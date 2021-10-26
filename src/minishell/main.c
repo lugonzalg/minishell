@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/10/26 16:22:26 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/10/26 18:02:04 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	print_intro(t_string *str)
 		free(str->tmp);
 	}
 	str->tmp = getenv("USER");	
-	str->user = ft_strjoin(str->tmp, " \e[1;34mminishell \e[0;m% ");
+	str->user = ft_strjoin(str->tmp, " \e[1;37mminishell \e[0;m% ");
 	str->tmp = ft_strtrim(getenv("PATH"), "PATH=");
 	str->path = ft_split(str->tmp, ':');
 	free(str->tmp);
