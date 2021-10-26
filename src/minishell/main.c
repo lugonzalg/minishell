@@ -6,7 +6,11 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/10/26 18:46:49 by lugonzal         ###   ########.fr       */
+=======
+/*   Updated: 2021/10/26 17:36:34 by lugonzal         ###   ########.fr       */
+>>>>>>> 771c496b0fe91975212cc7063f825710071aa36e
 /*                                                                            */
 /* ************************************************************************** */
  
@@ -53,7 +57,10 @@ static void	print_intro(t_string *str)
 	close(fd);
 }
 
-//static void create_process()
+static void create_process()
+{
+
+}
 
 static void	process_io(t_string *str)
 {
@@ -61,13 +68,12 @@ static void	process_io(t_string *str)
 
 	i = 0;
 	str->d2_prompt = ft_split(str->prompt, 32);
-	printf("STR: %s", str->prompt);
+
 	while (str->path[i])
 	{
 		str->tmp = ft_strjoin(str->d2_prompt[0], str->path[i]);
 		if (!access(str->tmp, X_OK))
-			break ;
-			//create_process(str);
+			create_process(str);
 		else
 			free(str->tmp);
 		i++;
@@ -80,9 +86,9 @@ static void	prompt_io(t_string *str)
 	{
 		str->prompt = readline(str->user);
 		add_history(str->prompt);
-		process_io(str);
 		if (!ft_strncmp(str->prompt, "exit", 5))
 			break ;
+		process_io(str);
 		free(str->prompt);
 	}
 	rl_clear_history();
