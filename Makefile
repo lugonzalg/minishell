@@ -1,0 +1,42 @@
+NAME = minishell
+
+MK_DIR = mkdir -p
+RM = rm -rf
+CC = Clang
+INC = -I /Users/lugonzal/.brew/opt/readline/include
+CFLAGS = -Wall -Werror -Wextra 
+LFLAGS = -L /Users/lugonzal/.brew/opt/readline/lib -L bin/ -lreadline -lft -lftprintf
+BIN = libft.a libftprintf.a minishell
+FILES = minishell/main \
+
+SRC_DIR = src/
+OBJ_DIR = obj/
+SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
+OBJ = $(addprefix $(SRC_DIR), $(addsuffix .o, $(FILES)))
+
+.c.o:
+	@echo "\033[1;34m\tCompiling source files into object files\033[0;m"
+	${CC} ${CFLAGS} ${INC} -c $^ -o $@
+
+$(NAME): ${OBJ}
+	@${SHELL} ./src/script/file_manager.sh
+	${CC} -o ${NAME} ${OBJ} ${LFLAGS}
+
+all: $(NAME)
+
+clean:
+	@${MAKE} -C src/libft clean
+	@${MAKE} -C src/ft_printf clean
+	${RM} bin
+	${RM} ${OBJ}
+	${RM} ${OBJ_DIR}
+
+fclean: clean
+	@${MAKE} -C src/libft fclean
+	@${MAKE} -C src/ft_printf fclean
+	${RM} bin
+	${RM} ${BIN}
+
+re: fclean all
+
+.PHONY: all clean fclean re
