@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/10/26 16:52:23 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/10/26 17:16:27 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	process_io(t_string *str)
 	{
 		str->tmp = ft_strjoin(str->d2_prompt[0], str->path[i]);
 		if (!access(str->tmp, X_OK))
-			break ;
+			break  ;
 			//create_process(str);
 		else
 			free(str->tmp);
