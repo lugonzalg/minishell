@@ -6,14 +6,10 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/10/26 18:46:49 by lugonzal         ###   ########.fr       */
-=======
-/*   Updated: 2021/10/26 17:36:34 by lugonzal         ###   ########.fr       */
->>>>>>> 771c496b0fe91975212cc7063f825710071aa36e
+/*   Updated: 2021/10/27 17:32:16 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
- 
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <readline/readline.h>
