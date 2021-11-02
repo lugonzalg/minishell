@@ -4,9 +4,9 @@ MK_DIR = mkdir -p
 RM = rm -rf
 CC = Clang
 INC = -I /Users/$(USER)/.brew/opt/readline/include \
-	  -I /Users/$(USER)/Cursus_42/minishell/src/libft \
-	  -I /Users/$(USER)/Cursus_42/minishell/src/ft_printf \
-	  -I /Users/$(USER)/Cursus_42/minishell
+	  -I ${PWD} \
+	  -I ${PWD}/src/libft \
+	  -I ${PWD}/src/ft_printf \
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 LFLAGS = -L /Users/lugonzal/.brew/opt/readline/lib \
