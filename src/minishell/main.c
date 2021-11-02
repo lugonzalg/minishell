@@ -6,10 +6,10 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/10/27 17:57:39 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/02 17:39:17 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
- 
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <readline/readline.h>
@@ -18,66 +18,118 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include "../libft/inc/libft.h"
-#include "../libft/inc/get_next_line.h"
-#include "../ft_printf/inc/ft_printf.h"
-#include "../../inc/minishell.h"
+#include "inc/libft.h"
+#include "inc/get_next_line.h"
+#include "inc/ft_printf.h"
+#include "inc/minishell.h"
 
-static void	print_intro(t_string *str)
+static void free_d2_data(char **dat)
 {
-	int		fd;
-	int		i;
+	int	i;
 
-	fd = open("./doc/intro.txt", O_RDONLY);
-	printf("\n");
-	while (1)
-	{
-		str->tmp = get_next_line(fd);
-		if (!str->tmp)
-			break ;
-		printf("%s", str->tmp);
-		free(str->tmp);
-	}
-	str->tmp = getenv("USER");	
-	str->user = ft_strjoin(str->tmp, " \e[1;37mminishell \e[0;m% ");
-	str->tmp = ft_strtrim(getenv("PATH"), "PATH=");
-	str->path = ft_split(str->tmp, ':');
-	free(str->tmp);
 	i = -1;
-	while (str->path[++i])
-	{
-		str->tmp = ft_strjoin(str->path[i], "/");
-		free(str->path[i]);
-		str->path[i] = str->tmp;
-	}
-	close(fd);
+	while (dat[++i])
+		free(dat[i]);
+	free(dat);
 }
 
-static void create_process()
+static char	*find_fd(t_child *child, char *cmd, short int fd, short int pipe)
 {
+	char		**d2_cmd;
+	int			i;
+	short int	local_fd;
+	char		*file;
 
+	i = -1;
+	d2_cmd = ft_split(cmd, ' ');
+	while (d2_cmd[++i])
+	{
+		if (fd)
+			local_fd = open(d2_cmd[i], O_RDWR |O_TRUNC |O_CREAT, 0755);
+		else
+			local_fd = open(d2_cmd[i], O_RDWR);
+		if (local_fd > 2)
+		{
+			child->fd[pipe][fd] = local_fd;
+			close(local_fd);
+			file = ft_strdup(d2_cmd[i]);
+			free_d2_data(d2_cmd);
+			return (file);
+		}
+	}
+	free_d2_data(d2_cmd);
+	return (NULL);
+}
+
+static char	*trim_prompt (t_string *str, int i)
+{
+	char *tmp;
+
+	str->tmp = ft_strtrim(str->d2_prompt[i], str->trim_file);
+	free(str->trim_file);
+	str->trim_file = NULL;
+	free(str->d2_prompt[i]);
+	str->d2_prompt[i] = NULL;
+	tmp = ft_strtrim(str->tmp, " <>");
+	free(str->tmp);
+	return (tmp);
+}
+
+static void	set_child(t_child *child, t_string *str)
+{
+	int	i;
+
+	i = 1;
+	ft_memset(child, 0, sizeof(t_child));
+	while (str->d2_prompt[i - 1] != NULL)
+		i++;
+	child->fd = ft_calloc(sizeof(int *), i);
+	while ((i--))
+	{
+		child->fd[i] = ft_calloc(sizeof(int), 2);
+		pipe(child->fd[i]);
+	}
+	child->fd[0][0] = 0;
+	i = 0;
+	while (str->d2_prompt[i] != NULL)
+	{
+		if (ft_strchr(str->d2_prompt[i], '>'))
+			str->trim_file = find_fd(child, str->d2_prompt[i], 1, i);
+		else if (ft_strchr(str->d2_prompt[i], '<'))
+			str->trim_file = find_fd(child, str->d2_prompt[i], 0, i);
+		if (str->trim_file)
+		{
+			str->d2_prompt[i] = trim_prompt(str, i);
+			free(str->trim_file);
+			str->trim_file = NULL;
+		}
+		i++;
+	}
 }
 
 static void	process_io(t_string *str)
 {
 	int	i;
+	t_child	child;
 
+	ft_memset(str, 0, sizeof(t_string));
+	str->d2_prompt = ft_split(str->prompt, '|');
+	set_child(&child, str);
 	i = 0;
-	str->d2_prompt = ft_split(str->prompt, 32);
-
-	while (str->path[i])
+	while (0 && str->path[i])
 	{
-		str->tmp = ft_strjoin(str->d2_prompt[0], str->path[i]);
-		if (!access(str->tmp, X_OK))
-			create_process(str);
-		else
-			free(str->tmp);
-		i++;
+		//str->tmp = ft_strjoin(str->d2_prompt[0], str->path[i]);
+		//if (!access(str->tmp, X_OK))
+			//create_process(str);
+		//else
+		//	free(str->tmp);
+		//i++;
 	}
 }
 
 static void	prompt_io(t_string *str)
 {
+	set_str(str);
 	while (1)
 	{
 		str->prompt = readline(str->user);
@@ -89,14 +141,17 @@ static void	prompt_io(t_string *str)
 	}
 	rl_clear_history();
 }
-int	main(int argc, char *argv[])
+
+int	main(int argc, char *argv[], char *env[])
 {
 	t_string	str;
 	(void)argc;
 	(void)argv;
+	(void)env;
 
-	print_intro(&str);
+	print_intro();
 	prompt_io(&str);
+	//free_str(&str);
 	return (0);
 }
 

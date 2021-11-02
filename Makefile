@@ -3,11 +3,18 @@ NAME = minishell
 MK_DIR = mkdir -p
 RM = rm -rf
 CC = Clang
-INC = -I /Users/lugonzal/.brew/opt/readline/include
-CFLAGS = -Wall -Werror -Wextra 
-LFLAGS = -L /Users/lugonzal/.brew/opt/readline/lib -L bin/ -lreadline -lft -lftprintf
+INC = -I /Users/$(USER)/.brew/opt/readline/include \
+	  -I /Users/$(USER)/Cursus_42/minishell/src/libft \
+	  -I /Users/$(USER)/Cursus_42/minishell/src/ft_printf \
+	  -I /Users/$(USER)/Cursus_42/minishell
+
+CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
+LFLAGS = -L /Users/lugonzal/.brew/opt/readline/lib \
+		 -L bin/ -lreadline -lft -lftprintf
 BIN = libft.a libftprintf.a minishell
+
 FILES = minishell/main \
+		minishell/print_intro
 
 SRC_DIR = src/
 OBJ_DIR = obj/
@@ -20,7 +27,7 @@ OBJ = $(addprefix $(SRC_DIR), $(addsuffix .o, $(FILES)))
 
 $(NAME): ${OBJ}
 	@${SHELL} ./src/script/file_manager.sh
-	${CC} -o ${NAME} ${OBJ} ${LFLAGS}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJ} ${LFLAGS}
 
 all: $(NAME)
 
