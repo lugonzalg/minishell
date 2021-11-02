@@ -9,7 +9,7 @@ INC = -I /Users/$(USER)/.brew/opt/readline/include \
 	  -I /Users/$(USER)/Cursus_42/minishell
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
-LFLAGS = -L /Users/lugonzal/.brew/opt/readline/lib \
+LFLAGS = -L /Users/$(USER)/.brew/opt/readline/lib \
 		 -L bin/ -lreadline -lft -lftprintf
 BIN = libft.a libftprintf.a minishell
 

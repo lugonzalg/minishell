@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/10/28 16:08:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/02 18:42:21 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct	s_string
 
 typedef struct	s_child
 {
+	char		**info;
 	int			**fd;
 	char		*path;
 	short int	num;

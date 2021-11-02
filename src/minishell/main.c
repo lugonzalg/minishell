@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/02 17:39:17 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/02 19:05:07 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
-#include "inc/libft.h"
-#include "inc/get_next_line.h"
-#include "inc/ft_printf.h"
-#include "inc/minishell.h"
+#include "../libft/inc/libft.h"
+#include "../libft/inc/get_next_line.h"
+#include "../ft_printf/inc/ft_printf.h"
+#include "../../inc/minishell.h"
 
 static void free_d2_data(char **dat)
 {
@@ -75,7 +75,7 @@ static char	*trim_prompt (t_string *str, int i)
 	return (tmp);
 }
 
-static void	set_child(t_child *child, t_string *str)
+void	set_child(t_child *child, t_string *str)
 {
 	int	i;
 
@@ -107,23 +107,56 @@ static void	set_child(t_child *child, t_string *str)
 	}
 }
 
-static void	process_io(t_string *str)
+int	command_pos(t_string *str, t_child child)
+{
+	int 	a;
+	int 	b;
+	char	*path;
+	int		z;
+
+	a = 0;
+	while (str->path[a])
+	{
+		b = 0;
+		while (child.info[b])
+		{
+			path = ft_strjoin(str->path[a], child.info[b]);
+			z = access(path, X_OK);
+			if (!z)
+			{
+				printf("ESTA es la ruta %s\n", path);
+				printf("La posicion del comando es la %d\n",  b);
+				free(path);
+				return (b);
+			}
+			free(path);
+			b++;
+		}
+		a++;
+	}
+	return (-1);
+}
+
+void	process_io(t_string *str)
 {
 	int	i;
 	t_child	child;
+	int pos;
 
-	ft_memset(str, 0, sizeof(t_string));
+//	ft_memset(str, 0, sizeof(t_string));   DA SEGMENTATION FAULT
 	str->d2_prompt = ft_split(str->prompt, '|');
-	set_child(&child, str);
+//	set_child(&child, str);
 	i = 0;
-	while (0 && str->path[i])
+	while (str->d2_prompt[i]  && i < 1)
 	{
+		child.info = ft_split(str->d2_prompt[i], ' ');	
 		//str->tmp = ft_strjoin(str->d2_prompt[0], str->path[i]);
 		//if (!access(str->tmp, X_OK))
 			//create_process(str);
 		//else
 		//	free(str->tmp);
-		//i++;
+		pos = command_pos(str, child);
+		i++;
 	}
 }
 

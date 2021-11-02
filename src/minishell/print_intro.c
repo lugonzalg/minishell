@@ -6,13 +6,14 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/10/28 18:21:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/02 18:06:05 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/libft.h"
-#include "inc/get_next_line.h"
-#include "inc/minishell.h"
+#include "../libft/inc/libft.h"
+#include "../libft/inc/get_next_line.h"
+#include "../ft_printf/inc/ft_printf.h"
+#include "../../inc/minishell.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
