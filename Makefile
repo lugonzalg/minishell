@@ -4,9 +4,9 @@ MK_DIR = mkdir -p
 RM = rm -rf
 CC = Clang
 INC = -I /Users/$(USER)/.brew/opt/readline/include \
-	  -I /Users/$(USER)/Cursus_42/minishell/src/libft \
-	  -I /Users/$(USER)/Cursus_42/minishell/src/ft_printf \
-	  -I /Users/$(USER)/Cursus_42/minishell
+	  -I $(PWD)/src/libft \
+	  -I $(PWD)/src/ft_printf \
+	  -I $(PWD)
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 LFLAGS = -L /Users/$(USER)/.brew/opt/readline/lib \
@@ -14,7 +14,9 @@ LFLAGS = -L /Users/$(USER)/.brew/opt/readline/lib \
 BIN = libft.a libftprintf.a minishell
 
 FILES = minishell/main \
-		minishell/print_intro
+		minishell/print_intro \
+		minishell/prompt \
+		minishell/set_data 
 
 SRC_DIR = src/
 OBJ_DIR = obj/

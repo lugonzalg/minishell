@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/02 18:06:05 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/03 13:40:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-extern void	set_str(t_string *str)
-{
-	int	i;
-
-	str->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
-	str->path = ft_split(getenv("PATH="), ':');
-	i = -1;
-	while (str->path[++i])
-	{
-		str->tmp = ft_strjoin(str->path[i], "/");
-		free(str->path[i]);
-		str->path[i] = str->tmp;
-	}
-	str->tmp = NULL;
-}
 
 extern void	print_intro(void)
 {
