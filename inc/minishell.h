@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/04 20:40:29 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/04 23:00:26 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,9 @@ extern void	set_child(t_string *str, t_child *child);
 extern void	prompt_io(t_string *str);
 extern void	print_intro(void);
 extern void	set_str(t_string *str);
+
+void	unify_fdinput(t_child *child);
+void	unify_fdoutput(t_child *child);
+void	unify_cmd(t_child *child);
 
 #endif
