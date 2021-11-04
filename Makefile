@@ -9,12 +9,14 @@ INC = -I /Users/$(USER)/.brew/opt/readline/include \
 	  -I ${PWD}/src/ft_printf \
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
-LFLAGS = -L /Users/lugonzal/.brew/opt/readline/lib \
+LFLAGS = -L /Users/$(USER)/.brew/opt/readline/lib \
 		 -L bin/ -lreadline -lft -lftprintf
 BIN = libft.a libftprintf.a minishell
 
 FILES = minishell/main \
-		minishell/print_intro
+		minishell/print_intro \
+		minishell/prompt \
+		minishell/set_data 
 
 SRC_DIR = src/
 OBJ_DIR = obj/
