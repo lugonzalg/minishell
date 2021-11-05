@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/04 23:00:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:11:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # define OUTPUT '>'
 # define INPUT	'<'
 # define NL		"\n"
+
+#include <stdbool.h>
 
 typedef struct	s_string
 {
@@ -30,11 +32,12 @@ typedef struct	s_child
 {
 	char		**info;
 	int		 	**fdpipe;
-	int		 	*fdout;
 	char		*path;
-	short int	size[4]; // [0] -> pipes // [1] -> fdout // [2] -> cmd START // [3] -> cmd END
-	short int	redir[2]; // [0] -> inredir // [1] -> outredir
+	short int	size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
+	bool		redir[2]; // [0] -> inredir // [1] -> outredir
 	short int	id;
+	int			tty;
+	char		*ttypath;
 }	t_child;
 
 void 		check_redir(t_string *str, t_child *child);
@@ -44,8 +47,7 @@ extern void	prompt_io(t_string *str);
 extern void	print_intro(void);
 extern void	set_str(t_string *str);
 
-void	unify_fdinput(t_child *child);
-void	unify_fdoutput(t_child *child);
-void	unify_cmd(t_child *child);
+extern void	unify_fdio(t_child *child);
+extern void	unify_cmd(t_child *child);
 
 #endif

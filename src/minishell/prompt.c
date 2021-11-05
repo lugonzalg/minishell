@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/04 23:00:18 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/05 19:22:10 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,18 @@
 void	check_redir(t_string *str, t_child *child)
 {
 	str->tmp = str->d2_prompt[child->id];
-	while (1)
-	{
-			str->tmp = ft_strchr(str->tmp, INPUT);
-			if (!str->tmp)
-				break ;
-			str->tmp++;
-			child->redir[0]++;
-	}
-	str->tmp = str->d2_prompt[child->id];
-	while (1)
-	{
-			str->tmp = ft_strchr(str->tmp, OUTPUT);
-			if (!str->tmp)
-				break ;
-			str->tmp++;
-			child->redir[1]++;
-	}
+	//USEFULL??
+	if (ft_strchr(str->tmp, INPUT))
+		child->redir[0] = 1;
+	if (ft_strchr(str->tmp, OUTPUT))
+		child->redir[1] = 1;
 	child->info = ft_split(str->d2_prompt[child->id], ' ');	
+	while (child->info[child->size[1]])
+		child->size[1]++;
 	child->size[2] = command_pos(str, child); //FIND COMMAND POS
-	if (child->redir[0])
-		unify_fdinput(child);
-	if (child->redir[1])
-		unify_fdoutput(child);
+	//USEFULL??
+	if (child->redir[0] || child->redir[1])
+		unify_fdio(child);
 	unify_cmd(child);
 }
 //FALTA REDIRIGIR LOS FDs DE LOOS ARCHIVOS TEMPORALES (SI HAY) AL FDPIPES, Y METER EL PATH EXACTO EN LA EXTRUCTURA
@@ -64,17 +53,12 @@ void	multipipe(t_child *child)
 			close(child->fdpipe[i][1]);
 		i++;
 	}
-	if (child->redir[0] || child->id > 0)
-	{
-		dup2(child->fdpipe[child->id][0], 0);
-		close(child->fdpipe[child->id][0]);
-	}
-	if (child->redir[1] || child->id > 0)
-	{
-		dup2(child->fdpipe[child->id + 1][1], 1);
-		close(child->fdpipe[child->id + 1][1]);
-	}
-	execve(child->path, child->info, NULL);
+	dup2(child->fdpipe[child->id][0], 0);
+	close(child->fdpipe[child->id][0]);
+	dup2(child->fdpipe[child->id + 1][1], 1);
+//	dup2(child->tty, 1);
+	close(child->fdpipe[child->id + 1][1]);
+   	execve(child->path, child->info, NULL);
 }
 
 static void	process_io(t_string *str)
@@ -85,8 +69,8 @@ static void	process_io(t_string *str)
 
 	str->d2_prompt = ft_split(str->prompt, '|');
 	set_child(str, &child);
-	i = 0;
-	while (str->d2_prompt[i])
+	i = -1;
+	while (str->d2_prompt[++i])
 	{
 		child.id = i;
 		check_redir(str, &child);
@@ -95,7 +79,6 @@ static void	process_io(t_string *str)
 			multipipe(&child);
 		else
 			wait(NULL);
-		i++;
 	}
 }
 
@@ -110,7 +93,6 @@ extern void	prompt_io(t_string *str)
 		//FREE STRUCTURES
 		//FREE STRUCTURES
 		free(str->prompt);
-		break ;
 	}
 	rl_clear_history();
 }
