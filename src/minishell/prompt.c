@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/05 19:22:10 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/05 19:57:26 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,26 @@ void	multipipe(t_child *child)
 	dup2(child->fdpipe[child->id][0], 0);
 	close(child->fdpipe[child->id][0]);
 	dup2(child->fdpipe[child->id + 1][1], 1);
-//	dup2(child->tty, 1);
 	close(child->fdpipe[child->id + 1][1]);
    	execve(child->path, child->info, NULL);
+}
+
+static void	restart_data(t_child *child)
+{
+	size_t	i;
+
+	ft_memset(child->size, 0, sizeof(short int) * 4);
+	ft_memset(child->redir, 0, sizeof(short int) * 4);
+	i = -1;
+	while (child->info[++i])
+	{
+		free(child->info[i]);
+		child->info[i] = NULL;
+	}
+	free(child->info);
+	child->info = NULL;
+	free(child->path);
+	child->path = NULL;
 }
 
 static void	process_io(t_string *str)
@@ -79,6 +96,7 @@ static void	process_io(t_string *str)
 			multipipe(&child);
 		else
 			wait(NULL);
+		restart_data(&child);
 	}
 }
 
