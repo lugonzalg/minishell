@@ -17,7 +17,8 @@ FILES = minishell/main \
 		minishell/print_intro \
 		minishell/prompt \
 		minishell/set_data \
-		minishell/unify
+		minishell/unify		\
+		minishell/builtins
 
 SRC_DIR = src/
 OBJ_DIR = obj/

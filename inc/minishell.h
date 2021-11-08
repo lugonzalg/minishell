@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/05 18:11:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/08 20:54:06 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,9 @@ extern void	set_str(t_string *str);
 
 extern void	unify_fdio(t_child *child);
 extern void	unify_cmd(t_child *child);
+
+int		ft_checkbuiltins(char *str);
+void	ft_builtins(t_child *child);
+void	ft_putenv(char **env);
 
 #endif

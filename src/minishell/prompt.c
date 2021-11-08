@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/05 19:57:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/08 21:22:33 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,26 @@ static void	process_io(t_string *str)
 	int	i;
 	int	id;
 	t_child	child;
+	int a;
 
 	str->d2_prompt = ft_split(str->prompt, '|');
 	set_child(str, &child);
+	a = child.size[0];
 	i = -1;
 	while (str->d2_prompt[++i])
 	{
 		child.id = i;
 		check_redir(str, &child);
-		id = fork();
-		if (id == 0)
-			multipipe(&child);
+		if (ft_checkbuiltins(child.info[0]))
+			ft_builtins(&child);
 		else
-			wait(NULL);
+		{
+			id = fork();
+			if (id == 0)
+				multipipe(&child);
+			else
+				wait(NULL);
+		}
 		restart_data(&child);
 	}
 }

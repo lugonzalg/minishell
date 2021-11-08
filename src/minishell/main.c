@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/05 19:46:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/08 21:22:30 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int	main(int argc, char *argv[], char *env[])
 	t_string	str;
 	(void)argc;
 	(void)argv;
-	(void)env;
 
+	ft_putenv(env);
 	print_intro();
 	prompt_io(&str);
 	//free_str(&str);
