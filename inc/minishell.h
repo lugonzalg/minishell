@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/08 20:54:06 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/09 19:57:37 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct	s_string
 	char		*user;
 	char		*prompt;
 	char		*tmp;
+	char		*envpath;
 }	t_string;
 
 typedef struct	s_child
@@ -51,7 +52,7 @@ extern void	unify_fdio(t_child *child);
 extern void	unify_cmd(t_child *child);
 
 int		ft_checkbuiltins(char *str);
-void	ft_builtins(t_child *child);
-void	ft_putenv(char **env);
+void	ft_builtins(t_child *child, t_string *str);
+void	ft_putenv(char **env, t_string *str);
 
 #endif

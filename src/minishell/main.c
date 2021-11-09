@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/08 21:22:30 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/09 20:06:58 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ extern int	command_pos(t_string *str, t_child *child)
 			child->path = ft_strjoin(str->path[a], child->info[b]);
 			if (!access(child->path, X_OK))
 				return (b);
-			free(child->path);
+		//	free(child->path);
 			b++;
 		}
 		a++;
@@ -78,7 +78,8 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argc;
 	(void)argv;
 
-	ft_putenv(env);
+	set_str(&str);//LO HE PUESTO AQUI, ANTES ESTABA AL RPINCIPIO DE LA FUNCION PROMPT_IO
+	ft_putenv(env, &str);
 	print_intro();
 	prompt_io(&str);
 	//free_str(&str);

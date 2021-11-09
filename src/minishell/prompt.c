@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/08 21:22:33 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/09 20:07:01 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static void	process_io(t_string *str)
 		child.id = i;
 		check_redir(str, &child);
 		if (ft_checkbuiltins(child.info[0]))
-			ft_builtins(&child);
+			ft_builtins(&child, str);
 		else
 		{
 			id = fork();
@@ -109,7 +109,6 @@ static void	process_io(t_string *str)
 
 extern void	prompt_io(t_string *str)
 {
-	set_str(str);
 	while (1)
 	{
 		str->prompt = readline(str->user);

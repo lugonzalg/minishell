@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/08 21:22:33 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/09 20:07:01 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ extern void	set_str(t_string *str)
 	int	i;
 
 	ft_memset(str, 0, sizeof(t_string));
-	str->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
+	str->user = ft_strjoin(getenv("USER"), " \e[1;32mminishell \e[0;m% ");
 	str->path = ft_split(getenv("PATH="), ':');
 	i = -1;
 	while (str->path[++i])
