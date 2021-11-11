@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdint.h>
 #include "../../inc/libft.h"
 
 int	*ft_lst_int(t_list *head, int *size)
@@ -22,7 +23,7 @@ int	*ft_lst_int(t_list *head, int *size)
 	i = 0;
 	while (head)
 	{
-		new_list[i] = (int)head->content;
+		new_list[i] = (intptr_t)head->content;
 		head = head->next;
 		i++;
 	}
