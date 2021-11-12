@@ -32,12 +32,12 @@ typedef struct	s_string
 typedef struct	s_child
 {
 	char		**info;
-	int		 	**fdpipe;
+	int	 	**fdpipe;
 	char		*path;
-	short int	size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
+	size_t		size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
 	bool		redir[2]; // [0] -> inredir // [1] -> outredir
-	short int	id;
-	int			tty;
+	size_t		id;
+	int		tty;
 	char		*ttypath;
 }	t_child;
 

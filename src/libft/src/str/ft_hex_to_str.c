@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdint.h>
 
 void	hex_to_str(uintptr_t n, char *hex)
 {
@@ -22,7 +23,7 @@ void	hex_to_str(uintptr_t n, char *hex)
 		hex_to_str(n / 16, hex);
 		hex_to_str(n % 16, hex);
 	}
-	else if (n >= 0 && n < 17)
+	else if (n < 17)
 	{
 		if (n > 9)
 			n += 39;
