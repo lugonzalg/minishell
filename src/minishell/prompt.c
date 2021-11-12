@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/12 18:35:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:41:44 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	restart_data(t_child *child)
 {
 	size_t	i;
 
-	ft_memset(&child->size[1], 0, sizeof(size_t) * 4);
+	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	i = -1;
 	while (child->info[++i])
@@ -99,8 +99,8 @@ static void	process_io(t_string *str)
 			ft_builtins(&child, str);
 		else
 		{
-			id = fork();
-			if (id == 0)
+			id[i] = fork();
+			if (id[i] == 0)
 				multipipe(&child);
 			else
 				wait(NULL);

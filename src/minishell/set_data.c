@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/12 18:37:23 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:42:20 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ extern void	set_str(t_string *str)
 extern void	set_child(t_string *str, t_child *child)
 {
 	size_t	i;
-	ssize_t	id;
 		
 	i = 1;
 	while (str->d2_prompt[i - 1])
