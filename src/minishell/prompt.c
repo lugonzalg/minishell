@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/05 19:57:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:17:20 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	check_redir(t_string *str, t_child *child)
 	str->tmp = str->d2_prompt[child->id];
 	//USEFULL??
 	if (ft_strchr(str->tmp, INPUT))
-		child->redir[0] = 1;
+		child->redir[0] = true;
 	if (ft_strchr(str->tmp, OUTPUT))
-		child->redir[1] = 1;
+		child->redir[1] = true;
 	child->info = ft_split(str->d2_prompt[child->id], ' ');	
 	while (child->info[child->size[1]])
 		child->size[1]++;
@@ -38,7 +38,7 @@ void	check_redir(t_string *str, t_child *child)
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(child);
-	child->size[2] = command_pos(str, child); //FIND COMMAND POS
+	command_pos(str, child); //FIND COMMAND POS
 }
 //FALTA REDIRIGIR LOS FDs DE LOOS ARCHIVOS TEMPORALES (SI HAY) AL FDPIPES, Y METER EL PATH EXACTO EN LA EXTRUCTURA
 void	multipipe(t_child *child)
@@ -68,7 +68,7 @@ static void	restart_data(t_child *child)
 	size_t	i;
 
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 4);
-	ft_memset(child->redir, 0, sizeof(bool) * 2);
+	ft_memset(child->redir, false, sizeof(bool) * 2);
 	i = -1;
 	while (child->info[++i])
 	{
@@ -96,15 +96,19 @@ static void	process_io(t_string *str)
 	{
 		child.id = i;
 		check_redir(str, &child);
-		close(child.fdpipe[i][1]);
 		id[i] = fork();
 		if (id[i] == 0)
 			multipipe(&child);
 		else
-			wait(NULL);
+			waitpid(id[i], NULL, 0);
 		restart_data(&child);
 	}
 	i = -1;
+	while (++i < child.size[0])
+	{
+		close(child.fdpipe[i][1]);
+		close(child.fdpipe[i][0]);
+	}
 }
 
 extern void	prompt_io(t_string *str)
