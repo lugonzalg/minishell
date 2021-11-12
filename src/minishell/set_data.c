@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/09 20:07:01 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:37:23 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ extern void	set_str(t_string *str)
 	int	i;
 
 	ft_memset(str, 0, sizeof(t_string));
-	str->user = ft_strjoin(getenv("USER"), " \e[1;32mminishell \e[0;m% ");
-	str->path = ft_split(getenv("PATH="), ':');
+	str->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
+	str->path = ft_split(getenv("PATH"), ':');
 	i = -1;
 	while (str->path[++i])
 	{
@@ -36,28 +36,18 @@ extern void	set_str(t_string *str)
 
 extern void	set_child(t_string *str, t_child *child)
 {
-	int	i;
-
+	size_t	i;
+	ssize_t	id;
+		
 	i = 1;
 	while (str->d2_prompt[i - 1])
 		i++;
 	ft_memset(child, 0, sizeof(t_child));
 	child->fdpipe = (int **)malloc(sizeof(int *) * i);
-	//BREAK CHECK I
 	child->size[0] = i;
 	while (i--)
 	{
 		child->fdpipe[i] = (int *)malloc(sizeof(int) * 2);
 		pipe(child->fdpipe[i]);
 	}
-	close(child->fdpipe[0][0]);
-	child->fdpipe[0][0] = 0;
-	close(child->fdpipe[child->size[0] - 1][1]);
-	child->tty = ttyslot();
-	//BREAK CHECK CHILD->TTY
-	child->ttypath = ttyname(child->tty);
-	child->tty = open(child->ttypath, O_WRONLY);
-	child->fdpipe[child->size[0] - 1][1] = child->tty;
-	//BREAK CHECK CHILD->TTY FD?
-	close(child->tty);
 }

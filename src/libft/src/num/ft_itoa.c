@@ -29,11 +29,9 @@ static int	ft_power_num(unsigned int num)
 
 static char	*ft_putnbr(unsigned int num, char *str)
 {
-	unsigned int	i;
 	unsigned int	size;
 
 	size = ft_power_num(num) - 1;
-	i = 0;
 	str[size + 1] = '\0';
 	if (num == 0)
 		str[size] = num % 10 + '0';

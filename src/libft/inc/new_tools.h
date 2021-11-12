@@ -14,6 +14,7 @@
 # define NEW_TOOLS_H
 
 # include <stdlib.h>
+# include <stdint.h>
 
 double	ft_atoi_double(const char *str);
 

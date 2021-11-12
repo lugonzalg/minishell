@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/09 19:57:37 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:35:31 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ typedef struct	s_string
 typedef struct	s_child
 {
 	char		**info;
-	int		 	**fdpipe;
+	int	 	**fdpipe;
 	char		*path;
-	short int	size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
+	size_t		size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
 	bool		redir[2]; // [0] -> inredir // [1] -> outredir
-	short int	id;
-	int			tty;
+	size_t		id;
+	int		tty;
 	char		*ttypath;
 }	t_child;
 

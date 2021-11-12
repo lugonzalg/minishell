@@ -40,7 +40,7 @@ extern void	cmd_size(t_child *child)
 extern void	unify_fdio(t_child *child)
 {
 	int		fd;
-	size_t	i;
+	size_t		i;
 
 	i = -1;
 	while (child->info[++i])
@@ -50,14 +50,12 @@ extern void	unify_fdio(t_child *child)
 			fd = open(child->info[++i], O_RDWR |O_TRUNC |O_CREAT, 0644);
 			close(child->fdpipe[child->id + 1][1]);
 			child->fdpipe[child->id + 1][1] = fd;
-			close(fd);
 		}
 		if (ft_strlen(child->info[i]) == 1 && ft_strchr(child->info[i], INPUT))
 		{
 			fd = open(child->info[++i], O_RDONLY);
 			close(child->fdpipe[child->id][0]);
 			child->fdpipe[child->id][0] = fd;
-			close(fd);
 		}
 	}
 }
@@ -65,7 +63,7 @@ extern void	unify_fdio(t_child *child)
 void	unify_cmd(t_child *child)
 {
 	char	**temp;
-	int		index;
+	size_t	index;
 	size_t	i;
 
 	index = 0;
