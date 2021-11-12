@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/12 18:42:20 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/12 20:13:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,29 @@
 #include "inc/libft.h"
 #include <fcntl.h>
 
-extern void	set_str(t_string *str)
+extern void	set_str(t_prompt *p)
 {
 	int	i;
 
-	ft_memset(str, 0, sizeof(t_string));
-	str->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
-	str->path = ft_split(getenv("PATH"), ':');
+	ft_memset(p, 0, sizeof(t_prompt));
+	p->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
+	p->path = ft_split(getenv("PATH"), ':');
 	i = -1;
-	while (str->path[++i])
+	while (p->path[++i])
 	{
-		str->tmp = ft_strjoin(str->path[i], "/");
-		free(str->path[i]);
-		str->path[i] = str->tmp;
+		p->tmp = ft_strjoin(p->path[i], "/");
+		free(p->path[i]);
+		p->path[i] = p->tmp;
 	}
-	str->tmp = NULL;
+	p->tmp = NULL;
 }
 
-extern void	set_child(t_string *str, t_child *child)
+extern void	set_child(t_prompt *p, t_child *child)
 {
 	size_t	i;
 		
 	i = 1;
-	while (str->d2_prompt[i - 1])
+	while (p->d2_prompt[i - 1])
 		i++;
 	ft_memset(child, 0, sizeof(t_child));
 	child->fdpipe = (int **)malloc(sizeof(int *) * i);
@@ -49,4 +49,5 @@ extern void	set_child(t_string *str, t_child *child)
 		child->fdpipe[i] = (int *)malloc(sizeof(int) * 2);
 		pipe(child->fdpipe[i]);
 	}
+	child->fdpipe[child->size[0] - 1][1] = 2;
 }

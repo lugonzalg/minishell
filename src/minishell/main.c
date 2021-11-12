@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/09 20:06:58 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/12 19:29:28 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ int		trim_path(t_child *child, int b)
 	return (b);
 }
 
-extern int	command_pos(t_string *str, t_child *child)
+extern int	command_pos(t_prompt *p, t_child *child)
 {
 	int 	a;
 	int 	b;
 
 	a = 0;
-	while (str->path[a])
+	while (p->path[a])
 	{
 		b = 0;
 		while (child->info[b])
@@ -61,7 +61,7 @@ extern int	command_pos(t_string *str, t_child *child)
 				child->path = ft_strdup(child->info[b]);
 				return (trim_path(child, b));
 			}
-			child->path = ft_strjoin(str->path[a], child->info[b]);
+			child->path = ft_strjoin(p->path[a], child->info[b]);
 			if (!access(child->path, X_OK))
 				return (b);
 		//	free(child->path);
@@ -74,14 +74,14 @@ extern int	command_pos(t_string *str, t_child *child)
 
 int	main(int argc, char *argv[], char *env[])
 {
-	t_string	str;
+	t_prompt	p;
 	(void)argc;
 	(void)argv;
 
-	set_str(&str);//LO HE PUESTO AQUI, ANTES ESTABA AL RPINCIPIO DE LA FUNCION PROMPT_IO
-	ft_putenv(env, &str);
+	set_str(&p);//LO HE PUESTO AQUI, ANTES ESTABA AL RPINCIPIO DE LA FUNCION PROMPT_IO
+	ft_putenv(env, &p);
 	print_intro();
-	prompt_io(&str);
-	//free_str(&str);
+	prompt_io(&p);
+	//free_p(&p);
 	return (0);
 }

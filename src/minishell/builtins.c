@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/09 20:06:57 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/12 19:29:52 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int		ft_checkbuiltins(char *str)
 	return (0);
 }
 
-static void		showenv(t_string *str)
+static void		showenv(t_prompt *p)
 {
 	char	*line;
 	int		fd;
 
-	printf("%s\n", str->envpath);
-	fd = open(str->envpath, O_RDONLY);
+	printf("%s\n", p->envpath);
+	fd = open(p->envpath, O_RDONLY);
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -53,12 +53,12 @@ static void		showenv(t_string *str)
 	close(fd);
 }
 
-void	envinclude(t_child	*child, t_string *str)
+void	envinclude(t_child	*child, t_prompt *p)
 {
 	int	fd;
 	int	a;
 	
-	fd = open(str->envpath, O_WRONLY | O_APPEND);
+	fd = open(p->envpath, O_WRONLY | O_APPEND);
 	a = 0;
 	while (child->info[1][a])
 	{
@@ -69,13 +69,13 @@ void	envinclude(t_child	*child, t_string *str)
 	close(fd);
 }
 
-void	deletenv(t_child	*child, t_string *str)
+void	deletenv(t_child	*child, t_prompt *p)
 {
 	int		fd1;
 	int		fd2;
 	char	*line;
 	
-	fd1 = open(str->envpath, O_RDONLY);
+	fd1 = open(p->envpath, O_RDONLY);
 	fd2 = open(".envtemp", O_WRONLY | O_CREAT, 0644);
 	line = get_next_line(fd1);
 	while (line)
@@ -87,7 +87,7 @@ void	deletenv(t_child	*child, t_string *str)
 	}
 	close(fd1);
 	close(fd2);
-	fd1 = open(str->envpath, O_WRONLY | O_TRUNC);
+	fd1 = open(p->envpath, O_WRONLY | O_TRUNC);
 	fd2 = open(".envtemp", O_RDONLY);
 	line = get_next_line(fd2);
 	while (line)
@@ -101,7 +101,7 @@ void	deletenv(t_child	*child, t_string *str)
 	unlink(".envtemp");
 }
 
-void	ft_builtins(t_child *child, t_string *str)
+void	ft_builtins(t_child *child, t_prompt *p)
 {
 	char	pwd[PATH_MAX];
 
@@ -113,14 +113,14 @@ void	ft_builtins(t_child *child, t_string *str)
 	if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
 		chdir(child->info[1]);
 	if (!ft_strncmp(child->info[0], "env", sizeof("env")))
-		showenv(str);
+		showenv(p);
 	if (!ft_strncmp(child->info[0], "export", sizeof("export")) && ft_strchr(child->info[1], '='))
-		envinclude(child, str);
+		envinclude(child, p);
 	if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
-		deletenv(child, str);
+		deletenv(child, p);
 }
 
-void	ft_putenv(char **env, t_string *str)
+void	ft_putenv(char **env, t_prompt *p)
 {
 	int		a;
 	int		b;
@@ -128,8 +128,8 @@ void	ft_putenv(char **env, t_string *str)
 	char	pwd[PATH_MAX];
 
 	getcwd(pwd, sizeof(pwd));
-	str->envpath = ft_strjoin(pwd, "/.env");
-	fd = open(str->envpath, O_WRONLY |O_TRUNC | O_CREAT, 0644);
+	p->envpath = ft_strjoin(pwd, "/.env");
+	fd = open(p->envpath, O_WRONLY |O_TRUNC | O_CREAT, 0644);
 	a = 0;
 	while(env[a])
 	{
