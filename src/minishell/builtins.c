@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/13 17:49:22 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 19:31:47 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,78 +47,6 @@ int	ft_checkbuiltins(char *str)
 	return (0);
 }
 
-static void	showenv(t_prompt *p)
-{
-	char	*line;
-	int		fd;
-
-	printf("%s\n", p->envpath);
-	fd = open(p->envpath, O_RDONLY);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		printf("%s", line);
-		free(line);
-	}
-	close(fd);
-}
-
-void	envinclude(t_child	*child, t_prompt *p)
-{
-	int	fd;
-	int	i;
-
-	fd = open(p->envpath, O_WRONLY | O_APPEND);
-	i = -1;
-	while (child->info[1][++i])
-		write(fd, &child->info[1][i], 1);
-	write(fd, "\n", 1);
-	close(fd);
-}
-
-static void	deletenv_2(t_prompt *p)
-{
-	int		fd[2];
-	char	*line;
-
-	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
-	fd[1] = open(".envtemp", O_RDONLY);
-	while (1)
-	{
-		line = get_next_line(fd[1]);
-		if (!line)
-			break ;
-		write(fd[0], line, ft_strlen(line));
-		free(line);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	unlink(".envtemp");
-}
-
-void	deletenv(t_child	*child, t_prompt *p)
-{
-	int		fd[2];
-	char	*line;
-
-	fd[0] = open(p->envpath, O_RDONLY);
-	fd[1] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
-	while (1)
-	{
-		line = get_next_line(fd[0]);
-		if (!line)
-			break ;
-		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1]) - 1))
-			write(fd[1], line, ft_strlen(line));
-		free(line);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	deletenv_2(p);
-}
-
 void	ft_builtins(t_child *child, t_prompt *p)
 {
 	char	pwd[PATH_MAX];
@@ -131,12 +59,12 @@ void	ft_builtins(t_child *child, t_prompt *p)
 	else if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
 		chdir(child->info[1]);
 	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
-		showenv(p);
+		ft_env(p);
 	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
 			&& ft_strchr(child->info[1], '='))
-		envinclude(child, p);
+		ft_export(p, child);
 	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
-		deletenv(child, p);
+		ft_unset(p, child);
 }
 
 void	ft_putenv(char **env, t_prompt *p)
@@ -156,6 +84,111 @@ void	ft_putenv(char **env, t_prompt *p)
 		while (env[i][++j])
 			write(fd, &env[i][j], sizeof(char));
 		write(fd, "\n", sizeof(char));
+	}
+	close(fd);
+}
+
+
+extern void	ft_echo(t_prompt *p, t_child *child)
+{
+	(void)p;
+	(void)child;
+	printf("eeasfaef");
+}
+
+
+extern void	ft_exit(t_prompt *p, t_child *child)
+{
+
+	(void)p;
+	(void)child;
+	printf("eeasfaef");
+}
+
+extern void	ft_cd(t_prompt *p, t_child *child)
+{
+
+	(void)p;
+	(void)child;
+	printf("eeasfaef");
+}
+
+extern void	ft_pwd(t_prompt *p, t_child *child)
+{
+
+	(void)p;
+	(void)child;
+	printf("eeasfaef");
+}
+
+extern void	ft_export(t_prompt *p, t_child *child)
+{
+	int	fd;
+	int	i;
+
+	fd = open(p->envpath, O_WRONLY | O_APPEND);
+	i = -1;
+	while (child->info[1][++i])
+		write(fd, &child->info[1][i], 1);
+	write(fd, "\n", 1);
+	close(fd);
+}
+
+static void	ft_unset_2(t_prompt *p)
+{
+	int		fd[2];
+	char	*line;
+
+	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
+	fd[1] = open(".envtemp", O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd[1]);
+		if (!line)
+			break ;
+		write(fd[0], line, ft_strlen(line));
+		free(line);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	unlink(".envtemp");
+}
+
+extern void	ft_unset(t_prompt *p, t_child *child)
+{
+	int		fd[2];
+	char	*line;
+
+	fd[0] = open(p->envpath, O_RDONLY);
+	fd[1] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	while (1)
+	{
+		line = get_next_line(fd[0]);
+		if (!line)
+			break ;
+		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1]) - 1))
+			write(fd[1], line, ft_strlen(line));
+		free(line);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	ft_unset_2(p);
+}
+
+extern void	ft_env(t_prompt *p)
+{
+	char	*line;
+	int		fd;
+
+	printf("%s\n", p->envpath);
+	fd = open(p->envpath, O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		printf("%s", line);
+		free(line);
 	}
 	close(fd);
 }
