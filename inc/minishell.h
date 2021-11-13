@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 03:26:36 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 17:15:57 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # define NL		"\n"
 
 #include <stdbool.h>
+#include <unistd.h>
+
 
 typedef struct	s_prompt
 {
@@ -27,6 +29,7 @@ typedef struct	s_prompt
 	char		*prompt;
 	char		*tmp;
 	char		*envpath;
+	pid_t		*id;
 }	t_prompt;
 
 typedef struct	s_child

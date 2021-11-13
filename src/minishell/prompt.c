@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 03:21:58 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 17:41:53 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 #include "inc/libft.h"
 #include "inc/ft_printf.h"
 #include "inc/get_next_line.h"
-#include <readline.h>
-#include <history.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 void	check_redir(t_prompt *p, t_child *child)
 {
@@ -77,13 +77,14 @@ static void	process_io(t_prompt *p)
 	size_t	i;
 	t_child	child;
 
+	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	set_child(p, &child);
 	i = -1;
 	while (p->d2_prompt[++i])
 	{
 		child.id = i;
 		check_redir(p, &child);
-		if (ft_checkbuiltins(child.info[0]))
+		if (ft_checkbuiltins(child.info[i]))
 			ft_builtins(&child, p);
 		else
 		{

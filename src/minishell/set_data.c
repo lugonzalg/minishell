@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 03:25:59 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 17:15:55 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ extern void	set_str(t_prompt *p)
 	int	i;
 
 	ft_memset(p, 0, sizeof(t_prompt));
-	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	p->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
 	p->path = ft_split(getenv("PATH"), ':');
 	i = -1;

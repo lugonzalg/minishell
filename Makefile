@@ -4,12 +4,14 @@ MK_DIR = mkdir -p
 RM = rm -rf
 CC = clang
 INC = -I /usr/include/readline \
+	  -I /Users/$(USER)/.brew/opt/readline/include \
 	  -I ${PWD} \
 	  -I ${PWD}/src/libft \
 	  -I ${PWD}/src/ft_printf \
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address 
-LFLAGS = -L /usr/include/readline \
+LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
+		 -L usr/include/readline \
 		 -L bin/ -lreadline -lft -lftprintf
 BIN = libft.a libftprintf.a minishell
 

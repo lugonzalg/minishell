@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/13 03:11:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 17:49:22 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	ft_checkbuiltins(char *str)
 {
 	int		fd;
 	char	*line;
+	size_t	size;	
 
 	fd = open("doc/builtin_cmd", O_RDONLY);
 	while (1)
@@ -32,7 +33,9 @@ int	ft_checkbuiltins(char *str)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (!ft_strncmp(str, line, ft_strlen(line)))
+		size = ft_strlen(line);
+		line[size - 1] = 0;
+		if (!ft_strncmp(str, line, size))
 		{
 			free(line);
 			close(fd);
@@ -125,38 +128,34 @@ void	ft_builtins(t_child *child, t_prompt *p)
 		if (getcwd(pwd, sizeof(pwd)) != NULL)
 			printf("%s\n", pwd);
 	}
-	if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
+	else if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
 		chdir(child->info[1]);
-	if (!ft_strncmp(child->info[0], "env", sizeof("env")))
+	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
 		showenv(p);
-	if (!ft_strncmp(child->info[0], "export", sizeof("export"))
+	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
 			&& ft_strchr(child->info[1], '='))
 		envinclude(child, p);
-	if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
+	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
 		deletenv(child, p);
 }
 
 void	ft_putenv(char **env, t_prompt *p)
 {
-	int		a;
-	int		b;
+	size_t	i;
+	size_t	j;
 	int		fd;
 	char	pwd[PATH_MAX];
 
 	getcwd(pwd, sizeof(pwd));
 	p->envpath = ft_strjoin(pwd, "/.env");
 	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	a = 0;
-	while (env[a])
+	i = -1;
+	while (env[++i])
 	{
-		b = 0;
-		while (env[a][b])
-		{
-			write(fd, &env[a][b], sizeof(char));
-			b++;
-		}
+		j = -1;
+		while (env[i][++j])
+			write(fd, &env[i][j], sizeof(char));
 		write(fd, "\n", sizeof(char));
-		a++;
 	}
 	close(fd);
 }
