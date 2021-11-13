@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/09 20:07:02 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/13 03:20:40 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ extern void	cmd_size(t_child *child)
 	{
 		if ((ft_strchr(child->info[pos - 1], INPUT)
 				|| ft_strchr(child->info[pos - 1], OUTPUT))
-				&& ft_strlen(child->info[pos - 1]) == 1)
+			&& ft_strlen(child->info[pos - 1]) == 1)
 		{
 			*child->info[pos] = 0;
 			*child->info[pos - 1] = 0;
@@ -40,14 +40,14 @@ extern void	cmd_size(t_child *child)
 extern void	unify_fdio(t_child *child)
 {
 	int		fd;
-	size_t		i;
+	size_t	i;
 
 	i = -1;
 	while (child->info[++i])
 	{
 		if (ft_strlen(child->info[i]) == 1 && ft_strchr(child->info[i], OUTPUT))
 		{
-			fd = open(child->info[++i], O_RDWR |O_TRUNC |O_CREAT, 0644);
+			fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			close(child->fdpipe[child->id + 1][1]);
 			child->fdpipe[child->id + 1][1] = fd;
 		}
@@ -77,8 +77,6 @@ void	unify_cmd(t_child *child)
 		index++;
 	}
 	index = -1;
-	while (++index < child->size[2])
-		free(child->info[index]);
-	free(child->info);
+	free_d2(child->info);
 	child->info = temp;
 }

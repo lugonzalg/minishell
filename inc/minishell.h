@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/12 19:25:05 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 03:26:36 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,8 @@ extern void	unify_cmd(t_child *child);
 int		ft_checkbuiltins(char *p);
 void	ft_builtins(t_child *child, t_prompt *p);
 void	ft_putenv(char **env, t_prompt *p);
+extern void	free_d2(char **dat);
+extern void	free_p(t_prompt *p);
+extern void	free_child(t_child *child);
 
 #endif

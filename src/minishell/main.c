@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/12 19:29:28 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 03:24:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "inc/ft_printf.h"
 #include "inc/minishell.h"
 
-void free_d2_data(char **dat)
+extern void	free_d2(char **dat)
 {
 	int	i;
 
@@ -25,49 +25,46 @@ void free_d2_data(char **dat)
 	while (dat[++i])
 		free(dat[i]);
 	free(dat);
+	dat = NULL;
 }
 
-int		trim_path(t_child *child, int b)
+int	trim_path(t_child *child, int j)
 {
 	char	**tmp;
 	int		i;
 
-	tmp = ft_split(child->info[b], '/');
+	tmp = ft_split(child->info[j], '/');
 	i = 0;
 	while (tmp[i])
 		i++;
-	free(child->info[b]);
-	child->info[b] = ft_strdup(tmp[i - 1]);
+	free(child->info[j]);
+	child->info[j] = ft_strdup(tmp[i - 1]);
 	i = -1;
-	while (tmp[++i])
-		free(tmp[i]);
-	free(tmp);
-	return (b);
+	free_d2(tmp);
+	return (j);
 }
 
 extern int	command_pos(t_prompt *p, t_child *child)
 {
-	int 	a;
-	int 	b;
+	int	i;
+	int	j;
 
-	a = 0;
-	while (p->path[a])
+	i = -1;
+	while (p->path[++i])
 	{
-		b = 0;
-		while (child->info[b])
+		j = -1;
+		while (child->info[++j])
 		{
-			if (!access(child->info[b], X_OK))
+			if (!access(child->info[j], X_OK))
 			{
-				child->path = ft_strdup(child->info[b]);
-				return (trim_path(child, b));
+				child->path = ft_strdup(child->info[j]);
+				return (trim_path(child, j));
 			}
-			child->path = ft_strjoin(p->path[a], child->info[b]);
+			child->path = ft_strjoin(p->path[i], child->info[j]);
 			if (!access(child->path, X_OK))
-				return (b);
-		//	free(child->path);
-			b++;
+				return (j);
+			free(child->path);
 		}
-		a++;
 	}
 	return (-1);
 }
@@ -75,13 +72,14 @@ extern int	command_pos(t_prompt *p, t_child *child)
 int	main(int argc, char *argv[], char *env[])
 {
 	t_prompt	p;
-	(void)argc;
-	(void)argv;
 
-	set_str(&p);//LO HE PUESTO AQUI, ANTES ESTABA AL RPINCIPIO DE LA FUNCION PROMPT_IO
+	(void)argv;
+	if (argc != 1)
+		return (1);
+	set_str(&p);
 	ft_putenv(env, &p);
 	print_intro();
 	prompt_io(&p);
-	//free_p(&p);
+	free_p(&p);
 	return (0);
 }

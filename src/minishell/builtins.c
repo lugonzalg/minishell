@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/12 19:29:52 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 03:11:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,34 +21,43 @@
 
 #define PATH_MAX 4096
 
-int		ft_checkbuiltins(char *str)
+int	ft_checkbuiltins(char *str)
 {
-	if (!ft_strncmp(str, "pwd", sizeof("pwd")))
+	int		fd;
+	char	*line;
+
+	fd = open("doc/builtin_cmd", O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		if (!ft_strncmp(str, line, ft_strlen(line)))
+		{
+			free(line);
+			close(fd);
 			return (1);
-	if (!ft_strncmp(str, "cd", sizeof("cd")))
-			return (1);
-	if (!ft_strncmp(str, "env", sizeof("env")))
-			return (1);
-	if (!ft_strncmp(str, "export", sizeof("export")))
-			return (1);
-	if (!ft_strncmp(str, "unset", sizeof("unset")))
-			return (1);
+		}
+		free(line);
+	}
+	close(fd);
 	return (0);
 }
 
-static void		showenv(t_prompt *p)
+static void	showenv(t_prompt *p)
 {
 	char	*line;
 	int		fd;
 
 	printf("%s\n", p->envpath);
 	fd = open(p->envpath, O_RDONLY);
-	line = get_next_line(fd);
-	while (line)
+	while (1)
 	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
 		printf("%s", line);
 		free(line);
-		line = get_next_line(fd);
 	}
 	close(fd);
 }
@@ -56,49 +65,55 @@ static void		showenv(t_prompt *p)
 void	envinclude(t_child	*child, t_prompt *p)
 {
 	int	fd;
-	int	a;
-	
+	int	i;
+
 	fd = open(p->envpath, O_WRONLY | O_APPEND);
-	a = 0;
-	while (child->info[1][a])
-	{
-		write(fd, &child->info[1][a], 1);
-		a++;
-	}
+	i = -1;
+	while (child->info[1][++i])
+		write(fd, &child->info[1][i], 1);
 	write(fd, "\n", 1);
 	close(fd);
 }
 
+static void	deletenv_2(t_prompt *p)
+{
+	int		fd[2];
+	char	*line;
+
+	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
+	fd[1] = open(".envtemp", O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd[1]);
+		if (!line)
+			break ;
+		write(fd[0], line, ft_strlen(line));
+		free(line);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	unlink(".envtemp");
+}
+
 void	deletenv(t_child	*child, t_prompt *p)
 {
-	int		fd1;
-	int		fd2;
+	int		fd[2];
 	char	*line;
-	
-	fd1 = open(p->envpath, O_RDONLY);
-	fd2 = open(".envtemp", O_WRONLY | O_CREAT, 0644);
-	line = get_next_line(fd1);
-	while (line)
+
+	fd[0] = open(p->envpath, O_RDONLY);
+	fd[1] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	while (1)
 	{
+		line = get_next_line(fd[0]);
+		if (!line)
+			break ;
 		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1]) - 1))
-			write(fd2, line, ft_strlen(line));
+			write(fd[1], line, ft_strlen(line));
 		free(line);
-		line = get_next_line(fd1);
 	}
-	close(fd1);
-	close(fd2);
-	fd1 = open(p->envpath, O_WRONLY | O_TRUNC);
-	fd2 = open(".envtemp", O_RDONLY);
-	line = get_next_line(fd2);
-	while (line)
-	{
-		write(fd1, line, ft_strlen(line));
-		free(line);
-		line = get_next_line(fd2);
-	}
-	close(fd1);
-	close(fd2);
-	unlink(".envtemp");
+	close(fd[0]);
+	close(fd[1]);
+	deletenv_2(p);
 }
 
 void	ft_builtins(t_child *child, t_prompt *p)
@@ -114,7 +129,8 @@ void	ft_builtins(t_child *child, t_prompt *p)
 		chdir(child->info[1]);
 	if (!ft_strncmp(child->info[0], "env", sizeof("env")))
 		showenv(p);
-	if (!ft_strncmp(child->info[0], "export", sizeof("export")) && ft_strchr(child->info[1], '='))
+	if (!ft_strncmp(child->info[0], "export", sizeof("export"))
+			&& ft_strchr(child->info[1], '='))
 		envinclude(child, p);
 	if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
 		deletenv(child, p);
@@ -129,12 +145,12 @@ void	ft_putenv(char **env, t_prompt *p)
 
 	getcwd(pwd, sizeof(pwd));
 	p->envpath = ft_strjoin(pwd, "/.env");
-	fd = open(p->envpath, O_WRONLY |O_TRUNC | O_CREAT, 0644);
+	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	a = 0;
-	while(env[a])
+	while (env[a])
 	{
 		b = 0;
-		while(env[a][b])
+		while (env[a][b])
 		{
 			write(fd, &env[a][b], sizeof(char));
 			b++;

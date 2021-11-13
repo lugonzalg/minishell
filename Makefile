@@ -3,13 +3,13 @@ NAME = minishell
 MK_DIR = mkdir -p
 RM = rm -rf
 CC = clang
-INC = -I /Users/$(USER)/.brew/opt/readline/include \
+INC = -I /usr/include/readline \
 	  -I ${PWD} \
 	  -I ${PWD}/src/libft \
 	  -I ${PWD}/src/ft_printf \
 
-CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address 
-LFLAGS = -L /Users/$(USER)/.brew/opt/readline/lib \
+CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address 
+LFLAGS = -L /usr/include/readline \
 		 -L bin/ -lreadline -lft -lftprintf
 BIN = libft.a libftprintf.a minishell
 

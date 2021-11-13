@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/12 20:13:19 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 03:25:59 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ extern void	set_str(t_prompt *p)
 	int	i;
 
 	ft_memset(p, 0, sizeof(t_prompt));
+	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	p->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
 	p->path = ft_split(getenv("PATH"), ':');
 	i = -1;
@@ -31,13 +32,12 @@ extern void	set_str(t_prompt *p)
 		free(p->path[i]);
 		p->path[i] = p->tmp;
 	}
-	p->tmp = NULL;
 }
 
 extern void	set_child(t_prompt *p, t_child *child)
 {
 	size_t	i;
-		
+
 	i = 1;
 	while (p->d2_prompt[i - 1])
 		i++;
@@ -50,4 +50,27 @@ extern void	set_child(t_prompt *p, t_child *child)
 		pipe(child->fdpipe[i]);
 	}
 	child->fdpipe[child->size[0] - 1][1] = 2;
+}
+
+extern void	free_child(t_child *child)
+{
+	size_t	i;
+
+	i = -1;
+	i = -1;
+	while (++i < child->size[0])
+	{
+		close(child->fdpipe[i][0]);
+		close(child->fdpipe[i][1]);
+		free(child->fdpipe[i]);
+	}
+	free(child->fdpipe);
+	free(child->ttypath);
+}
+
+extern void	free_p(t_prompt *p)
+{
+	free_d2(p->path);
+	free(p->user);
+	free(p->envpath);
 }
