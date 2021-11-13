@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 17:15:55 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 19:29:50 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,63 @@
 #include <unistd.h>
 #include "inc/minishell.h"
 #include "inc/libft.h"
+#include "inc/get_next_line.h"
 #include <fcntl.h>
 
-extern void	set_str(t_prompt *p)
+void	lstadd_back(t_builtin **blt, t_builtin *new)
+{
+	t_builtin	*node;
+
+	node = *blt;
+	if (node)
+	{
+		while (node->next)
+			node = node->next;
+		node->next = new;
+		new->next = NULL;
+	}
+	else
+		(*blt) = new;
+}
+
+static void	set_function(t_builtin *blt)
+{
+	if (!ft_strncmp(blt->key, "echo", sizeof("echo")))
+			blt->ptr->b1 = ft_echo;
+	else if (!ft_strncmp(blt->key, "exit", sizeof("exit")))
+			blt->ptr->b1 = ft_exit;
+	else if (!ft_strncmp(blt->key, "cd", sizeof("cd")))
+			blt->ptr->b1 = ft_cd;
+	else if (!ft_strncmp(blt->key, "pwd", sizeof("pwd")))
+			blt->ptr->b1 = ft_pwd;
+	else if (!ft_strncmp(blt->key, "export", sizeof("export")))
+			blt->ptr->b1 = ft_export;
+	else if (!ft_strncmp(blt->key, "unset", sizeof("unset")))
+			blt->ptr->b1 = ft_unset;
+	else if (!ft_strncmp(blt->key, "env", sizeof("env")))
+			blt->ptr->b2 = ft_env;
+}
+
+static void create_list(t_prompt *p)
+{
+	char		*line;
+	ssize_t		fd;
+	t_builtin	*tmp;
+
+	fd = open("/doc/builtin__cmd", O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		tmp = (t_builtin *)malloc(sizeof(t_builtin));
+		tmp->key = line;
+		lstadd_back(&p->head, tmp);
+		set_function(tmp);
+	}
+}
+
+extern void	set_prompt(t_prompt *p)
 {
 	int	i;
 
@@ -31,6 +85,7 @@ extern void	set_str(t_prompt *p)
 		free(p->path[i]);
 		p->path[i] = p->tmp;
 	}
+	create_list(p);
 }
 
 extern void	set_child(t_prompt *p, t_child *child)
