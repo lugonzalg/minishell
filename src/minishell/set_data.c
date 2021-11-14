@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 21:21:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 23:37:16 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,19 @@ void	lstadd_back(t_builtin **blt, t_builtin *new)
 static void	set_function(t_builtin *blt)
 {
 	if (!ft_strncmp(blt->key, "echo", sizeof("echo")))
-			blt->ptr->b1 = ft_echo;
+			blt->ptr = ft_echo;
 	else if (!ft_strncmp(blt->key, "exit", sizeof("exit")))
-			blt->ptr->b1 = ft_exit;
+			blt->ptr = ft_exit;
 	else if (!ft_strncmp(blt->key, "cd", sizeof("cd")))
-			blt->ptr->b1 = ft_cd;
+			blt->ptr = ft_cd;
 	else if (!ft_strncmp(blt->key, "pwd", sizeof("pwd")))
-			blt->ptr->b1 = ft_pwd;
+			blt->ptr = ft_pwd;
 	else if (!ft_strncmp(blt->key, "export", sizeof("export")))
-			blt->ptr->b1 = ft_export;
+			blt->ptr = ft_export;
 	else if (!ft_strncmp(blt->key, "unset", sizeof("unset")))
-			blt->ptr->b1 = ft_unset;
+			blt->ptr = ft_unset;
 	else if (!ft_strncmp(blt->key, "env", sizeof("env")))
-			blt->ptr->b2 = ft_env;
+			blt->ptr = ft_env;
 }
 
 static void create_list(t_prompt *p)
@@ -58,14 +58,16 @@ static void create_list(t_prompt *p)
 	ssize_t		fd;
 	t_builtin	*tmp;
 
-	fd = open("/doc/builtin__cmd", O_RDONLY);
+	fd = open("doc/builtin_cmd", O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (!line)
 			break ;
 		tmp = (t_builtin *)malloc(sizeof(t_builtin));
+		line[ft_strlen(line) - 1] = 0;
 		tmp->key = line;
+		tmp->next = NULL;
 		lstadd_back(&p->head, tmp);
 		set_function(tmp);
 	}

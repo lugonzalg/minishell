@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/13 19:31:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/14 00:39:17 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "inc/libft.h"
 #include "inc/ft_printf.h"
 #include "inc/get_next_line.h"
+#include <dirent.h>
 
 #define PATH_MAX 4096
 
@@ -49,22 +50,19 @@ int	ft_checkbuiltins(char *str)
 
 void	ft_builtins(t_child *child, t_prompt *p)
 {
-	char	pwd[PATH_MAX];
+	t_ptr		ft_builtin;
+	t_builtin	*tmp;
 
-	if (!ft_strncmp(child->info[0], "pwd", sizeof("pwd")))
+	tmp = p->head;
+	while (tmp)
 	{
-		if (getcwd(pwd, sizeof(pwd)) != NULL)
-			printf("%s\n", pwd);
+		if (!ft_strncmp(child->info[child->id], tmp->key, ft_strlen(tmp->key)))
+		{
+			ft_builtin = tmp->ptr;
+			ft_builtin(p, child);
+		}
+		tmp = tmp->next;
 	}
-	else if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
-		chdir(child->info[1]);
-	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
-		ft_env(p);
-	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
-			&& ft_strchr(child->info[1], '='))
-		ft_export(p, child);
-	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
-		ft_unset(p, child);
 }
 
 void	ft_putenv(char **env, t_prompt *p)
@@ -107,8 +105,18 @@ extern void	ft_exit(t_prompt *p, t_child *child)
 
 extern void	ft_cd(t_prompt *p, t_child *child)
 {
+	DIR 			*dir;
+	struct dirent	*s_dir;
+	char			**d2_dir;
 
-	(void)p;
+	d2_dir = ft_split(p->d2_prompt[child->id], 32);
+	dir = opendir(d2_dir[1]);
+	if (!dir)
+	{
+		free_d2(d2_dir);
+		return ;
+	}
+	s_dir = readdir(dir);
 	(void)child;
 	printf("eeasfaef");
 }
@@ -134,10 +142,11 @@ extern void	ft_export(t_prompt *p, t_child *child)
 	close(fd);
 }
 
-static void	ft_unset_2(t_prompt *p)
+static void	ft_unset_2(t_prompt *p, t_child *child)
 {
 	int		fd[2];
 	char	*line;
+	(void)child;
 
 	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
 	fd[1] = open(".envtemp", O_RDONLY);
@@ -172,13 +181,14 @@ extern void	ft_unset(t_prompt *p, t_child *child)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	ft_unset_2(p);
+	ft_unset_2(p, child);
 }
 
-extern void	ft_env(t_prompt *p)
+extern void	ft_env(t_prompt *p, t_child *child)
 {
 	char	*line;
 	int		fd;
+	(void)child;
 
 	printf("%s\n", p->envpath);
 	fd = open(p->envpath, O_RDONLY);

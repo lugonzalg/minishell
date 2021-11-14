@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 19:45:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/14 00:12:29 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static void	restart_data(t_child *child)
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	i = -1;
 	free_d2(child->info);
-	free(child->path);
 	child->path = NULL;
 }
 
@@ -77,8 +76,8 @@ static void	process_io(t_prompt *p)
 	size_t	i;
 	t_child	child;
 
-	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	set_child(p, &child);
+	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0] - 1);
 	i = -1;
 	while (p->d2_prompt[++i])
 	{

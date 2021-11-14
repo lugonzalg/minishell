@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 19:32:30 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 23:10:46 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,11 @@ typedef struct s_child
 	int			tty;
 }	t_child;
 
-typedef void	(*t_no_ch)(t_prompt *p);
-typedef void	(*t_no_p)(t_child *child);
 typedef void	(*t_ptr)(t_prompt *, t_child *);
-
-typedef union u_ptrs
-{
-	t_ptr				b1;
-	t_no_ch				b2;
-	t_no_p				b3;
-}	t_ptrs;
 
 typedef struct s_builtin
 {
-	t_ptrs				*ptr;
+	t_ptr				ptr;
 	char				*key;
 	struct s_builtin	*next;
 }	t_builtin;
@@ -85,5 +76,5 @@ extern void ft_cd(t_prompt *p, t_child *child);
 extern void ft_pwd(t_prompt *p, t_child *child);
 extern void ft_export(t_prompt *p, t_child *child);
 extern void ft_unset(t_prompt *p, t_child *child);
-extern void ft_env(t_prompt *p);
+extern void ft_env(t_prompt *p, t_child *child);
 #endif
