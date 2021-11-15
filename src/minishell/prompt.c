@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/15 19:31:08 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:56:40 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@
 
 void	check_redir(t_prompt *p, t_child *child)
 {
-	p->tmp = p->d2_prompt[child->id];
-	if (ft_strchr(p->tmp, INPUT))
+	if (ft_strchr(p->d2_prompt[child->id], INPUT))
 		child->redir[0] = true;
-	if (ft_strchr(p->tmp, OUTPUT))
+	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
 	child->info = ft_split(p->d2_prompt[child->id], ' ');
 	while (child->info[child->size[1]])
@@ -65,7 +64,7 @@ static void	restart_data(t_child *child)
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	free_d2(child->info);
-	free(child->path);
+	//free(child->path);
 	child->path = NULL;
 }
 
@@ -81,7 +80,7 @@ static void	process_io(t_prompt *p)
 	{
 		child.id = i;
 		check_redir(p, &child);
-		if (ft_checkbuiltins(child.info[i], p))
+		if (ft_checkbuiltins(child.info[0], p))
 			ft_builtins(&child, p);
 		else
 		{

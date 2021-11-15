@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/15 19:31:26 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/15 20:35:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,21 @@ extern void	set_str(t_prompt *p)
 extern void	set_child(t_prompt *p, t_child *child)
 {
 	size_t	i;
+	char	*tmp;
 
 	i = 1;
 	while (p->d2_prompt[i - 1])
+	{
+		tmp = ft_strtrim(p->d2_prompt[i - 1], " ");
+		free(p->d2_prompt[i - 1]);
+		p->d2_prompt[i - 1] = tmp;
 		i++;
+	}
 	ft_memset(child, 0, sizeof(t_child));
 	child->fdpipe = (int **)malloc(sizeof(int *) * i);
 	child->size[0] = i;
-	while (i--)
+	i = -1;
+	while (++i < child->size[0])
 	{
 		child->fdpipe[i] = (int *)malloc(sizeof(int) * 2);
 		pipe(child->fdpipe[i]);
