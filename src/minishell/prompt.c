@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/15 19:56:40 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/15 20:47:02 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,10 @@ static void	process_io(t_prompt *p)
 {
 	size_t	i;
 	t_child	child;
+	pid_t	pid;
+	int		status;
 
+	status = 0;
 	set_child(p, &child);
 	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	i = -1;
@@ -87,15 +90,11 @@ static void	process_io(t_prompt *p)
 			p->id[i] = fork();
 			if (p->id[i] == 0)
 				multipipe(&child);
-			else
-			{
-				close(child.fdpipe[i][1]);
-				wait(NULL);
-			}
 		}
 		restart_data(&child);
 	}
 	free_child(&child);
+	while ((pid = wait(&status)) > 0);
 }
 
 extern void	prompt_io(t_prompt *p)
