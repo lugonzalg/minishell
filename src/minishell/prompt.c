@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 17:41:53 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:14:09 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,8 @@ void	multipipe(t_child *child)
 
 static void	restart_data(t_child *child)
 {
-	size_t	i;
-
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
-	i = -1;
 	free_d2(child->info);
 	free(child->path);
 	child->path = NULL;
@@ -77,14 +74,14 @@ static void	process_io(t_prompt *p)
 	size_t	i;
 	t_child	child;
 
-	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	set_child(p, &child);
+	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	i = -1;
 	while (p->d2_prompt[++i])
 	{
 		child.id = i;
 		check_redir(p, &child);
-		if (ft_checkbuiltins(child.info[i]))
+		if (ft_checkbuiltins(child.info[i], p))
 			ft_builtins(&child, p);
 		else
 		{
@@ -113,7 +110,6 @@ extern void	prompt_io(t_prompt *p)
 		free_d2(p->d2_prompt);
 		free(p->prompt);
 		free(p->id);
-		break ;
 	}
 	rl_clear_history();
 }

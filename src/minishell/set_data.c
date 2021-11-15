@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 22:01:25 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:00:46 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ extern void	free_p(t_prompt *p)
 	free_d2(p->path);
 	free(p->user);
 	free(p->envpath);
+	free(p->builtpath);
 }

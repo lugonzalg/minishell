@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/13 22:04:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:15:30 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@
 
 #define PATH_MAX 4096
 
-int	ft_checkbuiltins(char *str)
+int	ft_checkbuiltins(char *str, t_prompt *p)
 {
 	int		fd;
 	char	*line;
 	size_t	size;	
 
-	fd = open("doc/builtin_cmd", O_RDONLY);
+	fd = open(p->builtpath, O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -147,6 +147,7 @@ void	ft_putenv(char **env, t_prompt *p)
 	char	pwd[PATH_MAX];
 
 	getcwd(pwd, sizeof(pwd));
+	p->builtpath = ft_strjoin(pwd, "/doc/builtin_cmd");
 	p->envpath = ft_strjoin(pwd, "/.env");
 	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	i = -1;

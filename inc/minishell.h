@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 17:15:57 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/15 19:14:55 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct	s_prompt
 	char		*prompt;
 	char		*tmp;
 	char		*envpath;
+	char		*builtpath;
 	pid_t		*id;
 }	t_prompt;
 
@@ -54,7 +55,7 @@ extern void	set_str(t_prompt *p);
 extern void	unify_fdio(t_child *child);
 extern void	unify_cmd(t_child *child);
 
-int		ft_checkbuiltins(char *p);
+int		ft_checkbuiltins(char *str, t_prompt *p);
 void	ft_builtins(t_child *child, t_prompt *p);
 void	ft_putenv(char **env, t_prompt *p);
 extern void	free_d2(char **dat);
