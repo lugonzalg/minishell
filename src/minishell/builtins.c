@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/15 19:15:30 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/16 22:29:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,28 @@ void	deletenv(t_child	*child, t_prompt *p)
 	deletenv_2(p);
 }
 
+static void	ft_echo(t_child *child)
+{
+	size_t	i;
+	bool	nl;
+
+	nl = true;
+	i = 0;
+	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
+	{
+		nl = false;
+		i++;
+	}
+	while (child->info[++i])
+	{
+		write(0, child->info[i], ft_strlen(child->info[i]));
+		if (i < child->size[1] - 1)
+			write(0, " ", 1);
+	}
+	if (nl)
+		write(child->fdpipe[child->id + 1][1], "\n", 1);
+}
+
 void	ft_builtins(t_child *child, t_prompt *p)
 {
 	char	pwd[PATH_MAX];
@@ -137,6 +159,9 @@ void	ft_builtins(t_child *child, t_prompt *p)
 		envinclude(child, p);
 	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
 		deletenv(child, p);
+	else if (!ft_strncmp(child->info[0], "echo", sizeof("echo")))
+		ft_echo(child);
+	printf("\n");
 }
 
 void	ft_putenv(char **env, t_prompt *p)
@@ -147,7 +172,7 @@ void	ft_putenv(char **env, t_prompt *p)
 	char	pwd[PATH_MAX];
 
 	getcwd(pwd, sizeof(pwd));
-	p->builtpath = ft_strjoin(pwd, "/doc/builtin_cmd");
+	p->builtpath = ft_strjoin(pwd, "/doc/.builtin_cmd");
 	p->envpath = ft_strjoin(pwd, "/.env");
 	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	i = -1;
