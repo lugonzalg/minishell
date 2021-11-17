@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/16 20:09:21 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 18:34:24 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	check_redir(t_prompt *p, t_child *child)
 		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
-	unify_cmd(child);
+	unify_cmd(p, child);
 	command_pos(p, child);
 }
 
@@ -53,8 +53,11 @@ void	multipipe(t_child *child)
 	}
 	dup2(child->fdpipe[child->id][0], 0);
 	close(child->fdpipe[child->id][0]);
-	dup2(child->fdpipe[child->id + 1][1], 1);
-	close(child->fdpipe[child->id + 1][1]);
+	if (child->id < child->size[0] - 2 || child->redir[1])
+	{
+		dup2(child->fdpipe[child->id + 1][1], 1);
+		close(child->fdpipe[child->id + 1][1]);
+	}
 	signal = execve(child->path, child->info, NULL);
 	exit(0);
 }
@@ -64,7 +67,6 @@ static void	restart_data(t_child *child)
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	free_d2(child->info);
-	//free(child->path);
 	child->path = NULL;
 }
 
@@ -102,6 +104,7 @@ extern void	prompt_io(t_prompt *p)
 	while (1)
 	{
 		p->prompt = readline(p->user);
+		rl_on_new_line();
 		p->d2_prompt = ft_split(p->prompt, '|');
 		add_history(p->prompt);
 		process_io(p);

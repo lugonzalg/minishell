@@ -13,6 +13,7 @@ CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
 LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
 		 -L usr/include/readline \
 		 -L bin/ -lreadline -lft -lftprintf
+
 BIN = libft.a libftprintf.a minishell
 
 FILES = minishell/main \

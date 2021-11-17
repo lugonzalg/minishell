@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/15 19:14:55 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 17:31:20 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,10 @@ extern void	set_child(t_prompt *p, t_child *child);
 extern void	prompt_io(t_prompt *p);
 extern void	print_intro(void);
 extern void	set_str(t_prompt *p);
+int	go_exit(int num);
 
 extern void	unify_fdio(t_child *child);
-extern void	unify_cmd(t_child *child);
+extern void	unify_cmd(t_prompt *p, t_child *child);
 
 int		ft_checkbuiltins(char *str, t_prompt *p);
 void	ft_builtins(t_child *child, t_prompt *p);

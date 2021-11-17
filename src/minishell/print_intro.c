@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/16 20:09:20 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 18:34:13 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	sig_handler(int signo)
+void   sig_handler(int signo)
 {
-	if (signo == SIGINT)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+       if (signo == SIGINT)
+       {
+               printf("\n");
+               rl_on_new_line();
+               rl_replace_line("", 0);
+               rl_redisplay();
+       }
 }
 
 extern void	print_intro(void)

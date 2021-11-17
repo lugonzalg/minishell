@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/16 20:09:22 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 18:34:37 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ extern void	set_child(t_prompt *p, t_child *child)
 		child->fdpipe[i] = (int *)malloc(sizeof(int) * 2);
 		pipe(child->fdpipe[i]);
 	}
-	child->fdpipe[child->size[0] - 1][1] = 2;
 }
 
 extern void	free_child(t_child *child)
