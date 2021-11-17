@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/17 16:37:42 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 18:30:56 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ static void	deletenv_2(t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
-	(void)child;
 
 	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
 	fd[1] = open(".envtemp", O_RDONLY);
