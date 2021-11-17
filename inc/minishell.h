@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 17:31:20 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:45:24 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct	s_child
 	char		*ttypath;
 	size_t		size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
 	bool		redir[2]; // [0] -> inredir // [1] -> outredir
+	bool		builtin;
 	size_t		id;
 	int			tty;
 }	t_child;

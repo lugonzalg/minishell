@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 18:34:51 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:45:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void	here_doc(t_child *child, char *key)
 			break;
 		}
 		write(child->fdpipe[child->id + 1][1], line, ft_strlen(line));
+		write(child->fdpipe[child->id + 1][1], "\n", 1);
 		free(line);
 	}
 }
@@ -101,6 +102,7 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	int		fd;
 	char	*var;
 
+	child->builtin = true;
 	fd = open(p->envpath, O_RDONLY);
 	line = ft_strtrim(child->info[i], "$\"");
 	free(child->info[i]);
@@ -125,7 +127,7 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	return (NULL);
 }
 
-void	unify_cmd(t_prompt *p, t_child *child)
+void 	unify_cmd(t_prompt *p, t_child *child)
 {
 	char	**temp;
 	size_t	index;

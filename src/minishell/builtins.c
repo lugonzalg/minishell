@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/17 18:33:29 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:45:18 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,9 +124,13 @@ static void	ft_echo(t_child *child)
 {
 	size_t	i;
 	bool	nl;
+	int		fd;
 
+	fd = 1;
 	nl = true;
 	i = 0;
+	if (child->redir[1] ||child->id < child->size[0] - 2)
+		fd = child->fdpipe[child->id + 1][1];
 	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
 	{
 		nl = false;
@@ -134,12 +138,12 @@ static void	ft_echo(t_child *child)
 	}
 	while (child->info[++i])
 	{
-		write(0, child->info[i], ft_strlen(child->info[i]));
+		write(fd, child->info[i], ft_strlen(child->info[i]));
 		if (i < child->size[1] - 1)
 			write(0, " ", 1);
 	}
 	if (nl)
-		write(child->fdpipe[child->id + 1][1], "\n", 1);
+		write(fd, "\n", 1);
 }
 
 void	ft_builtins(t_child *child, t_prompt *p)
@@ -162,7 +166,7 @@ void	ft_builtins(t_child *child, t_prompt *p)
 		deletenv(child, p);
 	else if (!ft_strncmp(child->info[0], "echo", sizeof("echo")))
 		ft_echo(child);
-	printf("\n");
+	//printf("\n");
 }
 
 void	ft_putenv(char **env, t_prompt *p)

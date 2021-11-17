@@ -6,14 +6,15 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 18:34:13 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:45:16 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/inc/libft.h"
-#include "../libft/inc/get_next_line.h"
-#include "../ft_printf/inc/ft_printf.h"
-#include "../../inc/minishell.h"
+#include "inc/libft.h"
+#include "inc/get_next_line.h"
+#include "inc/ft_printf.h"
+#include "inc/minishell.h"
+#include <signal.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>

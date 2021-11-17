@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 18:34:24 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:45:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	check_redir(t_prompt *p, t_child *child)
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(p, child);
-	command_pos(p, child);
+	if (!child->builtin)
+		command_pos(p, child);
 }
 
 void	multipipe(t_child *child)
@@ -51,6 +52,7 @@ void	multipipe(t_child *child)
 			close(child->fdpipe[i][1]);
 		i++;
 	}
+	if (child->id ||child->redir[0])
 	dup2(child->fdpipe[child->id][0], 0);
 	close(child->fdpipe[child->id][0]);
 	if (child->id < child->size[0] - 2 || child->redir[1])
