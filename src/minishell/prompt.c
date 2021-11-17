@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/14 02:22:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/17 16:38:06 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,16 @@
 
 void	check_redir(t_prompt *p, t_child *child)
 {
-	p->tmp = p->d2_prompt[child->id];
-	if (ft_strchr(p->tmp, INPUT))
+	if (ft_strchr(p->d2_prompt[child->id], INPUT))
 		child->redir[0] = true;
-	if (ft_strchr(p->tmp, OUTPUT))
+	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
 	child->info = ft_split(p->d2_prompt[child->id], ' ');
 	while (child->info[child->size[1]])
 		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
-	unify_cmd(child);
+	unify_cmd(p, child);
 	command_pos(p, child);
 }
 
@@ -54,19 +53,19 @@ void	multipipe(t_child *child)
 	}
 	dup2(child->fdpipe[child->id][0], 0);
 	close(child->fdpipe[child->id][0]);
-	dup2(child->fdpipe[child->id + 1][1], 1);
-	close(child->fdpipe[child->id + 1][1]);
+	if (child->id < child->size[0] - 2 || child->redir[1])
+	{
+		dup2(child->fdpipe[child->id + 1][1], 1);
+		close(child->fdpipe[child->id + 1][1]);
+	}
 	signal = execve(child->path, child->info, NULL);
 	exit(0);
 }
 
 static void	restart_data(t_child *child)
 {
-	size_t	i;
-
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
-	i = -1;
 	free_d2(child->info);
 	child->path = NULL;
 }
@@ -75,30 +74,29 @@ static void	process_io(t_prompt *p)
 {
 	size_t	i;
 	t_child	child;
+	pid_t	pid;
+	int		status;
 
+	status = 0;
 	set_child(p, &child);
-	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0] - 1);
+	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	i = -1;
 	while (p->d2_prompt[++i])
 	{
 		child.id = i;
 		check_redir(p, &child);
-		if (ft_checkbuiltins(child.info[i]))
+		if (ft_checkbuiltins(child.info[0], p))
 			ft_builtins(&child, p);
 		else
 		{
 			p->id[i] = fork();
 			if (p->id[i] == 0)
 				multipipe(&child);
-			else
-			{
-				close(child.fdpipe[i][1]);
-				wait(NULL);
-			}
 		}
 		restart_data(&child);
 	}
 	free_child(&child);
+	while ((pid = wait(&status)) > 0);
 }
 
 extern void	prompt_io(t_prompt *p)
@@ -106,6 +104,7 @@ extern void	prompt_io(t_prompt *p)
 	while (1)
 	{
 		p->prompt = readline(p->user);
+		rl_on_new_line();
 		p->d2_prompt = ft_split(p->prompt, '|');
 		add_history(p->prompt);
 		process_io(p);

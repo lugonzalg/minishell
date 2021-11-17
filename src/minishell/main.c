@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/13 18:40:29 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/13 17:15:53 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "inc/libft.h"
 #include "inc/ft_printf.h"
 #include "inc/minishell.h"
-
 
 extern void	free_d2(char **dat)
 {
@@ -77,7 +76,7 @@ int	main(int argc, char *argv[], char *env[])
 	(void)argv;
 	if (argc != 1)
 		return (1);
-	set_prompt(&p);
+	set_str(&p);
 	ft_putenv(env, &p);
 	print_intro();
 	prompt_io(&p);

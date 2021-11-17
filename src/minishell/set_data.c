@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/14 02:22:36 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/17 16:38:32 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,65 +15,9 @@
 #include <unistd.h>
 #include "inc/minishell.h"
 #include "inc/libft.h"
-#include "inc/get_next_line.h"
 #include <fcntl.h>
 
-void	lstadd_back(t_builtin **blt, t_builtin *new)
-{
-	t_builtin	*node;
-
-	node = *blt;
-	if (node)
-	{
-		while (node->next)
-			node = node->next;
-		node->next = new;
-		new->next = NULL;
-	}
-	else
-		(*blt) = new;
-}
-
-static void	set_function(t_builtin *blt)
-{
-	if (!ft_strncmp(blt->key, "echo", sizeof("echo")))
-			blt->ptr = ft_echo;
-	else if (!ft_strncmp(blt->key, "exit", sizeof("exit")))
-			blt->ptr = ft_exit;
-	else if (!ft_strncmp(blt->key, "cd", sizeof("cd")))
-			blt->ptr = ft_cd;
-	else if (!ft_strncmp(blt->key, "pwd", sizeof("pwd")))
-			blt->ptr = ft_pwd;
-	else if (!ft_strncmp(blt->key, "export", sizeof("export")))
-			blt->ptr = ft_export;
-	else if (!ft_strncmp(blt->key, "unset", sizeof("unset")))
-			blt->ptr = ft_unset;
-	else if (!ft_strncmp(blt->key, "env", sizeof("env")))
-			blt->ptr = ft_env;
-}
-
-static void create_list(t_prompt *p)
-{
-	char		*line;
-	ssize_t		fd;
-	t_builtin	*tmp;
-
-	fd = open("doc/builtin_cmd", O_RDONLY);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		tmp = (t_builtin *)malloc(sizeof(t_builtin));
-		line[ft_strlen(line) - 1] = 0;
-		tmp->key = line;
-		tmp->next = NULL;
-		lstadd_back(&p->head, tmp);
-		set_function(tmp);
-	}
-}
-
-extern void	set_prompt(t_prompt *p)
+extern void	set_str(t_prompt *p)
 {
 	int	i;
 
@@ -87,25 +31,30 @@ extern void	set_prompt(t_prompt *p)
 		free(p->path[i]);
 		p->path[i] = p->tmp;
 	}
-	create_list(p);
 }
 
 extern void	set_child(t_prompt *p, t_child *child)
 {
 	size_t	i;
+	char	*tmp;
 
 	i = 1;
 	while (p->d2_prompt[i - 1])
+	{
+		tmp = ft_strtrim(p->d2_prompt[i - 1], " ");
+		free(p->d2_prompt[i - 1]);
+		p->d2_prompt[i - 1] = tmp;
 		i++;
+	}
 	ft_memset(child, 0, sizeof(t_child));
 	child->fdpipe = (int **)malloc(sizeof(int *) * i);
 	child->size[0] = i;
-	while (i--)
+	i = -1;
+	while (++i < child->size[0])
 	{
 		child->fdpipe[i] = (int *)malloc(sizeof(int) * 2);
 		pipe(child->fdpipe[i]);
 	}
-	child->fdpipe[child->size[0] - 1][1] = 2;
 }
 
 extern void	free_child(t_child *child)
@@ -129,4 +78,5 @@ extern void	free_p(t_prompt *p)
 	free_d2(p->path);
 	free(p->user);
 	free(p->envpath);
+	free(p->builtpath);
 }

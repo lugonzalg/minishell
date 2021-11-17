@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/14 02:22:32 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/17 16:37:42 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 
 #define PATH_MAX 4096
 
-int	ft_checkbuiltins(char *str)
+int	ft_checkbuiltins(char *str, t_prompt *p)
 {
 	int		fd;
 	char	*line;
 	size_t	size;	
 
-	fd = open("doc/builtin_cmd", O_RDONLY);
+	fd = open(p->builtpath, O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -48,88 +48,25 @@ int	ft_checkbuiltins(char *str)
 	return (0);
 }
 
-void	ft_builtins(t_child *child, t_prompt *p)
+static void	showenv(t_prompt *p)
 {
-	t_ptr		ft_builtin;
-	t_builtin	*tmp;
-
-	tmp = p->head;
-	while (tmp)
-	{
-		if (!ft_strncmp(child->info[child->id], tmp->key, ft_strlen(tmp->key)))
-		{
-			ft_builtin = tmp->ptr;
-			ft_builtin(p, child);
-		}
-		tmp = tmp->next;
-	}
-}
-
-void	ft_putenv(char **env, t_prompt *p)
-{
-	size_t	i;
-	size_t	j;
+	char	*line;
 	int		fd;
-	char	pwd[PATH_MAX];
 
-	getcwd(pwd, sizeof(pwd));
-	p->envpath = ft_strjoin(pwd, "/.env");
-	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	i = -1;
-	while (env[++i])
+	printf("%s\n", p->envpath);
+	fd = open(p->envpath, O_RDONLY);
+	while (1)
 	{
-		j = -1;
-		while (env[i][++j])
-			write(fd, &env[i][j], sizeof(char));
-		write(fd, "\n", sizeof(char));
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		printf("%s", line);
+		free(line);
 	}
 	close(fd);
 }
 
-
-extern void	ft_echo(t_prompt *p, t_child *child)
-{
-	(void)p;
-	(void)child;
-	printf("eeasfaef");
-}
-
-
-extern void	ft_exit(t_prompt *p, t_child *child)
-{
-
-	(void)p;
-	(void)child;
-	printf("eeasfaef");
-}
-
-extern void	ft_cd(t_prompt *p, t_child *child)
-{
-	DIR 			*dir;
-	struct dirent	*s_dir;
-	char			**d2_dir;
-
-	d2_dir = ft_split(p->d2_prompt[child->id], 32);
-	dir = opendir(d2_dir[1]);
-	if (!dir)
-	{
-		free_d2(d2_dir);
-		return ;
-	}
-	s_dir = readdir(dir);
-	(void)child;
-	printf("eeasfaef");
-}
-
-extern void	ft_pwd(t_prompt *p, t_child *child)
-{
-
-	(void)p;
-	(void)child;
-	printf("eeasfaef");
-}
-
-extern void	ft_export(t_prompt *p, t_child *child)
+void	envinclude(t_child	*child, t_prompt *p)
 {
 	int	fd;
 	int	i;
@@ -142,7 +79,7 @@ extern void	ft_export(t_prompt *p, t_child *child)
 	close(fd);
 }
 
-static void	ft_unset_2(t_prompt *p, t_child *child)
+static void	deletenv_2(t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -163,7 +100,7 @@ static void	ft_unset_2(t_prompt *p, t_child *child)
 	unlink(".envtemp");
 }
 
-extern void	ft_unset(t_prompt *p, t_child *child)
+void	deletenv(t_child	*child, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -181,24 +118,72 @@ extern void	ft_unset(t_prompt *p, t_child *child)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	ft_unset_2(p, child);
+	deletenv_2(p);
 }
 
-extern void	ft_env(t_prompt *p, t_child *child)
+static void	ft_echo(t_child *child)
 {
-	char	*line;
-	int		fd;
-	(void)child;
+	size_t	i;
+	bool	nl;
 
-	printf("%s\n", p->envpath);
-	fd = open(p->envpath, O_RDONLY);
-	while (1)
+	nl = true;
+	i = 0;
+	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		printf("%s", line);
-		free(line);
+		nl = false;
+		i++;
+	}
+	while (child->info[++i])
+	{
+		write(0, child->info[i], ft_strlen(child->info[i]));
+		if (i < child->size[1] - 1)
+			write(0, " ", 1);
+	}
+	if (nl)
+		write(child->fdpipe[child->id + 1][1], "\n", 1);
+}
+
+void	ft_builtins(t_child *child, t_prompt *p)
+{
+	char	pwd[PATH_MAX];
+
+	if (!ft_strncmp(child->info[0], "pwd", sizeof("pwd")))
+	{
+		if (getcwd(pwd, sizeof(pwd)) != NULL)
+			printf("%s\n", pwd);
+	}
+	else if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
+		chdir(child->info[1]);
+	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
+		showenv(p);
+	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
+			&& ft_strchr(child->info[1], '='))
+		envinclude(child, p);
+	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
+		deletenv(child, p);
+	else if (!ft_strncmp(child->info[0], "echo", sizeof("echo")))
+		ft_echo(child);
+	printf("\n");
+}
+
+void	ft_putenv(char **env, t_prompt *p)
+{
+	size_t	i;
+	size_t	j;
+	int		fd;
+	char	pwd[PATH_MAX];
+
+	getcwd(pwd, sizeof(pwd));
+	p->builtpath = ft_strjoin(pwd, "/doc/.builtin_cmd");
+	p->envpath = ft_strjoin(pwd, "/.env");
+	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	i = -1;
+	while (env[++i])
+	{
+		j = -1;
+		while (env[i][++j])
+			write(fd, &env[i][j], sizeof(char));
+		write(fd, "\n", sizeof(char));
 	}
 	close(fd);
 }
