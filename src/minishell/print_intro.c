@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 18:34:13 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/17 20:34:27 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,41 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <signal.h>
+#include <term.h>
+
+int	got_error(int n)
+{
+	g_glob.error = n;
+	return (g_glob.error);
+}
 
 void   sig_handler(int signo)
 {
-       if (signo == SIGINT)
-       {
-               printf("\n");
-               rl_on_new_line();
-               rl_replace_line("", 0);
-               rl_redisplay();
-       }
+	char buf[1024];
+	char *str;
+	if (signo == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	if (signo == SIGQUIT && g_glob.killid)
+	{
+		kill(g_glob.killid, SIGQUIT);
+		printf("Quit: 3\n");
+		g_glob.error = 131;
+	}
+	else
+	{
+		tgetent(buf, getenv("TERM"));
+		str = tgetstr("do", NULL);
+		fputs(str, stdout);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 extern void	print_intro(void)
