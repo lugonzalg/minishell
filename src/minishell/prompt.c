@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 20:45:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:30:11 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static void	process_io(t_prompt *p)
 		else
 		{
 			p->id[i] = fork();
+			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
 				multipipe(&child);
 		}
@@ -105,6 +106,7 @@ extern void	prompt_io(t_prompt *p)
 {
 	while (1)
 	{
+		g_glob.killid = 0;
 		p->prompt = readline(p->user);
 		rl_on_new_line();
 		p->d2_prompt = ft_split(p->prompt, '|');

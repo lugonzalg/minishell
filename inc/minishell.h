@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 20:45:24 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:31:25 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@ typedef struct	s_child
 	size_t		id;
 	int			tty;
 }	t_child;
+
+typedef struct	s_global
+{
+	int		error;
+	pid_t	killid;
+}	t_global;
+
+t_global	g_glob;
 
 void 		check_redir(t_prompt *p, t_child *child);
 extern int	command_pos(t_prompt *p, t_child *child);

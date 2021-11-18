@@ -12,7 +12,7 @@ INC = -I /usr/include/readline \
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address 
 LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
 		 -L usr/include/readline \
-		 -L bin/ -lreadline -lft -lftprintf
+		 -L bin/ -lreadline -lft -lftprintf -ltermcap
 
 BIN = libft.a libftprintf.a minishell
 
