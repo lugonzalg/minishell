@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 18:31:25 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:55:21 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ extern void	free_d2(char **dat);
 extern void	free_p(t_prompt *p);
 extern void	free_child(t_child *child);
 
+extern void	driver_talk(void);
 #endif

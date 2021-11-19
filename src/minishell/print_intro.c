@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 18:32:22 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:39:46 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ int	got_error(int n)
 	return (g_glob.error);
 }
 
-void   sig_handler(int signo)
+void	sig_handler(int signo)
 {
-	char buf[1024];
-	char *str;
+	char	buf[1024];
+	char	*str;
+
 	if (signo == SIGINT)
 	{
 		printf("\n");

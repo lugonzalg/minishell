@@ -21,7 +21,8 @@ FILES = minishell/main \
 		minishell/prompt \
 		minishell/set_data \
 		minishell/unify		\
-		minishell/builtins
+		minishell/builtins \
+		minishell/driver_talk
 
 SRC_DIR = src/
 OBJ_DIR = obj/

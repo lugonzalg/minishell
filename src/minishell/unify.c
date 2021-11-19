@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 18:31:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:51:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@ static void	here_doc(t_child *child, char *key)
 		if (!line)
 			break ;
 		size = ft_strlen(line);
-		line[size - 1] = 0;	
+		line[size - 1] = 0;
 		if (!ft_strncmp(key, line, ft_strlen(line)))
 		{
 			free(line);
-			break;
+			break ;
 		}
 		write(child->fdpipe[child->id + 1][1], line, ft_strlen(line));
 		write(child->fdpipe[child->id + 1][1], "\n", 1);
@@ -106,7 +106,7 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	fd = open(p->envpath, O_RDONLY);
 	line = ft_strtrim(child->info[i], "$\"");
 	free(child->info[i]);
-	child->info[i] = ft_strjoin(line, "=");;
+	child->info[i] = ft_strjoin(line, "=");
 	free(line);
 	while (1)
 	{
@@ -127,7 +127,7 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	return (NULL);
 }
 
-void 	unify_cmd(t_prompt *p, t_child *child)
+void	unify_cmd(t_prompt *p, t_child *child)
 {
 	char	**temp;
 	size_t	index;
