@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 18:30:37 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:21:33 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "inc/libft.h"
 #include "inc/ft_printf.h"
 #include "inc/minishell.h"
+#include <signal.h>
+#include <term.h>
 
 extern void	free_d2(char **dat)
 {
