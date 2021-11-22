@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/19 20:21:33 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 17:58:58 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int	main(int argc, char *argv[], char *env[])
 {
 	t_prompt	p;
 
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	(void)argv;
 	if (argc != 1)
 		return (1);

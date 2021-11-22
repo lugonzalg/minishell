@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 18:55:21 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 18:05:41 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ extern void	prompt_io(t_prompt *p);
 extern void	print_intro(void);
 extern void	set_str(t_prompt *p);
 int	go_exit(int num);
+void	sig_handler(int signo);
 
 extern void	unify_fdio(t_child *child);
 extern void	unify_cmd(t_prompt *p, t_child *child);

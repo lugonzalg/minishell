@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 18:51:45 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 19:51:05 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/19 20:29:07 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	driver_talk(void)
 	int		status;
 	struct winsize	win;
 	struct termios	term;
+
 	fd = ttyslot();
 	status = isatty(fd);
 	if (status)
 	{
 		tty = ttyname(fd);
+//		fd = open(tty, =_
 		status = ioctl(fd, TIOCGWINSZ, &win);
 		status = ioctl(fd, TIOCGETA, &term);
 	}
