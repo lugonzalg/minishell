@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 19:34:30 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:48:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static int trim_redir(char *str, char key, size_t count)
 		if (count == 1)
 			len = open(redir, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 		else
+			(void)here_doc;
 			len = open(redir, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	}
 	free(str);
@@ -107,10 +108,12 @@ static int	isolate_fdio(char *str, char redir)
 {
 	//char	*redir_pos;
 	size_t	count;
+	size_t	pos;
 
 	count = count_char(str, redir);
 	if (count > 2)
 		return (-1);
+	pos = ft_strrchr(str, redir) - ft_strchr(str, redir);
 	return (trim_redir(str, redir, count));
 }
 
@@ -119,7 +122,6 @@ extern void	unify_fdio(t_child *child)
 	int		fd;
 	size_t	i;
 
-	(void)here_doc;
 	i = -1;
 	while (child->info[++i])
 	{
