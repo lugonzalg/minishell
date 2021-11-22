@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 18:23:11 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:34:30 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,60 @@ static void	here_doc(t_child *child, char *key)
 		write(child->fdpipe[child->id + 1][1], "\n", 1);
 		free(line);
 	}
+	child->redir[0] = true;
+}
+
+static int trim_redir(char *str, char key, size_t count)
+{
+	char	*data;
+	char	*redir;
+	size_t	start;
+	size_t	len;
+	(void)key;
+
+	data = NULL;
+	redir = NULL;
+	len = -1;
+	if (ft_strchr(str, '\"'))
+	{
+		start = ft_strchr(str, '\"') - str;
+		len =  ft_strrchr(str, '\"') - ft_strchr(str, '\"');
+		data = ft_substr(str + 1, start, len);
+		redir = ft_substr(str, len, 2048);
+		if (count == 1)
+			len = open(redir, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		else
+			len = open(redir, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	}
+	free(str);
+	free(redir);
+	str = data;
+	return (len);
+}
+
+static size_t	count_char(char *str, char key)
+{
+	size_t	count;
+
+	count = 0;
+	while (*str)
+	{
+		if (*str == key)
+			count++;
+		str++;
+	}
+	return (count);
+}
+
+static int	isolate_fdio(char *str, char redir)
+{
+	//char	*redir_pos;
+	size_t	count;
+
+	count = count_char(str, redir);
+	if (count > 2)
+		return (-1);
+	return (trim_redir(str, redir, count));
 }
 
 extern void	unify_fdio(t_child *child)
@@ -65,6 +119,7 @@ extern void	unify_fdio(t_child *child)
 	int		fd;
 	size_t	i;
 
+	(void)here_doc;
 	i = -1;
 	while (child->info[++i])
 	{
@@ -72,10 +127,8 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
-			else if (ft_strlen(child->info[i]) == 2)
-				fd = open(child->info[++i], O_RDWR | O_APPEND | O_CREAT, 0644);
 			else
-				exit(0); //SET FAILURE
+				fd = isolate_fdio(child->info[i++], OUTPUT);
 			close(child->fdpipe[child->id + 1][1]);
 			child->fdpipe[child->id + 1][1] = fd;
 		}
@@ -83,13 +136,8 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDONLY);
-			else if (ft_strlen(child->info[i]) == 2)
-			{
-				here_doc(child, child->info[i + 1]);
-				continue ;
-			}
 			else
-				exit(0); //SET FAILURE
+				fd = isolate_fdio(child->info[i++], INPUT);
 			close(child->fdpipe[child->id][0]);
 			child->fdpipe[child->id][0] = fd;
 		}
@@ -150,3 +198,18 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	free_d2(child->info);
 	child->info = temp;
 }
+
+
+			/*else if (ft_strlen(child->info[i]) == 2)
+				fd = open(child->info[++i], O_RDWR | O_APPEND | O_CREAT, 0644);
+			else
+				exit(0); //SET FAILURE*/
+
+
+			/*else if (ft_strlen(child->info[i]) == 2)
+			{
+				here_doc(child, child->info[i + 1]);
+				continue ;
+			}
+			else
+				exit(0); //SET FAILURE*/
