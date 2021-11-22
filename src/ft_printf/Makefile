@@ -1,8 +1,9 @@
-NAME = libftprintf.a
-CC = clang
-CFLAGS = -Wall -Werror -Wextra -g
-RM = rm -rf
-AR = ar rcs
+NAME =		libftprintf.a
+CC = 		clang
+CFLAGS = 	-Wall -Werror -Wextra -g
+RM = 		rm -rf
+INC =		-I ./inc -I /Users/$(USER)/Cursus_42/minishell/src/libft/inc
+AR = 		ar rcs
 
 FILES = ft_printf \
 		handle_types \
@@ -13,7 +14,7 @@ SRCS = $(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
 OBJS = $(addprefix $(SRC_DIR), $(addsuffix .o, $(FILES)))
 
 .c.o: $(SRCS) 
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $^
 
 all: $(NAME)
 

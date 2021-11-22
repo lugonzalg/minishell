@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/26 21:22:59 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/26 21:30:28 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:31:14 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:31:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 int	ft_isascii(int c)
 {
 	if (c < 0 || (c > 127))

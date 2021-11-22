@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   writf.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/15 18:07:52 by lugonzal          #+#    #+#             */
-/*Updated: 2021/07/15 18:12:07 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:25:25 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:25:28 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/ft_printf.h"
-#include "../../libft/inc/libft.h"
+#include "ft_printf.h"
+#include "libft.h"
 #include <stdlib.h>
 
 static void	write_width(t_code *f_code, char *handle)

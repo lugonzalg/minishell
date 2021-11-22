@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_tools.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 19:29:19 by lugonzal          #+#    #+#             */
-/*Updated: 2021/08/12 19:30:33 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:19:41 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:19:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

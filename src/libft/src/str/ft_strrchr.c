@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/26 18:53:33 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/26 18:58:35 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:11:43 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:11:47 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "libft.h"
 
 char	*ft_strrchr(const char *s, int c)
 {

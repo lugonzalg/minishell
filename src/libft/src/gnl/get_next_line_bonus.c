@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/20 16:39:20 by lugonzal          #+#    #+#             */
-/*Updated: 2021/07/20 16:39:22 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:27:05 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:27:12 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "../../inc/get_next_line_bonus.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {

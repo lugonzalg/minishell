@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/15 18:06:59 by lugonzal          #+#    #+#             */
-/*Updated: 2021/07/15 18:12:00 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:15:54 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:18:05 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
