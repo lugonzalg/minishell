@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 15:47:37 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 21:01:14 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ void	multipipe(t_child *child)
 		i++;
 	}
 	if (child->id || child->redir[0])
+	{
 		dup2(child->fdpipe[child->id][0], 0);
-	close(child->fdpipe[child->id][0]);
-	if (child->id < child->size[0] - 2 || child->redir[1])
+		close(child->fdpipe[child->id][0]);
+	}
+	if (child->id < child->size[0] - 2 || (child->redir[1] && !child->redir[2]))
 	{
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
@@ -114,7 +116,7 @@ extern void	prompt_io(t_prompt *p)
 		g_glob.killid = 0;
 		p->prompt = readline(p->user);
 		rl_on_new_line();
-		driver_talk();
+		//driver_talk();
 		p->d2_prompt = ft_split(p->prompt, '|');
 		add_history(p->prompt);
 		process_io(p);

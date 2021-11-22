@@ -2,7 +2,7 @@ NAME =		libftprintf.a
 CC = 		clang
 CFLAGS = 	-Wall -Werror -Wextra -g
 RM = 		rm -rf
-INC =		-I ./inc -I /Users/$(USER)/Cursus_42/minishell/src/libft/inc
+INC =		-I ./inc -I ${PWD}/src/libft/inc
 AR = 		ar rcs
 
 FILES = ft_printf \

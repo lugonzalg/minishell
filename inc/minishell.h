@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/18 18:55:21 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 20:56:52 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct	s_child
 	char		*path;
 	char		*ttypath;
 	size_t		size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
-	bool		redir[2]; // [0] -> inredir // [1] -> outredir
+	bool		redir[3]; // [0] -> inredir // [1] -> outredir // here_doc
 	bool		builtin;
 	size_t		id;
 	int			tty;
@@ -52,7 +52,7 @@ typedef struct	s_global
 	pid_t	killid;
 }	t_global;
 
-t_global	g_glob;
+static t_global	g_glob;
 
 void 		check_redir(t_prompt *p, t_child *child);
 extern int	command_pos(t_prompt *p, t_child *child);

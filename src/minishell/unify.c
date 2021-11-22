@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 18:23:11 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/22 21:20:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,47 @@ extern void	cmd_size(t_child *child)
 	}
 }
 
+static void	resize_cat(t_child *child)
+{
+	char	**resize;
+
+	resize = (char **)malloc(sizeof(char *) * 3);
+	resize[0] = ft_strdup(child->info[0]);
+	resize[1] = ft_strdup(".here_doc");
+	resize[2] = NULL;
+	free_d2(child->info);
+	child->info = resize;
+	child->size[2]--;
+	child->redir[2] = true;
+	child->redir[0] = true;
+}
+
 static void	here_doc(t_child *child, char *key)
 {
 	char	*line;
-	size_t	size;
+	int		fd;
+	char	*key_nl;
 
+	fd = open(".here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	close(child->fdpipe[child->id + 1][1]);
+	child->fdpipe[child->id + 1][1] = fd;
+	key_nl = ft_strjoin(key, "\n");
 	while (1)
 	{
+		write(1, "> ", 2);
 		line = get_next_line(0);
 		if (!line)
 			break ;
-		size = ft_strlen(line);
-		line[size - 1] = 0;
-		if (!ft_strncmp(key, line, ft_strlen(line)))
+		if (!ft_strncmp(key_nl, line, ft_strlen(line)))
 		{
 			free(line);
 			break ;
 		}
 		write(child->fdpipe[child->id + 1][1], line, ft_strlen(line));
-		write(child->fdpipe[child->id + 1][1], "\n", 1);
 		free(line);
 	}
+	free(key_nl);
+	resize_cat(child);
 }
 
 extern void	unify_fdio(t_child *child)
@@ -143,7 +163,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 			temp[i++] = ft_strtrim(child->info[index], "\'");
 		else if (ft_strchr(child->info[index], '$'))
 				temp[i++] = expand_var(p, child, index);
-		else if (*child->info[index])
+		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);
 		index++;
 	}
