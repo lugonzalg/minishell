@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 19:08:44 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/23 18:08:45 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id][0], 0);
 		close(child->fdpipe[child->id][0]);
 	}
-	if (child->id < child->size[0] - 2 || child->redir[1])
+	if (child->id < child->size[0] - 2 || (child->redir[1] && !child->redir[2]))
 	{
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);

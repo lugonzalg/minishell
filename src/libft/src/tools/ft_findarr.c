@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_findarr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/02 15:47:31 by lugonzal          #+#    #+#             */
-/*Updated: 2021/09/02 15:48:04 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:17:41 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:17:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

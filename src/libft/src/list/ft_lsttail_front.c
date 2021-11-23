@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lsttail_front.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/03 15:03:44 by lugonzal          #+#    #+#             */
-/*Updated: 2021/09/03 15:03:48 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:06:59 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:07:02 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "libft.h"
 
 void	ft_lsttail_front(t_list **lst, t_list **tail)
 {

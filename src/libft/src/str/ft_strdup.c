@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/27 17:31:59 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/27 17:37:24 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:11:55 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:11:59 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../inc/libft.h"
+#include "libft.h"
 
 char	*ft_strdup(const char *s1)
 {

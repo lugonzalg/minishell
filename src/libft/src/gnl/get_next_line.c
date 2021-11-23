@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/19 20:51:26 by lugonzal          #+#    #+#             */
-/*Updated: 2021/07/19 20:53:00 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:26:50 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:26:56 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "../../inc/get_next_line.h"
+#include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/26 21:49:16 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/26 21:53:07 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:14:28 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:14:28 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

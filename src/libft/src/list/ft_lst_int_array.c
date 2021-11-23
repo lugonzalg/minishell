@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_int_array.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/02 13:05:41 by lugonzal          #+#    #+#             */
-/*Updated: 2021/09/02 13:07:35 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:32:06 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:33:58 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdint.h>
-#include "../../inc/libft.h"
+#include "libft.h"
 
 int	*ft_lst_int(t_list *head, int *size)
 {

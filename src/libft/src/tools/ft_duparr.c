@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_duparr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/02 15:43:20 by lugonzal          #+#    #+#             */
-/*Updated: 2021/09/02 15:43:23 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:14:55 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:14:57 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

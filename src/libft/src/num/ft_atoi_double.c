@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi_double.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 19:17:41 by lugonzal          #+#    #+#             */
-/*Updated: 2021/08/12 19:18:14 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:10:04 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:10:33 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
-#include "../../inc/new_tools.h"
+#include "new_tools.h"
 
 static int	sign_checker(const char *str)
 {
