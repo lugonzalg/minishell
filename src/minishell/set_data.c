@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/19 20:41:18 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/24 15:23:22 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,15 @@ extern void	free_p(t_prompt *p)
 	free(p->user);
 	free(p->envpath);
 	free(p->builtpath);
+}
+
+extern void	free_d2(char **dat)
+{
+	int	i;
+
+	i = -1;
+	while (dat[++i])
+		free(dat[i]);
+	free(dat);
+	dat = NULL;
 }
