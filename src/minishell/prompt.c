@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/24 14:25:15 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/25 20:13:38 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	check_redir(t_prompt *p, t_child *child)
 		child->redir[0] = true;
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
-	child->info = ft_split(p->d2_prompt[child->id], ' ');
+	child->info = ft_split_ptr(p->d2_prompt[child->id], ' ', ft_len_redir, ft_cut_redir);
 	while (child->info[child->size[1]])
 		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
@@ -79,7 +79,6 @@ static void	process_io(t_prompt *p)
 {
 	size_t	i;
 	t_child	child;
-	pid_t	pid;
 	int		status;
 
 	status = 0;
@@ -104,8 +103,7 @@ static void	process_io(t_prompt *p)
 	free_child(&child);
 	while (1)
 	{
-		pid = wait(&status);
-		if (pid <= 0)
+		if (wait(&status) < 0)
 			break ;
 	}
 }
@@ -118,7 +116,7 @@ extern void	prompt_io(t_prompt *p)
 		p->prompt = readline("minishell > ");
 		rl_on_new_line();
 		//driver_talk();
-		p->d2_prompt = ft_split(p->prompt, '|');
+		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, ft_cutp);
 		add_history(p->prompt);
 		process_io(p);
 		free_d2(p->d2_prompt);

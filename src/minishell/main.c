@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 17:58:58 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/24 21:43:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,6 @@
 #include "inc/minishell.h"
 #include <signal.h>
 #include <term.h>
-
-extern void	free_d2(char **dat)
-{
-	int	i;
-
-	i = -1;
-	while (dat[++i])
-		free(dat[i]);
-	free(dat);
-	dat = NULL;
-}
 
 int	trim_path(t_child *child, int j)
 {

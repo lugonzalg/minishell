@@ -22,6 +22,8 @@ FILES = minishell/main \
 		minishell/set_data \
 		minishell/unify		\
 		minishell/builtins \
+		minishell/split_ptr \
+		minishell/split_tools \
 		minishell/driver_talk
 
 SRC_DIR = src/

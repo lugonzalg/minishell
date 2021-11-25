@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/24 15:18:30 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/24 15:45:59 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,18 +163,3 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	free_d2(child->info);
 	child->info = temp;
 }
-
-
-			/*else if (ft_strlen(child->info[i]) == 2)
-				fd = open(child->info[++i], O_RDWR | O_APPEND | O_CREAT, 0644);
-			else
-				exit(0); //SET FAILURE*/
-
-
-			/*else if (ft_strlen(child->info[i]) == 2)
-			{
-				here_doc(child, child->info[i + 1]);
-				continue ;
-			}
-			else
-				exit(0); //SET FAILURE*/

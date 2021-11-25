@@ -6,96 +6,50 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/24 15:26:06 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/25 16:45:23 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft.h"
+#include "inc/minishell.h"
+#include "inc/libft.h"
 
-static char	**ft_frlloc(char **tab)
+static char	**ft_handle_tab(const char *str, char c, char **tab, t_cut ft_cut)
 {
-	int	i;
+	size_t	j;
 
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-	return (NULL);
-}
-
-static int	ft_strc(const char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != c && str[i])
-		i++;
-	return (i);
-}
-
-static int	ft_tab_len(const char *s, char c)
-{
-	int	i;
-	int	row;
-
-	row = 0;
-	i = 0;
-	while (s[i])
-	{
-		while (s[i] == c && s[i])
-			i++;
-		if (s[i] != c && s[i] != 0)
-			row++;
-		while (s[i] != c && s[i])
-			i++;
-	}
-	return (row);
-}
-
-static char	**ft_handle_tab(const char *str, char c, char **tab, int k)
-{
-	int	j;
-	int	i;
-	int	x;
-
-	i = 0;
 	j = 0;
-	while (str[i] && j < k)
+	while (*str)
 	{
-		while (str[i] && str[i] == c)
-			i++;
-		if (str[i] != c)
+		while (*str && *str == c)
+			str++;
+		if (*str != c)
 		{
-			x = ft_strc(str + i, c);
-			tab[j] = ft_substr(str, i, x);
+			tab[j] = ft_cut(str, (char **)&str);
 			if (tab[j] == NULL)
-				return (ft_frlloc(tab));
+			{
+				free_d2(tab);
+				return (NULL);
+			}
 			j++;
-			tab[j] = NULL;
 		}
-		while (str[i] && str[i] != c)
-			i++;
+		while (*str && *str != c)
+			str++;
 	}
 	return (tab);
 }
 
-char	**ft_split_ptr(const char *s, char c, int(*len)(const char *, char), void (*cut)(const char,)
+char	**ft_split_ptr(const char *s, char c, t_len ft_len, t_cut ft_cut)
 {
-	int		j;
+	size_t		j;
 	char	**tab;
 
+	(void)ft_cut;
 	if (!s)
 		return (NULL);
-	j = ft_tab_len(s, c);
-	tab = (char **)malloc((j + 1) * (sizeof(char *)));
+	j = ft_len(s, c);
+	tab = (char **)ft_calloc(sizeof(char *), j + 1);
 	if (!tab)
 		return (NULL);
-	tab[j] = NULL;
-	if (!j)
-		return (tab);
-	return (ft_handle_tab(s, c, tab, j));
+	return (ft_handle_tab(s, c, tab, ft_cut));
 }
