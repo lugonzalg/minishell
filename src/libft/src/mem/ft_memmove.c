@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/26 10:31:56 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/26 10:31:58 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:08:58 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:09:25 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
-
+#include "libft.h"
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {

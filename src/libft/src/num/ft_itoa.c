@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/28 17:42:22 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/28 17:50:37 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:10:41 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:10:44 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../inc/libft.h"
+#include "libft.h"
 
 static int	ft_power_num(unsigned int num)
 {

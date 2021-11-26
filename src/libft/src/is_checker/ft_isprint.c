@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/26 21:34:38 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/26 21:37:46 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:31:45 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:31:46 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 int	ft_isprint(int c)
 {
 	if (c < 32 || c > 126)

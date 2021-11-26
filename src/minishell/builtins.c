@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/17 20:45:18 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/25 20:46:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ static void	ft_echo(t_child *child)
 	fd = 1;
 	nl = true;
 	i = 0;
-	if (child->redir[1] ||child->id < child->size[0] - 2)
+	if (child->redir[1] || child->id < child->size[0] - 2)
 		fd = child->fdpipe[child->id + 1][1];
 	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
 	{
@@ -160,13 +160,12 @@ void	ft_builtins(t_child *child, t_prompt *p)
 	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
 		showenv(p);
 	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
-			&& ft_strchr(child->info[1], '='))
+		&& ft_strchr(child->info[1], '='))
 		envinclude(child, p);
 	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
 		deletenv(child, p);
 	else if (!ft_strncmp(child->info[0], "echo", sizeof("echo")))
 		ft_echo(child);
-	//printf("\n");
 }
 
 void	ft_putenv(char **env, t_prompt *p)

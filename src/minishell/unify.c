@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 20:45:19 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/25 20:46:46 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,47 @@ extern void	cmd_size(t_child *child)
 	}
 }
 
+static void	resize_cat(t_child *child)
+{
+	char	**resize;
+
+	resize = (char **)malloc(sizeof(char *) * 3);
+	resize[0] = ft_strdup(child->info[0]);
+	resize[1] = ft_strdup(".here_doc");
+	resize[2] = NULL;
+	free_d2(child->info);
+	child->info = resize;
+	child->size[2]--;
+	child->redir[2] = true;
+	child->redir[0] = true;
+}
+
 static void	here_doc(t_child *child, char *key)
 {
 	char	*line;
-	size_t	size;
+	int		fd;
+	char	*key_nl;
 
+	fd = open(".here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	close(child->fdpipe[child->id + 1][1]);
+	child->fdpipe[child->id + 1][1] = fd;
+	key_nl = ft_strjoin(key, "\n");
 	while (1)
 	{
+		write(1, "> ", 2);
 		line = get_next_line(0);
 		if (!line)
 			break ;
-		size = ft_strlen(line);
-		line[size - 1] = 0;	
-		if (!ft_strncmp(key, line, ft_strlen(line)))
+		if (!ft_strncmp(key_nl, line, ft_strlen(line)))
 		{
 			free(line);
-			break;
+			break ;
 		}
 		write(child->fdpipe[child->id + 1][1], line, ft_strlen(line));
-		write(child->fdpipe[child->id + 1][1], "\n", 1);
 		free(line);
 	}
+	free(key_nl);
+	resize_cat(child);
 }
 
 extern void	unify_fdio(t_child *child)
@@ -72,10 +92,8 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
-			else if (ft_strlen(child->info[i]) == 2)
-				fd = open(child->info[++i], O_RDWR | O_APPEND | O_CREAT, 0644);
 			else
-				exit(0); //SET FAILURE
+				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			close(child->fdpipe[child->id + 1][1]);
 			child->fdpipe[child->id + 1][1] = fd;
 		}
@@ -83,13 +101,8 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDONLY);
-			else if (ft_strlen(child->info[i]) == 2)
-			{
-				here_doc(child, child->info[i + 1]);
-				continue ;
-			}
 			else
-				exit(0); //SET FAILURE
+				here_doc(child, child->info[i + 1]);
 			close(child->fdpipe[child->id][0]);
 			child->fdpipe[child->id][0] = fd;
 		}
@@ -106,7 +119,7 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	fd = open(p->envpath, O_RDONLY);
 	line = ft_strtrim(child->info[i], "$\"");
 	free(child->info[i]);
-	child->info[i] = ft_strjoin(line, "=");;
+	child->info[i] = ft_strjoin(line, "=");
 	free(line);
 	while (1)
 	{
@@ -127,7 +140,7 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	return (NULL);
 }
 
-void 	unify_cmd(t_prompt *p, t_child *child)
+void	unify_cmd(t_prompt *p, t_child *child)
 {
 	char	**temp;
 	size_t	index;
@@ -143,7 +156,7 @@ void 	unify_cmd(t_prompt *p, t_child *child)
 			temp[i++] = ft_strtrim(child->info[index], "\'");
 		else if (ft_strchr(child->info[index], '$'))
 				temp[i++] = expand_var(p, child, index);
-		else if (*child->info[index])
+		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);
 		index++;
 	}

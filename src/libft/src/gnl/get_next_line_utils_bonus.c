@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/19 21:45:55 by lugonzal          #+#    #+#             */
-/*Updated: 2021/07/19 21:45:57 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:27:43 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:27:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../inc/get_next_line_bonus.h"
+#include "get_next_line_bonus.h"
 
 int	len_c(char	*str, char c)
 {

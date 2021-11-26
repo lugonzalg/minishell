@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 18:29:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 18:52:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "inc/get_next_line.h"
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <term.h>
 
 void	check_redir(t_prompt *p, t_child *child)
 {
@@ -28,7 +29,7 @@ void	check_redir(t_prompt *p, t_child *child)
 		child->redir[0] = true;
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
-	child->info = ft_split(p->d2_prompt[child->id], ' ');
+	child->info = ft_split_ptr(p->d2_prompt[child->id], ' ', ft_len_redir, ft_cut_redir);
 	while (child->info[child->size[1]])
 		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
@@ -52,12 +53,12 @@ void	multipipe(t_child *child)
 			close(child->fdpipe[i][1]);
 		i++;
 	}
-	if (child->id ||child->redir[0])
+	if (child->id || child->redir[0])
 	{
 		dup2(child->fdpipe[child->id][0], 0);
 		close(child->fdpipe[child->id][0]);
 	}
-	if (child->id < child->size[0] - 2 || child->redir[1])
+	if (child->id < child->size[0] - 2 || (child->redir[1] && !child->redir[2]))
 	{
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
@@ -78,8 +79,8 @@ static void	process_io(t_prompt *p)
 {
 	size_t	i;
 	t_child	child;
-	pid_t	pid;
 	int		status;
+	pid_t	pid;
 
 	status = 0;
 	set_child(p, &child);
@@ -94,22 +95,30 @@ static void	process_io(t_prompt *p)
 		else
 		{
 			p->id[i] = fork();
+			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
 				multipipe(&child);
 		}
 		restart_data(&child);
 	}
 	free_child(&child);
-	while ((pid = wait(&status)) > 0);
+	while (1)
+	{
+		pid = wait(&status);
+		if (pid < 0)
+			break ;
+	}
 }
 
 extern void	prompt_io(t_prompt *p)
 {
 	while (1)
 	{
-		p->prompt = readline(p->user);
+		g_glob.killid = 0;
+		p->prompt = readline("minishell > ");
 		rl_on_new_line();
-		p->d2_prompt = ft_split(p->prompt, '|');
+		//driver_talk();
+		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, ft_cutp);
 		add_history(p->prompt);
 		process_io(p);
 		free_d2(p->d2_prompt);

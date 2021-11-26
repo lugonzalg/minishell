@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/02 18:24:33 by lugonzal          #+#    #+#             */
-/*Updated: 2021/06/02 18:25:14 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:28:59 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:29:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <unistd.h>
 
 void	ft_putendl_fd(char *s, int fd)

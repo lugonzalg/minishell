@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/27 14:04:40 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/27 14:05:26 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:09:53 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:09:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

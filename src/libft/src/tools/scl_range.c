@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scl_range.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 19:14:25 by lugonzal          #+#    #+#             */
-/*Updated: 2021/08/12 19:14:58 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:18:17 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:18:18 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

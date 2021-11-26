@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit_double.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/12 19:16:46 by lugonzal          #+#    #+#             */
-/*Updated: 2021/08/12 19:17:04 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:31:35 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:31:37 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

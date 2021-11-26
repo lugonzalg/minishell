@@ -12,7 +12,7 @@ INC = -I /usr/include/readline \
 CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address 
 LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
 		 -L usr/include/readline \
-		 -L bin/ -lreadline -lft -lftprintf
+		 -L bin/ -lreadline -lft -lftprintf -ltermcap
 
 BIN = libft.a libftprintf.a minishell
 
@@ -21,7 +21,10 @@ FILES = minishell/main \
 		minishell/prompt \
 		minishell/set_data \
 		minishell/unify		\
-		minishell/builtins
+		minishell/builtins \
+		minishell/split_ptr \
+		minishell/split_tools \
+		minishell/driver_talk
 
 SRC_DIR = src/
 OBJ_DIR = obj/

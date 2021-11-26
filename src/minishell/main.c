@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 20:45:14 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/24 21:43:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,8 @@
 #include "inc/libft.h"
 #include "inc/ft_printf.h"
 #include "inc/minishell.h"
-
-extern void	free_d2(char **dat)
-{
-	int	i;
-
-	i = -1;
-	while (dat[++i])
-		free(dat[i]);
-	free(dat);
-	dat = NULL;
-}
+#include <signal.h>
+#include <term.h>
 
 int	trim_path(t_child *child, int j)
 {
@@ -73,6 +64,8 @@ int	main(int argc, char *argv[], char *env[])
 {
 	t_prompt	p;
 
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	(void)argv;
 	if (argc != 1)
 		return (1);

@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   driver_talk.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/22 13:34:26 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 13:50:37 by lugonzal         ###   ########.fr       */
+/*   Created: 2021/11/18 18:51:45 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/23 18:08:05 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <unistd.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+void	driver_talk(void)
 {
-	t_list	*node;
-
-	node = lst;
-	while (node != NULL)
+	int		fd;
+	char	*tty;
+	int		status;
+	//struct winsize	win;
+	//struct termios	term;
+	fd = ttyslot();
+	status = isatty(fd);
+	if (0 && status)
 	{
-		f(node->content);
-		node = node->next;
+		tty = ttyname(fd);
+		//status = ioctl(fd, TIOCGWINSZ, &win);
+		//status = ioctl(fd, TIOCGETA, &term);
+		//win.ws_col = 65535;
+		//status = ioctl(fd, TIOCSWINSZ, &win);
 	}
 }

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/02 18:19:29 by lugonzal          #+#    #+#             */
-/*Updated: 2021/06/02 18:22:01 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:30:29 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:30:30 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <unistd.h>
 
 void	ft_putstr_fd(char *s, int fd)

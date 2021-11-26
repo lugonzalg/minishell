@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/02 18:29:35 by lugonzal          #+#    #+#             */
-/*Updated: 2021/06/02 18:31:42 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:30:15 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:30:18 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

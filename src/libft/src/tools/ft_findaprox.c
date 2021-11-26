@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_findaprox.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/02 17:39:47 by lugonzal          #+#    #+#             */
-/*Updated: 2021/09/02 17:41:34 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:15:08 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:15:09 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

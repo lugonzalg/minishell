@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_split_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/28 14:16:55 by lugonzal          #+#    #+#             */
-/*Updated: 2021/05/28 14:16:57 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 18:11:18 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 18:11:23 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "../../inc/libft.h"
+#include "libft.h"
 
 static char	**ft_frlloc(char **tab)
 {

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   handle_types.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lugonzal <lugonzal@student.42urduliz.com>  +#+  +:+       +#+        */
+/*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/15 18:07:29 by lugonzal          #+#    #+#             */
-/*Updated: 2021/07/15 18:12:03 by lugonzal               ###   ########.fr    */
+/*   Created: 2021/11/22 13:18:21 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/22 13:25:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdarg.h>
-#include "../inc/ft_printf.h"
-#include "../../libft/inc/libft.h"
+#include "ft_printf.h"
+#include "libft.h"
 
 static void	hex_to_str(uintptr_t n, char *hex)
 {

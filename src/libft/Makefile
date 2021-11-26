@@ -16,7 +16,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g
 AR = ar rcs
 RM = rm -f
-INC = -I -I ../inc
+INC = -I ./inc
 FILES = mem/ft_memset \
 		mem/ft_bzero \
 		mem/ft_memcpy \
@@ -66,7 +66,6 @@ FILES = mem/ft_memset \
 		gnl/get_next_line_utils \
 		gnl/get_next_line_bonus \
 		gnl/get_next_line_utils_bonus 
-			
 
 FILES_B = list/ft_lstnew \
 		  list/ft_lstadd_front \
@@ -91,7 +90,7 @@ OBJS_B = $(addprefix $(OBJS_DIR), $(addsuffix .o, $(FILES_B)))
 
 
 .c.o: $(SRCS)
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $^
 
 all: $(NAME)
 
