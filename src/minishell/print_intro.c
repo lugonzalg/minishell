@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 21:17:25 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/26 22:19:53 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,7 @@
 #include <readline/history.h>
 #include <signal.h>
 
-int	ft_putchar1(int c)
-{
-	write(1, &c, 1);
-	return (0);
-}
-
-int	got_error(int n)
+int	go_exit(int n)
 {
 	g_glob.error = n;
 	return (g_glob.error);

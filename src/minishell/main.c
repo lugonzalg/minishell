@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 21:17:25 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/26 22:35:17 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include "inc/libft.h"
 #include "inc/ft_printf.h"
+#include "inc/get_next_line.h"
 #include "inc/minishell.h"
 #include <signal.h>
 #include <fcntl.h>
@@ -38,22 +39,40 @@ int	trim_path(t_child *child, int j)
 
 char	**ft_setpath(t_prompt *p)
 {
-	char	**path;
-	char	*tmp;
+	char	**tmp;
+	char	*line;
 	int		fd;
 	int		i;
 
 	fd = open(p->envpath, O_RDONLY); 
-	path = ft_calloc(sizeof(char *), p->sizenv + 1);
-	i = -1;
-	while (path[++i])
+	while (1)
 	{
-		tmp = ft_strjoin(path[i], "/");
-		free(p->path[i]);
-		path[i] = tmp;
+		line = get_next_line(fd);
+		if (!line)
+			return (NULL);
+		if (!ft_strncmp(line, "PATH=", 5))
+			break ;
+		free(line);
 	}
-	path[i] = NULL;
-	return (path);
+	p->tmp = ft_strtrim(line, "PATH=\n");
+	free(line);
+	tmp = ft_split(p->tmp, ':');
+	free(p->tmp);
+	i = -1;
+	while (tmp[++i])
+	{
+		line = ft_strjoin(tmp[i], "/");
+		free(tmp[i]);
+		tmp[i] = line;
+	}
+	return (tmp);
+}
+
+int		ft_putpath(t_child *child)
+{
+	if (!access(child->info[0], X_OK))
+		child->path = ft_strdup(child->info[0]);
+	return (1);
 }
 
 extern void	command_pos(t_prompt *p, t_child *child)
@@ -63,7 +82,9 @@ extern void	command_pos(t_prompt *p, t_child *child)
 
 	i = -1;
 	p->path = ft_setpath(p);
-	while (p->path[++i])
+	if (!p->path && ft_putpath(child))
+		return ;
+	while (p->path[++i] && !child->path)
 	{
 		j = -1;
 		while (child->info[++j])
@@ -78,6 +99,7 @@ extern void	command_pos(t_prompt *p, t_child *child)
 			if (!access(child->path, X_OK))
 				break ;
 			free(child->path);
+			child->path = NULL;
 		}
 	}
 	free_d2(p->path);

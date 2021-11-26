@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 21:21:28 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 22:21:51 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,8 @@ void	multipipe(t_child *child/*, t_prompt *p*/)
 	}
 //	env = ft_enviro(p);
 	signal = execve(child->path, child->info, NULL);
-	exit(0);
+	printf("minishell: %s: No such file or directory\n", child->info[0]);
+	exit(go_exit(127));
 }
 
 static void	restart_data(t_child *child)
