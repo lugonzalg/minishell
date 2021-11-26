@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/24 15:45:59 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 21:17:24 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 
 	child->builtin = true;
 	fd = open(p->envpath, O_RDONLY);
+	if (child->info[0][0] == '$')
+		child->echo = true;
 	line = ft_strtrim(child->info[i], "$\"");
 	free(child->info[i]);
 	child->info[i] = ft_strjoin(line, "=");
@@ -140,6 +142,32 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	return (NULL);
 }
 
+char	**ft_realloc_child(char **temp)
+{
+	int	size;
+	char	**d2;
+	int	index;
+
+	size = 0;
+	while (temp[size])
+		size++;
+	size += 1;
+	d2 = (char **)ft_calloc(sizeof(char *), size + 1);
+	d2[0] = ft_strdup("echo");
+	size = 1;
+	index = 0;
+	while (temp[index])
+	{
+		d2[size] = ft_strdup(temp[index]);
+		free(temp[index]);
+		index++;
+		size++;
+	}
+	d2[size] = NULL;
+	free(temp);
+	return (d2);
+}
+
 void	unify_cmd(t_prompt *p, t_child *child)
 {
 	char	**temp;
@@ -160,6 +188,8 @@ void	unify_cmd(t_prompt *p, t_child *child)
 			temp[i++] = ft_strdup(child->info[index]);
 		index++;
 	}
+	if (child->echo)
+		temp = ft_realloc_child(temp);
 	free_d2(child->info);
 	child->info = temp;
 }

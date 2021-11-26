@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/25 20:13:38 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 21:17:22 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,46 @@ void	check_redir(t_prompt *p, t_child *child)
 		command_pos(p, child);
 }
 
-void	multipipe(t_child *child)
+/*char	**ft_enviro(t_prompt *p)
+{
+	char	**env;
+	int		fd;
+	int		size;
+	char	*line;
+
+	size = 1;
+	fd = open(p->envpath, O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		size++;
+		free(line);
+	}
+	close(fd);
+	env = malloc(sizeof(char *) * size);
+	fd = open(p->envpath, O_RDONLY);
+	size = 0;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		env[size] = ft_strdup(line);
+		free(line);
+		size++;
+	}
+	env[size] = NULL;
+	close(fd);
+	return (env);
+}*/
+
+void	multipipe(t_child *child/*, t_prompt *p*/)
 {
 	size_t	i;
 	ssize_t	signal;
+//	char	**env;
 
 	i = 0;
 	while (i < child->size[0])
@@ -63,6 +99,7 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
+//	env = ft_enviro(p);
 	signal = execve(child->path, child->info, NULL);
 	exit(0);
 }
@@ -96,7 +133,7 @@ static void	process_io(t_prompt *p)
 			p->id[i] = fork();
 			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
-				multipipe(&child);
+				multipipe(&child/*, p*/);
 		}
 		restart_data(&child);
 	}
