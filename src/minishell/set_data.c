@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/25 20:46:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 21:21:07 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ extern void	set_str(t_prompt *p)
 
 	ft_memset(p, 0, sizeof(t_prompt));
 	p->user = ft_strjoin(getenv("USER"), " \e[1;37mminishell \e[0;m% ");
-	p->path = ft_split(getenv("PATH"), ':');
+/*	p->path = ft_split(getenv("PATH"), ':');
 	i = -1;
 	while (p->path[++i])
 	{
 		p->tmp = ft_strjoin(p->path[i], "/");
 		free(p->path[i]);
 		p->path[i] = p->tmp;
-	}
+	}*/
 }
 
 extern void	set_child(t_prompt *p, t_child *child)

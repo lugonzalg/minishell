@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/24 21:43:00 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 21:17:25 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "inc/ft_printf.h"
 #include "inc/minishell.h"
 #include <signal.h>
+#include <fcntl.h>
 #include <term.h>
 
 int	trim_path(t_child *child, int j)
@@ -35,12 +36,33 @@ int	trim_path(t_child *child, int j)
 	return (j);
 }
 
-extern int	command_pos(t_prompt *p, t_child *child)
+char	**ft_setpath(t_prompt *p)
+{
+	char	**path;
+	char	*tmp;
+	int		fd;
+	int		i;
+
+	fd = open(p->envpath, O_RDONLY); 
+	path = ft_calloc(sizeof(char *), p->sizenv + 1);
+	i = -1;
+	while (path[++i])
+	{
+		tmp = ft_strjoin(path[i], "/");
+		free(p->path[i]);
+		path[i] = tmp;
+	}
+	path[i] = NULL;
+	return (path);
+}
+
+extern void	command_pos(t_prompt *p, t_child *child)
 {
 	int	i;
 	int	j;
 
 	i = -1;
+	p->path = ft_setpath(p);
 	while (p->path[++i])
 	{
 		j = -1;
@@ -49,15 +71,16 @@ extern int	command_pos(t_prompt *p, t_child *child)
 			if (!access(child->info[j], X_OK))
 			{
 				child->path = ft_strdup(child->info[j]);
-				return (trim_path(child, j));
+				trim_path(child, j);
+				break ;
 			}
 			child->path = ft_strjoin(p->path[i], child->info[j]);
 			if (!access(child->path, X_OK))
-				return (j);
+				break ;
 			free(child->path);
 		}
 	}
-	return (-1);
+	free_d2(p->path);
 }
 
 int	main(int argc, char *argv[], char *env[])

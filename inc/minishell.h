@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/25 20:46:53 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 21:22:10 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct	s_prompt
 	char		*envpath;
 	char		*builtpath;
 	pid_t		*id;
+	int			sizenv;
 }	t_prompt;
 
 typedef struct	s_child
@@ -46,6 +47,7 @@ typedef struct	s_child
 	bool		builtin;
 	size_t		id;
 	int			tty;
+	bool		echo;
 }	t_child;
 
 typedef struct	s_global
@@ -60,7 +62,7 @@ typedef	char	*(*t_cut)(const char *, char **);
 static t_global	g_glob;
 
 void 				check_redir(t_prompt *p, t_child *child);
-extern int			command_pos(t_prompt *p, t_child *child);
+extern void			command_pos(t_prompt *p, t_child *child);
 extern void			set_child(t_prompt *p, t_child *child);
 extern void			prompt_io(t_prompt *p);
 extern void			print_intro(void);

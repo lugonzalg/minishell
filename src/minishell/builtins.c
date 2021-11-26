@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/26 20:40:41 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 21:21:44 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ static void	showenv(t_prompt *p)
 	char	*line;
 	int		fd;
 
-	printf("%s\n", p->envpath);
 	fd = open(p->envpath, O_RDONLY);
 	while (1)
 	{
@@ -78,6 +77,7 @@ void	envinclude(t_child	*child, t_prompt *p)
 	while (child->info[1][++i])
 		write(fd, &child->info[1][i], 1);
 	write(fd, "\n", 1);
+	p->sizenv++;
 	close(fd);
 }
 
@@ -115,6 +115,8 @@ void	deletenv(t_child	*child, t_prompt *p)
 			break ;
 		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1]) - 1))
 			write(fd[1], line, ft_strlen(line));
+		else
+			p->sizenv--;
 		free(line);
 	}
 	close(fd[0]);
@@ -188,6 +190,7 @@ void	ft_putenv(char **env, t_prompt *p)
 		while (env[i][++j])
 			write(fd, &env[i][j], sizeof(char));
 		write(fd, "\n", sizeof(char));
+		p->sizenv++;
 	}
 	close(fd);
 }
