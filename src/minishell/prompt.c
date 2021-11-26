@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/17 20:45:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 18:29:47 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ void	multipipe(t_child *child)
 		i++;
 	}
 	if (child->id ||child->redir[0])
-	dup2(child->fdpipe[child->id][0], 0);
-	close(child->fdpipe[child->id][0]);
+	{
+		dup2(child->fdpipe[child->id][0], 0);
+		close(child->fdpipe[child->id][0]);
+	}
 	if (child->id < child->size[0] - 2 || child->redir[1])
 	{
 		dup2(child->fdpipe[child->id + 1][1], 1);
