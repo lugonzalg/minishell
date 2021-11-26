@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/25 20:13:38 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 18:20:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static void	process_io(t_prompt *p)
 	size_t	i;
 	t_child	child;
 	int		status;
+	pid_t	pid;
 
 	status = 0;
 	set_child(p, &child);
@@ -103,7 +104,8 @@ static void	process_io(t_prompt *p)
 	free_child(&child);
 	while (1)
 	{
-		if (wait(&status) < 0)
+		pid = wait(&status);
+		if (pid < 0)
 			break ;
 	}
 }
