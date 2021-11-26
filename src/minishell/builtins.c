@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/25 20:46:48 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 20:40:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	ft_checkbuiltins(char *str, t_prompt *p)
 	char	*line;
 	size_t	size;	
 
+	if (!str)
+		return (0);
 	fd = open(p->builtpath, O_RDONLY);
 	while (1)
 	{

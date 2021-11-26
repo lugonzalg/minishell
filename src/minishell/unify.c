@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/25 20:46:46 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 20:50:31 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,14 @@ extern void	cmd_size(t_child *child)
 static void	resize_cat(t_child *child)
 {
 	char	**resize;
+	size_t	i;
 
-	resize = (char **)malloc(sizeof(char *) * 3);
+	i = 1;
+	resize = ft_calloc(sizeof(char *), child->size[1] + 1);
 	resize[0] = ft_strdup(child->info[0]);
 	resize[1] = ft_strdup(".here_doc");
-	resize[2] = NULL;
+	while (child->info[++i])
+		resize[i] = ft_strdup(child->info[i]);
 	free_d2(child->info);
 	child->info = resize;
 	child->size[2]--;
@@ -150,7 +153,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	i = 0;
 	cmd_size(child);
 	temp = (char **)ft_calloc(sizeof(char *), child->size[1] + 1);
-	while (index < child->size[2])
+	while (index < child->size[2] && child->info[index])
 	{
 		if (ft_strchr(child->info[index], '\''))
 			temp[i++] = ft_strtrim(child->info[index], "\'");

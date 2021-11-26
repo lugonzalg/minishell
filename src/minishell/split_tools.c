@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:01:38 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/25 20:46:45 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/26 19:56:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,27 @@ static char *ft_find_quote(const char *s)
 
 static char *ft_find_redir(const char *s)
 {
-	char	*redir_in;
-	char	*redir_out;
+	char	*redir_in[2];
+	char	*redir_out[2];
 
-	redir_in = ft_strchr(s, '<');
-	redir_out = ft_strchr(s, '>');
-	if (!redir_in && redir_out)
-		return (redir_out);
-	else if (redir_in && !redir_out)
-		return (redir_in);
-	else if (!redir_in && !redir_out)
+	redir_in[0] = ft_strchr(s, '<');
+	redir_out[0] = ft_strchr(s, '>');
+	redir_in[1] = ft_strchr(s + 1, '<');
+	redir_out[1] = ft_strchr(s + 1, '>');
+	if (redir_in[1] - redir_in[0] == 1)
+		redir_in[0] = redir_in[1];
+	if (redir_out[1] - redir_out[0] == 1)
+		redir_out[0] = redir_out[1];
+	if (!redir_in[0] && redir_out[0])
+		return (redir_out[0]);
+	else if (redir_in[0] && !redir_out[0])
+		return (redir_in[0]);
+	else if (!redir_in[0] && !redir_out[0])
 		return (NULL);
-	else if (redir_in < redir_out)
-		return (redir_in);
-	else if (redir_out < redir_in)
-		return (redir_out);
+	else if (redir_in[0] < redir_out[0])
+		return (redir_in[0]);
+	else if (redir_out[0] < redir_in[0])
+		return (redir_out[0]);
 	return (NULL);
 }
 
@@ -60,9 +66,11 @@ extern char	*ft_cutp(const char *s, char **s_ptr)
 	size_t		len;
 
 	quote = ft_find_quote(s);
-
 	quote = (char *)ft_quote(quote);
-	quote = ft_strchr(quote, '|');
+	if (quote)
+		quote = ft_strchr(quote, '|');
+	else
+		quote = ft_strchr(s, '|');
 	len = 0;
 	if (quote)
 		len = quote - s;
@@ -163,11 +171,11 @@ extern size_t	ft_len_redir(const char *s, char c)
 			row++;
 		while (*s != c && *s)
 		{
-			if (*s == OUTPUT || *s == INPUT)
+			if (*s == '<' || *s == '>')
 			{
-				while (*s && (*s == OUTPUT || *s == OUTPUT))
+				while (*s && (*s == '<' || *s == '>'))
 					s++;
-				if (*s)
+				if (*s && *s != 32)
 					row++;
 				break ;
 			}
