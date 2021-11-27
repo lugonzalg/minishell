@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 22:42:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 16:36:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,11 @@ static void	process_io(t_prompt *p)
 			p->id[i] = fork();
 			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
+			{
+				rl_catch_signals = 0;
+				signal(SIGINT, sig_handler);
 				multipipe(&child/*, p*/);
+			}
 		}
 		restart_data(&child);
 	}
@@ -150,6 +154,7 @@ extern void	prompt_io(t_prompt *p)
 {
 	while (1)
 	{
+		rl_catch_signals = 0;
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		rl_on_new_line();
