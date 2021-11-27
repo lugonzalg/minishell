@@ -22,9 +22,11 @@ FILES = minishell/main \
 		minishell/set_data \
 		minishell/unify		\
 		minishell/builtins \
+		minishell/builtins_extra \
+		minishell/handle_builtins \
+		minishell/command_path \
 		minishell/split_ptr \
-		minishell/split_tools \
-		minishell/driver_talk
+		minishell/split_tools
 
 SRC_DIR = src/
 OBJ_DIR = obj/

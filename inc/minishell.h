@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 22:42:24 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 17:10:35 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 # define NL			"\n"
 # define S_QUOTE	"\'"
 # define D_QUOTE	"\""
+# define PATH_MAX	4096
 
-#include <stdbool.h>
-#include <unistd.h>
+# include <stdbool.h>
+# include <unistd.h>
 
-
-typedef struct	s_prompt
+typedef struct s_prompt
 {
 	char		**path;
 	char		**d2_prompt;
@@ -36,10 +36,10 @@ typedef struct	s_prompt
 	int			sizenv;
 }	t_prompt;
 
-typedef struct	s_child
+typedef struct s_child
 {
 	char		**info;
-	int	 		**fdpipe;
+	int			**fdpipe;
 	char		*path;
 	char		*ttypath;
 	size_t		size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
@@ -56,35 +56,46 @@ typedef struct	s_global
 	pid_t	killid;
 }	t_global;
 
-typedef	size_t	(*t_len)(const char *, char);
-typedef	char	*(*t_cut)(const char *, char **);
+typedef size_t	(*t_len)(const char *, char);
+typedef char	*(*t_cut)(const char *, char **);
 
 static t_global	g_glob;
 
-void 				check_redir(t_prompt *p, t_child *child);
+extern void			check_redir(t_prompt *p, t_child *child);
 extern void			command_pos(t_prompt *p, t_child *child);
-extern void			set_child(t_prompt *p, t_child *child);
+
 extern void			prompt_io(t_prompt *p);
 extern void			print_intro(void);
+
+extern void			set_child(t_prompt *p, t_child *child);
 extern void			set_str(t_prompt *p);
-int					go_exit(int num);
-void				sig_handler(int signo);
+
+extern int			go_exit(int num);
+extern void			sig_handler(int signo);
 
 extern void			unify_fdio(t_child *child);
 extern void			unify_cmd(t_prompt *p, t_child *child);
 
-int					ft_checkbuiltins(char *str, t_prompt *p);
-void				ft_builtins(t_child *child, t_prompt *p);
-void				ft_putenv(char **env, t_prompt *p);
 extern void			free_d2(char **dat);
 extern void			free_p(t_prompt *p);
 extern void			free_child(t_child *child);
 
-extern void			driver_talk(void);
-char				**ft_split_ptr(const char *s, char c, t_len len, t_cut cut);
+extern char			**ft_split_ptr(const char *s, char c, t_len len, t_cut cut);
 extern size_t		ft_lenp(const char *s, char c);
 extern size_t		ft_len_redir(const char *s, char c);
 extern char			*ft_cutp(const char *s, char **s_ptr);
-extern char 		*ft_cut_redir(const char *s, char **s_ptr);
+extern char			*ft_cut_redir(const char *s, char **s_ptr);
 extern const char	*ft_quote(const char *s);
+
+extern int			ft_checkbuiltins(char *str, t_prompt *p);
+extern void			ft_builtins(t_child *child, t_prompt *p);
+
+extern void			ft_putenv(char **env, t_prompt *p);
+extern void			ft_echo(t_child *child);
+extern void			deletenv(t_child	*child, t_prompt *p);
+extern void			envinclude(t_child	*child, t_prompt *p);
+extern void			showenv(t_prompt *p);
+
+extern int	trim_path(t_child *child, int j);
+extern char	**ft_setpath(t_prompt *p);
 #endif
