@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 22:42:28 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 22:18:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static void	resize_cat(t_child *child)
 	resize = ft_calloc(sizeof(char *), child->size[1] + 1);
 	resize[0] = ft_strdup(child->info[0]);
 	resize[1] = ft_strdup(".here_doc");
+	i = 2;
 	while (child->info[++i])
 		resize[i] = ft_strdup(child->info[i]);
 	free_d2(child->info);
@@ -61,7 +62,7 @@ static void	here_doc(t_child *child, char *key)
 	int		fd;
 	char	*key_nl;
 
-	fd = open(".here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	fd = open(".here_doc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	close(child->fdpipe[child->id + 1][1]);
 	child->fdpipe[child->id + 1][1] = fd;
 	key_nl = ft_strjoin(key, "\n");
@@ -112,65 +113,6 @@ extern void	unify_fdio(t_child *child)
 	}
 }
 
-static char	*expand_var(t_prompt *p, t_child *child, size_t i)
-{
-	char	*line;
-	int		fd;
-	char	*var;
-
-	child->builtin = true;
-	fd = open(p->envpath, O_RDONLY);
-	if (child->info[0][0] == '$')
-		child->echo = true;
-	line = ft_strtrim(child->info[i], "$\"");
-	free(child->info[i]);
-	child->info[i] = ft_strjoin(line, "=");
-	free(line);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		if (!ft_strncmp(line, child->info[i], ft_strlen(child->info[i])))
-		{
-			line[ft_strlen(line) - 1] = 0;
-			close(fd);
-			var = ft_strtrim(line, child->info[i]);
-			free(line);
-			return (var);
-		}
-		free(line);
-	}
-	close(fd);
-	return (NULL);
-}
-
-char	**ft_realloc_child(char **temp)
-{
-	int	size;
-	char	**d2;
-	int	index;
-
-	size = 0;
-	while (temp[size])
-		size++;
-	size += 1;
-	d2 = (char **)ft_calloc(sizeof(char *), size + 1);
-	d2[0] = ft_strdup("echo");
-	size = 1;
-	index = 0;
-	while (temp[index])
-	{
-		d2[size] = ft_strdup(temp[index]);
-		free(temp[index]);
-		index++;
-		size++;
-	}
-	d2[size] = NULL;
-	free(temp);
-	return (d2);
-}
-
 void	unify_cmd(t_prompt *p, t_child *child)
 {
 	char	**temp;
@@ -183,9 +125,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	temp = (char **)ft_calloc(sizeof(char *), child->size[1] + 1);
 	while (index < child->size[2] && child->info[index])
 	{
-		if (ft_strchr(child->info[index], '\''))
-			temp[i++] = ft_strtrim(child->info[index], "\'");
-		else if (ft_strchr(child->info[index], '$'))
+		if (ft_strchr(child->info[index], '$') && ft_strchr(child->info[index], '\''))
 				temp[i++] = expand_var(p, child, index);
 		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);

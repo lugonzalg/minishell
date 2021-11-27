@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:01:38 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 22:42:27 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 19:26:08 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "inc/libft.h"
 #include "inc/minishell.h"
 
-static char *ft_find_quote(const char *s)
+extern char	*ft_find_quote(const char *s)
 {
 	char	*s_quote;
 	char	*d_quote;
@@ -34,7 +34,7 @@ static char *ft_find_quote(const char *s)
 	return (NULL);
 }
 
-static char *ft_find_redir(const char *s)
+static char	*ft_find_redir(const char *s)
 {
 	char	*redir_in[2];
 	char	*redir_out[2];
@@ -63,10 +63,10 @@ static char *ft_find_redir(const char *s)
 extern char	*ft_cutp(const char *s, char **s_ptr)
 {
 	char	*quote;
-	size_t		len;
+	size_t	len;
 
 	quote = ft_find_quote(s);
-	quote = (char *)ft_quote(quote);
+	ft_quote(quote, (const char **)&quote);
 	if (quote)
 		quote = ft_strchr(quote, '|');
 	else
@@ -113,7 +113,7 @@ extern char	*ft_cut_redir(const char *s, char **s_ptr)
 	else if (limit[0] < limit[1])
 	{
 		i = 0;
-		limit[i] = ft_find_quote(s + 1);
+		ft_quote(limit[0], (const char **)&limit[0]);
 	}
 	else if (limit[1] < limit[0])
 		i = 1;
@@ -125,64 +125,4 @@ extern char	*ft_cut_redir(const char *s, char **s_ptr)
 	if (limit[i][1])
 		(**s_ptr) = 32;
 	return (limit[3]);
-}
-
-extern const char	*ft_quote(const char *s)
-{
-	if (!s)
-		return (NULL);
-	if (!ft_strncmp(s, S_QUOTE, 1))
-		s = ft_strchr(s + 1, '\'');
-	else if (!ft_strncmp(s, D_QUOTE, 1))
-		s = ft_strchr(s + 1, '\"');
-	return (s);
-}
-
-extern size_t	ft_lenp(const char *s, char c)
-{
-	size_t	row;
-
-	row = 0;
-	while (*s)
-	{
-		while (*s == c && *s)
-			s++;
-		if (*s != c && *s)
-			row++;
-		while (*s != c && *s)
-		{
-			s = ft_quote(s);
-			s++;
-		}
-	}
-	return (row);
-}
-
-extern size_t	ft_len_redir(const char *s, char c)
-{
-	size_t	row;
-
-	row = 0;
-	while (*s)
-	{
-		while (*s == c && *s)
-			s++;
-		if (*s != c && *s)
-			row++;
-		while (*s != c && *s)
-		{
-			if (*s == '<' || *s == '>')
-			{
-				while (*s && (*s == '<' || *s == '>'))
-					s++;
-				if (*s && *s != 32)
-					row++;
-				break ;
-			}
-			if (*s && (*s == '\'' || *s == '\"'))
-				s = ft_quote(s);
-			s++;
-		}
-	}
-	return (row);
 }

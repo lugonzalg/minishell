@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 16:36:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:37:59 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,82 @@
 #include <readline/history.h>
 #include <term.h>
 
+static char	*expand_var_2(char *str, t_prompt *p)
+{
+	char	*n_str;
+	char	*expand;
+	size_t	i;
+	size_t	j;
+
+	expand = ft_strchr(str, '$');
+	expand++;
+	i = 0;
+	while (expand[i] && ft_isalpha(expand[i]))
+		i++;
+	expand = ft_substr(expand, 0, i);
+	p->tmp = ft_gnl_query(p->envpath, expand);
+	n_str = ft_strtrim(p->tmp, expand);
+	free(p->tmp);
+	p->tmp = expand;
+	expand = ft_strdup(&n_str[1]);
+	free(n_str);
+	n_str = ft_calloc(sizeof(char), ft_strlen(expand) + ft_strlen(str));
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+		{
+			j = ft_strlen(expand);
+			ft_memcpy(&n_str[i], expand, j);
+			i += ft_strlen(p->tmp);
+		}
+		else
+			n_str[i + j] = str[i];
+	}
+	expand =  ft_strchr(n_str, 10);
+	*expand = '\'';
+	return (n_str);
+}
+
+static char	*clean_quotes(char *str, t_prompt *p)
+{
+
+	char	*quote;
+	char	*n_str;
+	size_t	i;
+	size_t	j;
+
+	quote = ft_find_quote(str);
+	if (!quote)
+		return (str);
+	n_str = ft_calloc(sizeof(char), ft_strlen(str));
+	j = 0;
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] != *quote)
+			n_str[j++] = str[i];
+	}
+	free(str);
+	if (ft_strnstr(n_str, "\'$", 2048))
+		n_str = expand_var_2(n_str, p);
+	return (n_str);
+}
+
 void	check_redir(t_prompt *p, t_child *child)
 {
+	size_t	i;
+
 	if (ft_strchr(p->d2_prompt[child->id], INPUT))
 		child->redir[0] = true;
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
-	child->info = ft_split_ptr(p->d2_prompt[child->id], ' ', ft_len_redir, ft_cut_redir);
-	while (child->info[child->size[1]])
-		child->size[1]++;
+	child->info = ft_split_ptr(p->d2_prompt[child->id],
+			' ', ft_len_redir, ft_cut_redir);
+	i = -1;
+	while (child->info[++i])
+		child->info[i] = clean_quotes(child->info[i], p);
+	child->size[1] = i;
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(p, child);
@@ -39,46 +106,10 @@ void	check_redir(t_prompt *p, t_child *child)
 		command_pos(p, child);
 }
 
-/*char	**ft_enviro(t_prompt *p)
-{
-	char	**env;
-	int		fd;
-	int		size;
-	char	*line;
-
-	size = 1;
-	fd = open(p->envpath, O_RDONLY);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		size++;
-		free(line);
-	}
-	close(fd);
-	env = malloc(sizeof(char *) * size);
-	fd = open(p->envpath, O_RDONLY);
-	size = 0;
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		env[size] = ft_strdup(line);
-		free(line);
-		size++;
-	}
-	env[size] = NULL;
-	close(fd);
-	return (env);
-}*/
-
-void	multipipe(t_child *child/*, t_prompt *p*/)
+void	multipipe(t_child *child)
 {
 	size_t	i;
 	ssize_t	signal;
-//	char	**env;
 
 	i = 0;
 	while (i < child->size[0])
@@ -99,7 +130,6 @@ void	multipipe(t_child *child/*, t_prompt *p*/)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
-//	env = ft_enviro(p);
 	signal = execve(child->path, child->info, NULL);
 	printf("minishell: %s: No such file or directory\n", child->info[0]);
 	exit(go_exit(127));
@@ -137,7 +167,7 @@ static void	process_io(t_prompt *p)
 			{
 				rl_catch_signals = 0;
 				signal(SIGINT, sig_handler);
-				multipipe(&child/*, p*/);
+				multipipe(&child);
 			}
 		}
 		restart_data(&child);
@@ -158,7 +188,6 @@ extern void	prompt_io(t_prompt *p)
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		rl_on_new_line();
-		//driver_talk();
 		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, ft_cutp);
 		add_history(p->prompt);
 		process_io(p);
