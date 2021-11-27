@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 17:11:21 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:51:55 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ extern void	command_pos(t_prompt *p, t_child *child)
 			if (!access(child->info[j], X_OK))
 			{
 				child->path = ft_strdup(child->info[j]);
-				trim_path(child, j);
 				break ;
 			}
 			child->path = ft_strjoin(p->path[i], child->info[j]);
@@ -59,6 +58,7 @@ int	main(int argc, char *argv[], char *env[])
 	t_prompt	p;
 	(void)argv;
 	
+	g_glob = ft_calloc(sizeof(t_global), 1);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	if (argc != 1)

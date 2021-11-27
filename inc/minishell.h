@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 17:10:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:47:07 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 typedef struct s_prompt
 {
 	char		**path;
+	char		*home;
 	char		**d2_prompt;
 	char		*user;
 	char		*prompt;
@@ -56,10 +57,11 @@ typedef struct	s_global
 	pid_t	killid;
 }	t_global;
 
+t_global	*g_glob;
+
 typedef size_t	(*t_len)(const char *, char);
 typedef char	*(*t_cut)(const char *, char **);
 
-static t_global	g_glob;
 
 extern void			check_redir(t_prompt *p, t_child *child);
 extern void			command_pos(t_prompt *p, t_child *child);
@@ -95,7 +97,7 @@ extern void			ft_echo(t_child *child);
 extern void			deletenv(t_child	*child, t_prompt *p);
 extern void			envinclude(t_child	*child, t_prompt *p);
 extern void			showenv(t_prompt *p);
+int					ft_changedir(t_child *child, t_prompt *p);
 
-extern int	trim_path(t_child *child, int j);
 extern char	**ft_setpath(t_prompt *p);
 #endif

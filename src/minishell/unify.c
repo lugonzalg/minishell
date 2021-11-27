@@ -6,12 +6,13 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/26 22:42:28 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:51:53 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include "inc/get_next_line.h"
 #include "inc/libft.h"
@@ -112,6 +113,13 @@ extern void	unify_fdio(t_child *child)
 	}
 }
 
+char	*ft_puterror(t_child *child)
+{
+	if (child->info[0][0] == '$' && child->info[0][1] == '?' && ft_strlen(child->info[0]) == 2)
+		return (ft_itoa(g_glob->error));
+	return (NULL);
+}
+
 static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 {
 	char	*line;
@@ -122,6 +130,9 @@ static char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	fd = open(p->envpath, O_RDONLY);
 	if (child->info[0][0] == '$')
 		child->echo = true;
+	var = ft_puterror(child);
+	if (var)
+		return (var);
 	line = ft_strtrim(child->info[i], "$\"");
 	free(child->info[i]);
 	child->info[i] = ft_strjoin(line, "=");

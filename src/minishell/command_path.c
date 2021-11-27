@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 17:08:41 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 17:14:06 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:51:56 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,6 @@
 #include "inc/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
-
-extern int	trim_path(t_child *child, int j)
-{
-	char	**tmp;
-	int		i;
-
-	tmp = ft_split(child->info[j], '/');
-	i = 0;
-	while (tmp[i])
-		i++;
-	free(child->info[j]);
-	child->info[j] = ft_strdup(tmp[i - 1]);
-	i = -1;
-	free_d2(tmp);
-	return (j);
-}
 
 static char	*ft_gnl_query(char *path)
 {

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:46:07 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 17:01:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:51:55 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ extern void	ft_builtins(t_child *child, t_prompt *p)
 			printf("%s\n", pwd);
 	}
 	else if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
-		chdir(child->info[1]);
+		ft_changedir(child, p);
 	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
 		showenv(p);
 	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))

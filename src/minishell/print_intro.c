@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 16:32:05 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/27 21:51:54 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,6 @@
 #include <readline/history.h>
 #include <signal.h>
 
-int	go_exit(int n)
-{
-	g_glob.error = n;
-	return (g_glob.error);
-}
-
 void	sig_handler(int signo)
 {
 	if (signo == SIGINT)
@@ -40,11 +34,11 @@ void	sig_handler(int signo)
 		//rl_replace_line("", 0);
 		//rl_redisplay();
 	}
-	if (signo == SIGQUIT && g_glob.killid)
+	if (signo == SIGQUIT && g_glob->killid)
 	{
-		kill(g_glob.killid, SIGQUIT);
+		kill(g_glob->killid, SIGQUIT);
 		printf("Quit: 3\n");
-		g_glob.error = 131;
+		g_glob->error = 131;
 	}
 	else
 	{
