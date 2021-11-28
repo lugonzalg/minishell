@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 02:09:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 16:44:18 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_prompt
 	char		*builtpath;
 	pid_t		*id;
 	int			sizenv;
+	size_t		on;
 }	t_prompt;
 
 typedef struct s_child
@@ -79,8 +80,8 @@ extern void			free_d2(char **dat);
 extern void			free_p(t_prompt *p);
 extern void			free_child(t_child *child);
 
-extern char			**ft_split_ptr(const char *s, char c, t_len len, size_t on);
-extern char			*ft_cut(char *s, char **s_ptr, char c, size_t on);
+extern char			**ft_split_ptr(const char *s, char c, t_len len, t_prompt *p);
+extern char			*ft_cut(char *s, char **s_ptr, char c, t_prompt *p);
 extern size_t		ft_lenp(char *s, char c);
 extern size_t		ft_len_redir(char *s, char c);
 extern void			ft_quote(char *s, char **n_str);
