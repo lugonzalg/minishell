@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 01:07:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 02:46:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <readline/history.h>
 #include <term.h>
 
-static char	*expand_var_2(char *str, t_prompt *p)
+/*static char	*expand_var_2(char *str, t_prompt *p)
 {
 	char	*n_str;
 	char	*expand;
@@ -83,11 +83,11 @@ static char	*clean_quotes(char *str, t_prompt *p)
 	if (ft_strnstr(n_str, "\'$", 2048))
 		n_str = expand_var_2(n_str, p);
 	return (n_str);
-}
+}*/
 
 void	check_redir(t_prompt *p, t_child *child)
 {
-	size_t	i;
+	//size_t	i;
 
 	if (ft_strchr(p->d2_prompt[child->id], INPUT))
 		child->redir[0] = true;
@@ -95,10 +95,11 @@ void	check_redir(t_prompt *p, t_child *child)
 		child->redir[1] = true;
 	child->info = ft_split_ptr(p->d2_prompt[child->id],
 			' ', ft_len_redir, 0);
-	i = -1;
-	while (child->info[++i])
-		child->info[i] = clean_quotes(child->info[i], p);
-	child->size[1] = i;
+	//i = -1;
+	//while (child->info[++i])
+	//	child->info[i] = clean_quotes(child->info[i], p);
+	while (child->info[child->size[1]])
+		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(p, child);

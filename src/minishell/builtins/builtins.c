@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/27 17:43:30 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 02:46:38 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ extern void	ft_echo(t_child *child)
 	{
 		write(fd, child->info[i], ft_strlen(child->info[i]));
 		if (i < child->size[1] - 1)
-			write(0, " ", 1);
+			write(fd, " ", 1);
 	}
 	if (nl)
 		write(fd, "\n", 1);
