@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 15:46:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 16:21:33 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ extern char	*ft_cut(char *s, char **s_ptr, char c, size_t on)
 			ft_memcpy(n_str + i + j, quote, ft_query_len(quote + on, *(quote - 1 + on)) + (on * 2));
 			s += ft_query_len(quote + on, *(quote - 1 + on)) + 2;
 			j += ft_query_len(quote + on, *(quote - 1 + on)) + (on * 2);
+			if (!on && (s[i] == '<' || s[i] == '>'))
+				break ;
 			continue ;
 		}
 		n_str[i + j] = s[i];
@@ -87,14 +89,15 @@ static char	*ft_delimit(char *s, size_t *row)
 	if (*s == '\"' || *s == '\"')
 	{
 		quote = s + 1;
-		s += ft_query_len(quote, *(quote - 1)) + 1;
+		s += ft_query_len(quote, *(quote - 1)) + 2;
+		(*row)++;
 	}
 	if (*s == '<' || *s == '>')
 	{
 		while (*s == '<' || *s == '>')
 			s++;
 		if (*(s + 1) != 32)
-			row++;
+			(*row)++;
 	}
 	return (s);
 }
@@ -127,14 +130,17 @@ static void	cut_redir(char *str, char **s_ptr, char **tab, size_t *j)
 
 	redir = *str;
 	tab[(*j)] = ft_calloc(sizeof(char), ft_strlen(str));
-	i = ft_query_len(str, redir);
-	ft_memcpy(tab + (*j), str, i);
+	i = 0;
+	while (str[i] && str[i] == redir)
+		i++;
+	ft_memcpy(tab[(*j)], str, i);
 	(*j)++;
 	if (str[i] && str[i] != 32)
 	{
-		tab[(*j)] = ft_calloc(sizeof(char), ft_strlen(str + i));
+		str += i;
+		tab[(*j)] = ft_calloc(sizeof(char), ft_strlen(str));
 		i += ft_query_len(str, 32);
-		ft_memcpy(tab + (*j), str, i);
+		ft_memcpy(tab[(*j)], str, i);
 	}
 	(*s_ptr) = str + i;
 }
@@ -156,9 +162,9 @@ static char	**ft_handle_tab(const char *str, char c, char **tab, size_t on)
 				free_d2(tab);
 				return (NULL);
 			}
+			j++;
 			if (!on && (*str == '<' || *str == '>'))
 				cut_redir((char *)str, (char **)&str, tab, &j);
-			j++;
 		}
 		while (*str && *str != c)
 			str++;
