@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 20:46:43 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 02:09:47 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ typedef struct	s_global
 	pid_t	killid;
 }	t_global;
 
-typedef size_t	(*t_len)(const char *, char);
-typedef char	*(*t_cut)(const char *, char **);
+typedef size_t	(*t_len)(char *, char);
 
 static t_global	g_glob;
 
@@ -80,12 +79,11 @@ extern void			free_d2(char **dat);
 extern void			free_p(t_prompt *p);
 extern void			free_child(t_child *child);
 
-extern char			**ft_split_ptr(const char *s, char c, t_len len, t_cut cut);
-extern char			*ft_cutp(const char *s, char **s_ptr);
-extern char			*ft_cut_redir(const char *s, char **s_ptr);
-extern size_t		ft_lenp(const char *s, char c);
-extern size_t		ft_len_redir(const char *s, char c);
-extern void			ft_quote(const char *s, const char **n_str);
+extern char			**ft_split_ptr(const char *s, char c, t_len len, size_t on);
+extern char			*ft_cut(char *s, char **s_ptr, char c, size_t on);
+extern size_t		ft_lenp(char *s, char c);
+extern size_t		ft_len_redir(char *s, char c);
+extern void			ft_quote(char *s, char **n_str);
 extern char			*ft_find_quote(const char *s);
 
 extern int			ft_checkbuiltins(char *str, t_prompt *p);

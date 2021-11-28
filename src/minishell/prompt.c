@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 21:37:59 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 01:07:26 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	check_redir(t_prompt *p, t_child *child)
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
 	child->info = ft_split_ptr(p->d2_prompt[child->id],
-			' ', ft_len_redir, ft_cut_redir);
+			' ', ft_len_redir, 0);
 	i = -1;
 	while (child->info[++i])
 		child->info[i] = clean_quotes(child->info[i], p);
@@ -188,7 +188,7 @@ extern void	prompt_io(t_prompt *p)
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		rl_on_new_line();
-		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, ft_cutp);
+		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, 1);
 		add_history(p->prompt);
 		process_io(p);
 		free_d2(p->d2_prompt);
