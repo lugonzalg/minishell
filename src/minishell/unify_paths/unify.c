@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 02:46:38 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 21:17:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	temp = (char **)ft_calloc(sizeof(char *), child->size[1] + 1);
 	while (index < child->size[2] && child->info[index])
 	{
-		if (ft_strchr(child->info[index], '$') && ft_strchr(child->info[index], '\''))
+		if (ft_strchr(child->info[index], '$'))
 				temp[i++] = expand_var(p, child, index);
 		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);

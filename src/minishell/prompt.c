@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 17:03:02 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 21:17:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,72 +23,8 @@
 #include <readline/history.h>
 #include <term.h>
 
-/*static char	*expand_var_2(char *str, t_prompt *p)
-{
-	char	*n_str;
-	char	*expand;
-	size_t	i;
-	size_t	j;
-
-	expand = ft_strchr(str, '$');
-	expand++;
-	i = 0;
-	while (expand[i] && ft_isalpha(expand[i]))
-		i++;
-	expand = ft_substr(expand, 0, i);
-	p->tmp = ft_gnl_query(p->envpath, expand);
-	n_str = ft_strtrim(p->tmp, expand);
-	free(p->tmp);
-	p->tmp = expand;
-	expand = ft_strdup(&n_str[1]);
-	free(n_str);
-	n_str = ft_calloc(sizeof(char), ft_strlen(expand) + ft_strlen(str));
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '$')
-		{
-			j = ft_strlen(expand);
-			ft_memcpy(&n_str[i], expand, j);
-			i += ft_strlen(p->tmp);
-		}
-		else
-			n_str[i + j] = str[i];
-	}
-	expand =  ft_strchr(n_str, 10);
-	*expand = '\'';
-	return (n_str);
-}
-
-static char	*clean_quotes(char *str, t_prompt *p)
-{
-
-	char	*quote;
-	char	*n_str;
-	size_t	i;
-	size_t	j;
-
-	quote = ft_find_quote(str);
-	if (!quote)
-		return (str);
-	n_str = ft_calloc(sizeof(char), ft_strlen(str));
-	j = 0;
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] != *quote)
-			n_str[j++] = str[i];
-	}
-	free(str);
-	if (ft_strnstr(n_str, "\'$", 2048))
-		n_str = expand_var_2(n_str, p);
-	return (n_str);
-}*/
-
 void	check_redir(t_prompt *p, t_child *child)
 {
-	//size_t	i;
-
 	if (ft_strchr(p->d2_prompt[child->id], INPUT))
 		child->redir[0] = true;
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
@@ -163,11 +99,7 @@ static void	process_io(t_prompt *p)
 			p->id[i] = fork();
 			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
-			{
-				rl_catch_signals = 0;
-				signal(SIGINT, sig_handler);
 				multipipe(&child);
-			}
 		}
 		restart_data(&child);
 	}

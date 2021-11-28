@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/28 02:46:38 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/28 21:17:02 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ extern void	deletenv(t_child	*child, t_prompt *p)
 		line = get_next_line(fd[0]);
 		if (!line)
 			break ;
-		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1]) - 1))
+		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1])))
 			write(fd[1], line, ft_strlen(line));
 		else
 			p->sizenv--;
