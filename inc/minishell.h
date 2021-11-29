@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 21:47:07 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:31:40 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_prompt
 	char		*builtpath;
 	pid_t		*id;
 	int			sizenv;
+	size_t		on;
 }	t_prompt;
 
 typedef struct s_child
@@ -59,8 +60,7 @@ typedef struct	s_global
 
 t_global	*g_glob;
 
-typedef size_t	(*t_len)(const char *, char);
-typedef char	*(*t_cut)(const char *, char **);
+typedef size_t	(*t_len)(char *, char);
 
 
 extern void			check_redir(t_prompt *p, t_child *child);
@@ -82,12 +82,12 @@ extern void			free_d2(char **dat);
 extern void			free_p(t_prompt *p);
 extern void			free_child(t_child *child);
 
-extern char			**ft_split_ptr(const char *s, char c, t_len len, t_cut cut);
-extern size_t		ft_lenp(const char *s, char c);
-extern size_t		ft_len_redir(const char *s, char c);
-extern char			*ft_cutp(const char *s, char **s_ptr);
-extern char			*ft_cut_redir(const char *s, char **s_ptr);
-extern const char	*ft_quote(const char *s);
+extern char			**ft_split_ptr(const char *s, char c, t_len len, t_prompt *p);
+extern char			*ft_cut(char *s, char **s_ptr, char c, t_prompt *p);
+extern size_t		ft_lenp(char *s, char c);
+extern size_t		ft_len_redir(char *s, char c);
+extern void			ft_quote(char *s, char **n_str);
+extern char			*ft_find_quote(const char *s);
 
 extern int			ft_checkbuiltins(char *str, t_prompt *p);
 extern void			ft_builtins(t_child *child, t_prompt *p);
@@ -98,6 +98,9 @@ extern void			deletenv(t_child	*child, t_prompt *p);
 extern void			envinclude(t_child	*child, t_prompt *p);
 extern void			showenv(t_prompt *p);
 int					ft_changedir(t_child *child, t_prompt *p);
+extern char			*expand_var(t_prompt *p, t_child *child, size_t i);
+extern char			**ft_realloc_child(char **temp);
 
-extern char	**ft_setpath(t_prompt *p);
+extern char			**ft_setpath(t_prompt *p);
+extern char			*ft_gnl_query(char *path, char *query);
 #endif

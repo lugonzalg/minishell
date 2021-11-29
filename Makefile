@@ -20,13 +20,13 @@ FILES = minishell/main \
 		minishell/print_intro \
 		minishell/prompt \
 		minishell/set_data \
-		minishell/unify		\
-		minishell/builtins \
-		minishell/builtins_extra \
-		minishell/handle_builtins \
-		minishell/command_path \
-		minishell/split_ptr \
-		minishell/split_tools
+		minishell/unify_paths/unify		\
+		minishell/unify_paths/command_path \
+		minishell/builtins/builtins \
+		minishell/builtins/builtins_extra \
+		minishell/builtins/handle_builtins \
+		minishell/split/split_ptr \
+		minishell/split/split_tools
 
 SRC_DIR = src/
 OBJ_DIR = obj/

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 21:51:55 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:32:59 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,12 @@ extern void	command_pos(t_prompt *p, t_child *child)
 int	main(int argc, char *argv[], char *env[])
 {
 	t_prompt	p;
+
 	(void)argv;
 	
 	g_glob = ft_calloc(sizeof(t_global), 1);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, sig_handler);
+	//signal(SIGINT, sig_handler);
+	//signal(SIGQUIT, sig_handler);
 	if (argc != 1)
 		return (1);
 	set_str(&p);

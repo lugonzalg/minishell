@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 21:51:53 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:36:25 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	resize_cat(t_child *child)
 	resize = ft_calloc(sizeof(char *), child->size[1] + 1);
 	resize[0] = ft_strdup(child->info[0]);
 	resize[1] = ft_strdup(".here_doc");
+	i = 2;
 	while (child->info[++i])
 		resize[i] = ft_strdup(child->info[i]);
 	free_d2(child->info);
@@ -62,7 +63,7 @@ static void	here_doc(t_child *child, char *key)
 	int		fd;
 	char	*key_nl;
 
-	fd = open(".here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	fd = open(".here_doc", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	close(child->fdpipe[child->id + 1][1]);
 	child->fdpipe[child->id + 1][1] = fd;
 	key_nl = ft_strjoin(key, "\n");
@@ -194,9 +195,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	temp = (char **)ft_calloc(sizeof(char *), child->size[1] + 1);
 	while (index < child->size[2] && child->info[index])
 	{
-		if (ft_strchr(child->info[index], '\''))
-			temp[i++] = ft_strtrim(child->info[index], "\'");
-		else if (ft_strchr(child->info[index], '$'))
+		if (ft_strchr(child->info[index], '$'))
 				temp[i++] = expand_var(p, child, index);
 		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);

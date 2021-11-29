@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 17:08:41 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/27 21:51:56 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:35:38 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-static char	*ft_gnl_query(char *path)
+extern char	*ft_gnl_query(char *path, char *query)
 {
 	char	*line;
 	int		fd;
@@ -27,7 +27,7 @@ static char	*ft_gnl_query(char *path)
 		line = get_next_line(fd);
 		if (!line)
 			return (NULL);
-		if (!ft_strncmp(line, "PATH=", 5))
+		if (!ft_strncmp(line, query, ft_strlen(query)))
 			break ;
 		free(line);
 	}
@@ -40,14 +40,15 @@ extern char	**ft_setpath(t_prompt *p)
 	char	*line;
 	int		i;
 
-	line = ft_gnl_query(p->envpath);
-	p->tmp = ft_strtrim(line, "PATH=\n");
+	line = ft_gnl_query(p->envpath, "PATH=");
+	if (!line)
+		return (NULL);
 	free(line);
-	tmp = ft_split(p->tmp, ':');
-	free(p->tmp);
+	tmp = ft_split(line + 5, ':');
 	i = -1;
 	while (tmp[++i])
 	{
+		tmp[i][ft_strlen(tmp[i])] = 0;
 		line = ft_strjoin(tmp[i], "/");
 		free(tmp[i]);
 		tmp[i] = line;
