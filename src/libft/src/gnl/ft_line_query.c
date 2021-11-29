@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_line_query.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/22 18:12:52 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 19:11:50 by lugonzal         ###   ########.fr       */
+/*   Created: 2021/11/29 19:50:55 by lugonzal          #+#    #+#             */
+/*   Updated: 2021/11/29 19:52:24 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "inc/libft.h"
 
-size_t	ft_strlen(const char *s)
+char	*ft_line_query(int fd)
 {
-	int	i;
+	char	*line;
+	char	*buf;
+	ssize_t	size;
 
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	if (fd < 0 || fd == 2)
+		return (NULL);
+	size = 1;
+	while (size && ft_str
 }

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:48:14 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 21:47:55 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,11 @@ extern void	unify_fdio(t_child *child)
 	{
 		if (ft_strchr(child->info[i], OUTPUT))
 		{
+			i++;
 			if (ft_strlen(child->info[i]) == 1)
-				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
+				fd = open(child->info[i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			else if (ft_strlen(child->info[i]) == 2)
-				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
+				fd = open(child->info[i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			else
 				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id + 1][1]);

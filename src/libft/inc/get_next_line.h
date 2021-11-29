@@ -6,14 +6,14 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:18:53 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 18:18:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/29 19:53:20 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFFER_SIZE 42
+# define BUFFER_SIZE 1
 
 char	*get_next_line(int fd);
 int		len_c(char	*str, char c);

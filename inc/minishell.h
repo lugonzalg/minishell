@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 18:12:26 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 21:47:57 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct	s_global
 	pid_t	killid;
 }	t_global;
 
-t_global	*g_glob;
+static t_global	*g_glob;
 
 typedef size_t	(*t_len)(char *, char);
 
