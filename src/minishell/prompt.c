@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:33:51 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 18:23:46 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,19 +119,33 @@ static void	process_io(t_prompt *p)
 
 extern void	prompt_io(t_prompt *p)
 {
+	int	len;
+
 	while (1)
 	{
-		rl_catch_signals = 0;
+		//rl_catch_signals = 0;
 		g_glob->killid = 0;
 		p->prompt = readline("minishell > ");
 		rl_on_new_line();
 		p->on = 2;
 		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, p);
+		len = -1;
+		while(p->d2_prompt[++len])
+		{
+			if (!ft_errorcheck(p->d2_prompt[len]))
+			{
+				len = -1;
+				break ;
+			}
+		}
 		add_history(p->prompt);
-		process_io(p);
+		if (len != -1)
+		{
+			process_io(p);
+			free(p->id);
+			free(p->prompt);
+		}
 		free_d2(p->d2_prompt);
-		free(p->prompt);
-		free(p->id);
 	}
 	rl_clear_history();
 }

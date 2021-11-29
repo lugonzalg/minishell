@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:47:46 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 18:12:26 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,5 @@ extern char			**ft_realloc_child(char **temp);
 
 extern char			**ft_setpath(t_prompt *p);
 extern char			*ft_gnl_query(char *path, char *query);
+int					ft_errorcheck(char *str);
 #endif

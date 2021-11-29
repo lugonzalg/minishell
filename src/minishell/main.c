@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:32:59 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 18:24:43 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,46 @@
 #include "inc/libft.h"
 #include <signal.h>
 #include <stdlib.h>
+
+int	ft_errorcheck(char *str)
+{
+	int	doub[2];
+	int	simp[2];
+
+	ft_memset(doub, 0, 2 * sizeof(int));
+	ft_memset(simp, 0, 2 * sizeof(int));
+	while (*str)
+	{
+		if (*str == '\'')
+		{
+			simp[0]++;
+			if (simp[0] % 2 == 1 && !doub[1])
+				simp[1] = 1;
+			if (simp[0] % 2 == 0 && simp[1])
+			{
+				if (doub[0] % 2 == 1)
+					return (0);
+				simp[1] = 0;
+			}
+		}
+		if (*str == '\"')
+		{
+			doub[0]++;
+			if (doub[0] % 2 == 1 && !simp[1])
+				doub[1] = 1;
+			if (doub[0] % 2 == 0 && doub[1])
+			{
+				if (simp[0] % 2 == 1)
+					return (0);
+				doub[1] = 0;
+			}
+		}
+		str++;
+	}
+	if (doub[0] % 2 == 1 || simp[0] % 2 == 1)
+		return (0);
+	return (1);
+}
 
 int	ft_putpath(t_child *child)
 {
