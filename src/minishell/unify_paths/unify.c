@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:36:25 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:48:14 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "inc/get_next_line.h"
 #include "inc/libft.h"
 #include "inc/minishell.h"
@@ -97,8 +98,10 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
-			else
+			else if (ft_strlen(child->info[i]) == 2)
 				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
+			else
+				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id + 1][1]);
 			child->fdpipe[child->id + 1][1] = fd;
 		}
@@ -106,8 +109,10 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDONLY);
-			else
+			else if (ft_strlen(child->info[i]) == 1)
 				here_doc(child, child->info[i + 1]);
+			else
+				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id][0]);
 			child->fdpipe[child->id][0] = fd;
 		}
@@ -119,68 +124,6 @@ char	*ft_puterror(t_child *child)
 	if (child->info[0][0] == '$' && child->info[0][1] == '?' && ft_strlen(child->info[0]) == 2)
 		return (ft_itoa(g_glob->error));
 	return (NULL);
-}
-
-static char	*expand_var(t_prompt *p, t_child *child, size_t i)
-{
-	char	*line;
-	int		fd;
-	char	*var;
-
-	child->builtin = true;
-	fd = open(p->envpath, O_RDONLY);
-	if (child->info[0][0] == '$')
-		child->echo = true;
-	var = ft_puterror(child);
-	if (var)
-		return (var);
-	line = ft_strtrim(child->info[i], "$\"");
-	free(child->info[i]);
-	child->info[i] = ft_strjoin(line, "=");
-	free(line);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		if (!ft_strncmp(line, child->info[i], ft_strlen(child->info[i])))
-		{
-			line[ft_strlen(line) - 1] = 0;
-			close(fd);
-			var = ft_strtrim(line, child->info[i]);
-			free(line);
-			return (var);
-		}
-		free(line);
-	}
-	close(fd);
-	return (NULL);
-}
-
-char	**ft_realloc_child(char **temp)
-{
-	int	size;
-	char	**d2;
-	int	index;
-
-	size = 0;
-	while (temp[size])
-		size++;
-	size += 1;
-	d2 = (char **)ft_calloc(sizeof(char *), size + 1);
-	d2[0] = ft_strdup("echo");
-	size = 1;
-	index = 0;
-	while (temp[index])
-	{
-		d2[size] = ft_strdup(temp[index]);
-		free(temp[index]);
-		index++;
-		size++;
-	}
-	d2[size] = NULL;
-	free(temp);
-	return (d2);
 }
 
 void	unify_cmd(t_prompt *p, t_child *child)
