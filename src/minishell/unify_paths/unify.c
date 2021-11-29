@@ -6,13 +6,14 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 21:17:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:26:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "inc/get_next_line.h"
 #include "inc/libft.h"
 #include "inc/minishell.h"
@@ -96,8 +97,10 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
-			else
+			else if (ft_strlen(child->info[i]) == 2)
 				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
+			else
+				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id + 1][1]);
 			child->fdpipe[child->id + 1][1] = fd;
 		}
@@ -105,8 +108,10 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDONLY);
-			else
+			else if (ft_strlen(child->info[i]) == 1)
 				here_doc(child, child->info[i + 1]);
+			else
+				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id][0]);
 			child->fdpipe[child->id][0] = fd;
 		}
