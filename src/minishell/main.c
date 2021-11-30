@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 21:47:58 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/30 14:42:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	ft_errorcheck(char *str)
 
 int	ft_putpath(t_child *child)
 {
-	if (!access(child->info[0], X_OK))
+	if (child->info[0] && !access(child->info[0], X_OK))
 		child->path = ft_strdup(child->info[0]);
 	return (1);
 }

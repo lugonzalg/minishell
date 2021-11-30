@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 21:47:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:36:33 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,10 @@ extern void	free_child(t_child *child)
 	i = -1;
 	while (++i < child->size[0])
 	{
-		close(child->fdpipe[i][0]);
-		close(child->fdpipe[i][1]);
+		if (child->fdpipe[i][0] != 0)
+			close(child->fdpipe[i][0]);
+		if (child->fdpipe[i][1] != 1)
+			close(child->fdpipe[i][1]);
 		free(child->fdpipe[i]);
 	}
 	free(child->fdpipe);
@@ -66,8 +68,9 @@ extern void	free_child(t_child *child)
 
 extern void	free_p(t_prompt *p)
 {
-	free_d2(p->path);
+	//free_d2(p->path);
 	free(p->user);
+	unlink(p->envpath);
 	free(p->envpath);
 	free(p->builtpath);
 	free(p->home);

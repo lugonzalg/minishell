@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 21:48:00 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:26:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void	check_redir(t_prompt *p, t_child *child)
 	p->on = 0;
 	child->info = ft_split_ptr(p->d2_prompt[child->id],
 			' ', ft_len_redir, p);
+	if (!child->builtin)
+		command_pos(p, child);
 	while (child->info[child->size[1]])
 		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(p, child);
-	if (!child->builtin)
-		command_pos(p, child);
 }
 
 int	go_exit(int n)
@@ -66,7 +66,7 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id][0], 0);
 		close(child->fdpipe[child->id][0]);
 	}
-	if (child->id < child->size[0] - 2 || (child->redir[1] && !child->redir[2]))
+	if (child->id < child->size[0] - 2 || ((child->redir[1]) /*&& !child->redir[2]*/)) //no se utiliza en here_doc
 	{
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
@@ -81,6 +81,7 @@ static void	restart_data(t_child *child)
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	free_d2(child->info);
+	free(child->path);
 	child->path = NULL;
 }
 
@@ -100,7 +101,7 @@ static void	process_io(t_prompt *p)
 		check_redir(p, &child);
 		if (ft_checkbuiltins(child.info[0], p))
 			ft_builtins(&child, p);
-		else
+		else if (child.info[0])
 		{
 			p->id[i] = fork();
 			//g_glob->killid = p->id[1];
@@ -146,6 +147,7 @@ extern void	prompt_io(t_prompt *p)
 			process_io(p);
 			free(p->id);
 			free(p->prompt);
+			unlink(".here_doc");
 		}
 		free_d2(p->d2_prompt);
 	}

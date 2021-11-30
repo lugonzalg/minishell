@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 21:47:55 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:20:29 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,31 @@ static void	resize_cat(t_child *child)
 
 	i = 1;
 	resize = ft_calloc(sizeof(char *), child->size[1] + 1);
-	resize[0] = ft_strdup(child->info[0]);
-	resize[1] = ft_strdup(".here_doc");
-	i = 2;
-	while (child->info[++i])
-		resize[i] = ft_strdup(child->info[i]);
+	if (!child->path)
+	{
+		child->path = ft_strdup("/bin/cat");
+		resize[0] = ft_strdup("cat");
+		resize[1] = ft_strdup(".here_doc");
+		i = 1;
+		while (child->info[++i])
+			resize[i] = ft_strdup(child->info[i]);
+	}
+	else
+	{
+		resize[0] = ft_strdup(child->info[0]);
+		resize[1] = ft_strdup(".here_doc");
+		i = 2;
+		while (child->info[++i])
+			resize[i - 1] = ft_strdup(child->info[i]);
+	}
 	free_d2(child->info);
 	child->info = resize;
-	child->size[2]--;
-	child->redir[2] = true;
+	//child->size[2]--;
+	//child->redir[2] = true;
 	child->redir[0] = true;
 }
 
-static void	here_doc(t_child *child, char *key)
+static int	here_doc(t_child *child, char *key)
 {
 	char	*line;
 	int		fd;
@@ -84,6 +96,7 @@ static void	here_doc(t_child *child, char *key)
 	}
 	free(key_nl);
 	resize_cat(child);
+	return (fd);
 }
 
 extern void	unify_fdio(t_child *child)
@@ -96,11 +109,10 @@ extern void	unify_fdio(t_child *child)
 	{
 		if (ft_strchr(child->info[i], OUTPUT))
 		{
-			i++;
 			if (ft_strlen(child->info[i]) == 1)
-				fd = open(child->info[i], O_RDWR | O_TRUNC | O_CREAT, 0644);
+				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			else if (ft_strlen(child->info[i]) == 2)
-				fd = open(child->info[i], O_RDWR | O_TRUNC | O_CREAT, 0644);
+				fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 			else
 				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id + 1][1]);
@@ -110,8 +122,8 @@ extern void	unify_fdio(t_child *child)
 		{
 			if (ft_strlen(child->info[i]) == 1)
 				fd = open(child->info[++i], O_RDONLY);
-			else if (ft_strlen(child->info[i]) == 1)
-				here_doc(child, child->info[i + 1]);
+			else if (ft_strlen(child->info[i]) == 2)
+				fd = here_doc(child, child->info[i + 1]);
 			else
 				printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 			close(child->fdpipe[child->id][0]);
