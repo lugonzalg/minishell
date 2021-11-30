@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 18:24:43 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 18:02:18 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	main(int argc, char *argv[], char *env[])
 
 	(void)argv;
 	
-	g_glob = ft_calloc(sizeof(t_global), 1);
+	//g_glob = ft_calloc(sizeof(t_global), 1);
 	//signal(SIGINT, sig_handler);
 	//signal(SIGQUIT, sig_handler);
 	if (argc != 1)

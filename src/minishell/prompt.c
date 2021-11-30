@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 18:23:46 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 18:02:25 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	check_redir(t_prompt *p, t_child *child)
 
 int	go_exit(int n)
 {
-	g_glob->error = n;
+	g_glob.error = n;
 	return (n);
 }
 
@@ -72,7 +72,6 @@ void	multipipe(t_child *child)
 		close(child->fdpipe[child->id + 1][1]);
 	}
 	signal = execve(child->path, child->info, NULL);
-	printf("minishell: %s: No such file or directory\n", child->info[0]);
 	exit(go_exit(127));
 }
 
@@ -103,7 +102,7 @@ static void	process_io(t_prompt *p)
 		else
 		{
 			p->id[i] = fork();
-			g_glob->killid = p->id[1];
+			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
 				multipipe(&child);
 		}
@@ -124,7 +123,7 @@ extern void	prompt_io(t_prompt *p)
 	while (1)
 	{
 		//rl_catch_signals = 0;
-		g_glob->killid = 0;
+		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		rl_on_new_line();
 		p->on = 2;

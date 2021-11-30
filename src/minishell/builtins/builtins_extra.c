@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:32:13 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 18:02:10 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int		ft_changedir(t_child *child, t_prompt *p)
 	if (chdir(child->info[1]))
 	{
 		printf("minishell: cd: %s: No such file or directory\n", child->info[1]);
-		go_exit(12);
+		go_exit(128);
 		return (1);
 	}
 	return (0);
@@ -95,6 +95,9 @@ extern char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	fd = open(p->envpath, O_RDONLY);
 	if (child->info[0][0] == '$')
 		child->echo = true;
+	var = ft_puterror(child);
+	if (var)
+		return (var);
 	line = ft_strtrim(child->info[i], "$\"");
 	free(child->info[i]);
 	child->info[i] = ft_strjoin(line, "=");
