@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 18:02:25 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 20:34:24 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	check_redir(t_prompt *p, t_child *child)
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(p, child);
-	if (!child->builtin)
+	if (!child->builtin || !ft_strncmp(child->info[0], "expr", 4))
 		command_pos(p, child);
 }
 
@@ -71,8 +71,9 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
+//	printf("%s\n", child->info[1]);
 	signal = execve(child->path, child->info, NULL);
-	exit(go_exit(127));
+	exit(127);
 }
 
 static void	restart_data(t_child *child)
@@ -105,6 +106,11 @@ static void	process_io(t_prompt *p)
 			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
 				multipipe(&child);
+			else
+			{
+				if (access(child.path, X_OK))
+					go_exit(127);
+			}
 		}
 		restart_data(&child);
 	}

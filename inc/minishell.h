@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 18:00:49 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 20:09:52 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ extern void			sig_handler(int signo);
 
 extern void			unify_fdio(t_child *child);
 extern void			unify_cmd(t_prompt *p, t_child *child);
-char				*ft_puterror(t_child *child);
+char				*ft_puterror(t_child *child, size_t i);
 
 extern void			free_d2(char **dat);
 extern void			free_p(t_prompt *p);

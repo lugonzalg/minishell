@@ -1,12 +1,12 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*                                                                            egk;m*/
 /*                                                        :::      ::::::::   */
 /*   print_intro.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 17:33:11 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 19:17:18 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,22 @@
 
 void	sig_handler(int signo)
 {
-	(void)signo;
-	/*if (signo == SIGINT)
+	if (signo == SIGINT)
 	{
 		printf("\n");
 	}
-	if (signo == SIGQUIT && g_glob->killid)
+	if (signo == SIGQUIT && g_glob.killid)
 	{
-		kill(g_glob->killid, SIGQUIT);
+		kill(g_glob.killid, SIGQUIT);
 		printf("Quit: 3\n");
-		g_glob->error = 131;
+		g_glob.error = 131;
 	}
 	else
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-	}*/
+	}
 }
 
 extern void	print_intro(void)

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 18:02:34 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 20:20:52 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,9 @@ extern void	unify_fdio(t_child *child)
 	}
 }
 
-char	*ft_puterror(t_child *child)
+char	*ft_puterror(t_child *child, size_t index)
 {
-	if (child->info[0][0] == '$' && child->info[0][1] == '?' && ft_strlen(child->info[0]) == 2)
+	if (child->info[index][0] == '$' && child->info[index][1] == '?' && ft_strlen(child->info[index]) == 2)
 		return (ft_itoa(g_glob.error));
 	return (NULL);
 }
@@ -139,7 +139,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	while (index < child->size[2] && child->info[index])
 	{
 		if (ft_strchr(child->info[index], '$'))
-				temp[i++] = expand_var(p, child, index);
+			temp[i++] = expand_var(p, child, index);
 		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);
 		index++;

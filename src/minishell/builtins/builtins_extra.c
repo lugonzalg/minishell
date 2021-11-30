@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 18:02:10 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 20:31:04 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ extern char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	fd = open(p->envpath, O_RDONLY);
 	if (child->info[0][0] == '$')
 		child->echo = true;
-	var = ft_puterror(child);
+	var = ft_puterror(child, i);
 	if (var)
 		return (var);
 	line = ft_strtrim(child->info[i], "$\"");
