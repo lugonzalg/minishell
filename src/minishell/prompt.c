@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:26:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:45:09 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ void	check_redir(t_prompt *p, t_child *child)
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);
 	unify_cmd(p, child);
+	if (!child->builtin || !ft_strncmp(child->info[0], "expr", 4))
+		command_pos(p, child);
 }
 
 int	go_exit(int n)
 {
-	//g_glob->error = n;
+	g_glob.error = n;
 	return (n);
 }
 
@@ -71,9 +73,9 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
+//	printf("%s\n", child->info[1]);
 	signal = execve(child->path, child->info, NULL);
-	printf("minishell: %s: No such file or directory\n", child->info[0]);
-	exit(go_exit(127));
+	exit(127);
 }
 
 static void	restart_data(t_child *child)
@@ -104,9 +106,14 @@ static void	process_io(t_prompt *p)
 		else if (child.info[0])
 		{
 			p->id[i] = fork();
-			//g_glob->killid = p->id[1];
+			g_glob.killid = p->id[1];
 			if (p->id[i] == 0)
 				multipipe(&child);
+			else
+			{
+				if (access(child.path, X_OK))
+					go_exit(127);
+			}
 		}
 		restart_data(&child);
 	}
@@ -125,7 +132,7 @@ extern void	prompt_io(t_prompt *p)
 	while (1)
 	{
 		//rl_catch_signals = 0;
-		//g_glob->killid = 0;
+		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		if (!ft_strncmp(p->prompt, "exit", sizeof("exit")))
 				break ;

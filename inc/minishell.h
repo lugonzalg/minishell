@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 21:47:57 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/11/30 21:46:08 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct	s_global
 	pid_t	killid;
 }	t_global;
 
-static t_global	*g_glob;
+t_global	g_glob;
 
 typedef size_t	(*t_len)(char *, char);
 
@@ -77,6 +77,7 @@ extern void			sig_handler(int signo);
 
 extern void			unify_fdio(t_child *child);
 extern void			unify_cmd(t_prompt *p, t_child *child);
+char				*ft_puterror(t_child *child, size_t i);
 
 extern void			free_d2(char **dat);
 extern void			free_p(t_prompt *p);
