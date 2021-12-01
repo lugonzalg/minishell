@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:45:09 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 14:40:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	check_redir(t_prompt *p, t_child *child)
 		child->redir[0] = true;
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
-	p->on = 0;
 	child->info = ft_split_ptr(p->d2_prompt[child->id],
 			' ', ft_len_redir, p);
 	if (!child->builtin)
@@ -73,7 +72,6 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
-//	printf("%s\n", child->info[1]);
 	signal = execve(child->path, child->info, NULL);
 	exit(127);
 }
@@ -87,6 +85,27 @@ static void	restart_data(t_child *child)
 	child->path = NULL;
 }
 
+static void	process_command(t_prompt *p, t_child *child, size_t i)
+{
+	child->id = i;
+	check_redir(p, child);
+	if (ft_checkbuiltins(child->info[0], p))
+		ft_builtins(child, p);
+	else if (child->info[0])
+	{
+		p->id[i] = fork();
+		g_glob.killid = p->id[1];
+		if (p->id[i] == 0)
+			multipipe(child);
+		else
+		{
+			if (access(child->path, X_OK))
+				go_exit(127);
+		}
+	}
+	restart_data(child);
+}
+
 static void	process_io(t_prompt *p)
 {
 	size_t	i;
@@ -95,28 +114,9 @@ static void	process_io(t_prompt *p)
 
 	status = 0;
 	set_child(p, &child);
-	p->id = (pid_t *)malloc(sizeof(pid_t) * child.size[0]);
 	i = -1;
 	while (p->d2_prompt[++i])
-	{
-		child.id = i;
-		check_redir(p, &child);
-		if (ft_checkbuiltins(child.info[0], p))
-			ft_builtins(&child, p);
-		else if (child.info[0])
-		{
-			p->id[i] = fork();
-			g_glob.killid = p->id[1];
-			if (p->id[i] == 0)
-				multipipe(&child);
-			else
-			{
-				if (access(child.path, X_OK))
-					go_exit(127);
-			}
-		}
-		restart_data(&child);
-	}
+		process_command(p, &child, i);
 	free_child(&child);
 	while (1)
 	{
@@ -125,37 +125,45 @@ static void	process_io(t_prompt *p)
 	}
 }
 
-extern void	prompt_io(t_prompt *p)
+static bool	check_prompt(t_prompt *p)
 {
 	int	len;
 
+	len = -1;
+	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, p);
+	while (p->d2_prompt[++len])
+	{
+		if (!ft_errorcheck(p->d2_prompt[len]))
+		{
+			len = -1;
+			free_d2(p->d2_prompt);
+			free(p->prompt);
+			return (true);
+		}
+	}
+	add_history(p->prompt);
+	if (len != -1)
+	{
+		process_io(p);
+		free(p->id);
+		free(p->prompt);
+		unlink(".here_doc");
+	}
+	return (false);
+}
+
+extern void	prompt_io(t_prompt *p)
+{
 	while (1)
 	{
 		//rl_catch_signals = 0;
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		if (!ft_strncmp(p->prompt, "exit", sizeof("exit")))
-				break ;
+			break ;
 		rl_on_new_line();
-		p->on = 2;
-		p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, p);
-		len = -1;
-		while(p->d2_prompt[++len])
-		{
-			if (!ft_errorcheck(p->d2_prompt[len]))
-			{
-				len = -1;
-				break ;
-			}
-		}
-		add_history(p->prompt);
-		if (len != -1)
-		{
-			process_io(p);
-			free(p->id);
-			free(p->prompt);
-			unlink(".here_doc");
-		}
+		if (check_prompt(p))
+			continue ;
 		free_d2(p->d2_prompt);
 	}
 	rl_clear_history();

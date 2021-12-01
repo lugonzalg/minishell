@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 17:08:41 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 14:42:16 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 12:15:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,20 @@ extern char	**ft_setpath(t_prompt *p)
 {
 	char	**tmp;
 	char	*line;
+	char	*nl;
 	int		i;
 
 	line = ft_gnl_query(p->envpath, "PATH=");
 	if (!line)
 		return (NULL);
-	free(line);
+	nl = ft_strchr(line, 10);
+	if (nl)
+		*nl = 0;
 	tmp = ft_split(line + 5, ':');
+	free(line);
 	i = -1;
 	while (tmp[++i])
 	{
-		tmp[i][ft_strlen(tmp[i])] = 0;
 		line = ft_strjoin(tmp[i], "/");
 		free(tmp[i]);
 		tmp[i] = line;

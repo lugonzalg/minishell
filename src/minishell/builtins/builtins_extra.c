@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:45:24 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 14:42:27 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int		changediraux(t_child *child, t_prompt *p)
+static int	changediraux(t_child *child, t_prompt *p)
 {
 	char	*path;
 	char	*temp;
 
 	if ((child->info[1][0] == '~' && child->info[1][1] == '/') ||
-			(child->info[1][0] == '~' && ft_strlen(child->info[1]) == 1))	
+			(child->info[1][0] == '~' && ft_strlen(child->info[1]) == 1))
 	{
 		temp = ft_strdup(child->info[1] + 1);
 		path = ft_strjoin(p->home, temp);
@@ -44,9 +44,9 @@ static int		changediraux(t_child *child, t_prompt *p)
 	return (-1);
 }
 
-int		ft_changedir(t_child *child, t_prompt *p)
+int	ft_changedir(t_child *child, t_prompt *p)
 {
-	if(child->size[1] == 1)
+	if (child->size[1] == 1)
 	{
 		chdir(p->home);
 		return (0);
@@ -85,7 +85,7 @@ extern void	ft_putenv(char **env, t_prompt *p)
 	close(fd);
 }
 
-extern char	*expand_var(t_prompt *p, t_child *child, size_t i)
+/*extern char	*expand_var(t_prompt *p, t_child *child, size_t i)
 {
 	char	*line;
 	int		fd;
@@ -119,7 +119,7 @@ extern char	*expand_var(t_prompt *p, t_child *child, size_t i)
 	}
 	close(fd);
 	return (NULL);
-}
+}*/
 
 extern char	**ft_realloc_child(char **temp)
 {

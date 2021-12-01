@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:36:33 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 14:36:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ extern void	set_child(t_prompt *p, t_child *child)
 	ft_memset(child, 0, sizeof(t_child));
 	child->fdpipe = (int **)malloc(sizeof(int *) * i);
 	child->size[0] = i;
+	p->id = (pid_t *)malloc(sizeof(pid_t) * child->size[0]);
 	i = -1;
 	while (++i < child->size[0])
 	{

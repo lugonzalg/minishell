@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/29 21:47:58 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 14:45:30 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ static size_t	ft_query_len(char *s, char c)
 	}
 	return (0);
 }
-static char	*dquote_expand(char *str, t_prompt *p)
+
+extern char	*dquote_expand(char *str, t_prompt *p)
 {
 	static char	*n_str;
-	char	*env;
-	size_t	i;
+	char		*env;
+	size_t		i;
 
 	i = 0;
 	n_str = ft_strchr(str, '$');
@@ -53,7 +54,8 @@ static char	*dquote_expand(char *str, t_prompt *p)
 	free(p->tmp);
 	p->tmp = ft_strchr(str + i, '\'');
 	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
-	free(str);
+	//if (on) <- leak split // double free error
+	//free(str);
 	if (ft_strchr(n_str, '$'))
 		dquote_expand(n_str, p);
 	return (n_str);
@@ -62,7 +64,7 @@ static char	*dquote_expand(char *str, t_prompt *p)
 extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
 {
 	char	*n_str;
-	char	*quote;
+	char	*quo;
 	size_t	i;
 	size_t	j;
 
@@ -73,16 +75,18 @@ extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
 	{
 		if (s[i] == '\'' || s[i] == '\"')
 		{
-			quote = s + i;
+			quo = s + i;
 			if (c == '|')
-				ft_memcpy(n_str + i + j, quote, ft_query_len(quote, *quote) + 1);
+				ft_memcpy(n_str + i + j, quo, ft_query_len(quo, *quo) + 1);
 			else
-				ft_memcpy(n_str + i + j, quote + 1, ft_query_len(quote, *quote) - 1);
-			s += ft_query_len(s + i, *quote) + 1;
+				ft_memcpy(n_str + i + j, quo + 1, ft_query_len(quo, *quo) - 1);
+			s += ft_query_len(s + i, *quo) + 1;
 			j = ft_strlen(n_str) - i;
-			if (!p->on && *quote == '\"' && ft_strnstr(n_str, "\'$", 2048))
-				n_str = dquote_expand(n_str, p);
-			if (!p->on && (s[i] == '<' || s[i] == '>'))
+			if (c == ' ')
+				j += 2;
+			if (c == ' ' && *quo == '\"' && ft_strnstr(n_str, "\'$", 2048))
+				n_str = dquo_expand(n_str, p);
+			if (c == ' ' && (s[i] == '<' || s[i] == '>'))
 				break ;
 			continue ;
 		}
@@ -198,7 +202,7 @@ static char	**ft_handle_tab(const char *str, char c, char **tab, t_prompt *p)
 				return (NULL);
 			}
 			j++;
-			if (!p->on && (*str == '<' || *str == '>'))
+			if (c == ' ' && (*str == '<' || *str == '>'))
 				cut_redir((char *)str, (char **)&str, tab, &j);
 		}
 		while (*str && *str != c)

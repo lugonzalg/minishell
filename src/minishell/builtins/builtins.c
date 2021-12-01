@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/11/29 21:47:59 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 12:11:03 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ extern void	envinclude(t_child	*child, t_prompt *p)
 	int	i;
 
 	fd = open(p->envpath, O_WRONLY | O_APPEND);
-	i = -1;
-	while (child->info[1][++i])
-		write(fd, &child->info[1][i], 1);
+	i = 0;
+	while (child->info[1][i] && child->info[1][i] != 10)
+		write(fd, &child->info[1][i++], 1);
 	write(fd, "\n", 1);
 	p->sizenv++;
 	close(fd);

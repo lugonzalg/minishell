@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:45:41 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 13:58:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
+//+25
 int	ft_errorcheck(char *str)
 {
 	int	doub[2];
@@ -98,7 +99,6 @@ int	main(int argc, char *argv[], char *env[])
 	t_prompt	p;
 
 	(void)argv;
-	
 	//signal(SIGINT, sig_handler);
 	//signal(SIGQUIT, sig_handler);
 	if (argc != 1)
