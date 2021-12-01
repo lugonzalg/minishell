@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 13:32:37 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 19:39:06 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,7 @@ void	unify_cmd(t_prompt *p, t_child *child)
 	while (index < child->size[2] && child->info[index])
 	{
 		if (ft_strchr(child->info[index], '$'))
-			//temp[i++] = expand_var(p, child, index);
-			temp[i++] = dquote_expand(child->info[index], p);
+			temp[i++] = dquote_expand(child->info[index], p, false);
 		else if (child->info[index] && *child->info[index])
 			temp[i++] = ft_strdup(child->info[index]);
 		index++;

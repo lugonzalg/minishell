@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:47:36 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 20:08:11 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct s_prompt
 	char		*builtpath;
 	pid_t		*id;
 	int			sizenv;
-	size_t		on;
 }	t_prompt;
 
 typedef struct s_child
@@ -52,7 +51,15 @@ typedef struct s_child
 	bool		echo;
 }	t_child;
 
-typedef struct	s_global
+typedef struct s_split
+{
+	size_t	i;
+	size_t	j;
+	char	*tmp;
+	char	c;
+}	t_split;
+
+typedef struct s_global
 {
 	int		error;
 	pid_t	killid;
@@ -99,10 +106,12 @@ extern void			deletenv(t_child	*child, t_prompt *p);
 extern void			envinclude(t_child	*child, t_prompt *p);
 extern void			showenv(t_prompt *p);
 int					ft_changedir(t_child *child, t_prompt *p);
-extern char			*expand_var(t_prompt *p, t_child *child, size_t i);
+/*extern char			*expand_var(t_prompt *p, t_child *child, size_t i);*/
 extern char			**ft_realloc_child(char **temp);
 
 extern char			**ft_setpath(t_prompt *p);
 extern char			*ft_gnl_query(char *path, char *query);
 int					ft_errorcheck(char *str);
+
+extern char	*dquote_expand(char *str, t_prompt *p, bool on);
 #endif
