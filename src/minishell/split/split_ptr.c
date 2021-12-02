@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 14:45:30 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/02 22:33:40 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,14 @@ extern char	*dquote_expand(char *str, t_prompt *p)
 	free(p->tmp);
 	p->tmp = ft_substr(env, i + 1, ft_strlen(env) - 2 - i);
 	free(env);
-	n_str = ft_calloc(sizeof(char), ft_strlen(p->tmp) + ft_strlen(str));
+	n_str = ft_calloc(sizeof(char), ft_strlen(p->tmp) + ft_strlen(str) + 100);
 	i = ft_strchr(str, '$') - str;
 	env = ft_memcpy(n_str, str, i);
 	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
 	free(p->tmp);
 	p->tmp = ft_strchr(str + i, '\'');
 	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
-	//if (on) <- leak split // double free error
-	//free(str);
+	free(str);
 	if (ft_strchr(n_str, '$'))
 		dquote_expand(n_str, p);
 	return (n_str);
@@ -82,10 +81,11 @@ extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
 				ft_memcpy(n_str + i + j, quo + 1, ft_query_len(quo, *quo) - 1);
 			s += ft_query_len(s + i, *quo) + 1;
 			j = ft_strlen(n_str) - i;
-			if (c == ' ')
-				j += 2;
 			if (c == ' ' && *quo == '\"' && ft_strnstr(n_str, "\'$", 2048))
-				n_str = dquo_expand(n_str, p);
+			{
+				n_str = dquote_expand(n_str, p);
+				j = ft_strlen(n_str) - i;
+			}
 			if (c == ' ' && (s[i] == '<' || s[i] == '>'))
 				break ;
 			continue ;

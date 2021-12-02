@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 17:08:41 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 12:15:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/02 22:33:37 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ extern char	*ft_gnl_query(char *path, char *query)
 {
 	char	*line;
 	char	*info;
+	char	*pos;
 	int		fd;
 
 	fd = open(path, O_RDONLY);
@@ -31,8 +32,13 @@ extern char	*ft_gnl_query(char *path, char *query)
 			return (NULL);
 		else if (info && !line)
 			break ;
-		if (!info && !ft_strncmp(line, query, ft_strlen(query)))
+		pos = ft_strchr(line, '=');
+		line[pos - line] = 0;
+		if (!info && !ft_strncmp(line, query, ft_strlen(line)) && ft_strlen(line) == ft_strlen(query))
+		{
+			line[pos - line] = '=';
 			info = ft_strdup(line);
+		}
 		free(line);
 	}
 	return (info);

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/30 21:47:36 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/02 22:33:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,6 @@ extern char			**ft_realloc_child(char **temp);
 extern char			**ft_setpath(t_prompt *p);
 extern char			*ft_gnl_query(char *path, char *query);
 int					ft_errorcheck(char *str);
+extern char			*dquote_expand(char *str, t_prompt *p);
+extern char			*expand_env(char *str, t_prompt *p);
 #endif
