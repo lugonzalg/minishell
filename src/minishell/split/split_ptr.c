@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/02 22:33:40 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 17:51:43 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static size_t	ft_query_len(char *s, char c)
 	return (0);
 }
 
-extern char	*dquote_expand(char *str, t_prompt *p)
+extern char	*dquote_expand(char *str, t_prompt *p, bool on)
 {
 	static char	*n_str;
 	char		*env;
@@ -56,23 +56,47 @@ extern char	*dquote_expand(char *str, t_prompt *p)
 	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
 	free(str);
 	if (ft_strchr(n_str, '$'))
-		dquote_expand(n_str, p);
+		dquote_expand(n_str, p, true);
 	return (n_str);
+}
+
+static bool	ft_handle_cut(char **s_ptr, t_prompt *p, t_split *spl)
+{
+	char	*quo;
+	char	*s;
+
+	s = (*s_ptr);	
+	quo = s + spl->i;
+	if (spl->c == '|')
+		ft_memcpy(spl->tmp + spl->i + spl->j, quo, ft_query_len(quo, *quo) + 1);
+	else
+		ft_memcpy(spl->tmp + spl->i + spl->j, quo + 1, ft_query_len(quo, *quo) - 1);
+	s += ft_query_len(s + spl->i, *quo) + 1;
+	spl->j = ft_strlen(spl->tmp) - spl->i;
+	if (spl->c == ' ')
+		spl->j += 2;
+	if (spl->c == ' ' && *quo == '\"' && ft_strnstr(spl->tmp, "\'$", 2048))
+	{
+		spl->tmp = dquote_expand(spl->tmp, p, true);
+		spl->j = ft_strlen(spl->tmp) - spl->i;
+	}
+	(*s_ptr) = s;
+	if (spl->c == ' ' && (s[spl->i] == '<' || s[spl->i] == '>'))
+		return (true);
+	return (false);
 }
 
 extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
 {
-	char	*n_str;
-	char	*quo;
-	size_t	i;
-	size_t	j;
+	t_split	spl;
 
-	n_str = ft_calloc(sizeof(char), ft_strlen(s) + 1);
-	i = 0;
-	j = 0;
-	while (s[i] && s[i] != c)
+	spl.tmp = ft_calloc(sizeof(char), ft_strlen(s) + 1);
+	spl.i = 0;
+	spl.j = 0;
+	spl.c = c;
+	while (s[spl.i] && s[spl.i] != c)
 	{
-		if (s[i] == '\'' || s[i] == '\"')
+		if (s[spl.i] == '\'' || s[spl.i] == '\"')
 		{
 			quo = s + i;
 			if (c == '|')
@@ -90,11 +114,14 @@ extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
 				break ;
 			continue ;
 		}
-		n_str[i + j] = s[i];
-		i++;
+		if (s[spl.i] && c == ' ' && (s[spl.i] == '<' || s[spl.i] == '>')
+			&& ft_isalnum(s[spl.i]))
+			break ;
+		spl.tmp[spl.i + spl.j] = s[spl.i];
+		spl.i++;
 	}
-	(*s_ptr) = s + i;
-	return (n_str);
+	(*s_ptr) = s + spl.i;
+	return (spl.tmp);
 }
 
 extern size_t	ft_lenp(char *s, char c)

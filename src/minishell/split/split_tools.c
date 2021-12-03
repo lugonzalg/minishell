@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:01:38 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/28 02:46:40 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/01 19:54:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,4 @@
 #include "inc/libft.h"
 #include "inc/minishell.h"
 
-extern char	*ft_find_quote(const char *s)
-{
-	char	*s_quote;
-	char	*d_quote;
 
-	s_quote = ft_strchr(s, '\'');
-	d_quote = ft_strchr(s, '\"');
-	if (!s_quote && d_quote)
-		return (d_quote);
-	else if (s_quote && !d_quote)
-		return (s_quote);
-	else if (!s_quote && !d_quote)
-		return (NULL);
-	else if (s_quote < d_quote)
-		return (s_quote);
-	else if (d_quote < s_quote)
-		return (d_quote);
-	return (NULL);
-}
