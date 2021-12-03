@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/03 18:15:33 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 18:29:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ static bool	ft_handle_cut(char **s_ptr, t_prompt *p, t_split *spl)
 		ft_memcpy(spl->tmp + spl->i + spl->j, quo + 1, ft_query_len(quo, *quo) - 1);
 	s += ft_query_len(s + spl->i, *quo) + 1;
 	spl->j = ft_strlen(spl->tmp) - spl->i;
-	if (spl->c == ' ')
-		spl->j += 2;
 	if (spl->c == ' ' && *quo == '\"' && ft_strnstr(spl->tmp, "\'$", 2048))
 	{
 		spl->tmp = dquote_expand(spl->tmp, p);
