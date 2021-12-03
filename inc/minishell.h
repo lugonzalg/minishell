@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/03 17:52:17 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 18:07:37 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ extern void			deletenv(t_child	*child, t_prompt *p);
 extern void			envinclude(t_child	*child, t_prompt *p);
 extern void			showenv(t_prompt *p);
 int					ft_changedir(t_child *child, t_prompt *p);
-/*extern char			*expand_var(t_prompt *p, t_child *child, size_t i);*/
+extern char			*expand_var(t_prompt *p, t_child *child, size_t i);
 extern char			**ft_realloc_child(char **temp);
 
 extern char			**ft_setpath(t_prompt *p);

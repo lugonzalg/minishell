@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/03 17:51:43 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 18:15:33 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static size_t	ft_query_len(char *s, char c)
 	return (0);
 }
 
-extern char	*dquote_expand(char *str, t_prompt *p, bool on)
+extern char	*dquote_expand(char *str, t_prompt *p)
 {
 	static char	*n_str;
 	char		*env;
@@ -56,7 +56,7 @@ extern char	*dquote_expand(char *str, t_prompt *p, bool on)
 	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
 	free(str);
 	if (ft_strchr(n_str, '$'))
-		dquote_expand(n_str, p, true);
+		dquote_expand(n_str, p);
 	return (n_str);
 }
 
@@ -77,7 +77,7 @@ static bool	ft_handle_cut(char **s_ptr, t_prompt *p, t_split *spl)
 		spl->j += 2;
 	if (spl->c == ' ' && *quo == '\"' && ft_strnstr(spl->tmp, "\'$", 2048))
 	{
-		spl->tmp = dquote_expand(spl->tmp, p, true);
+		spl->tmp = dquote_expand(spl->tmp, p);
 		spl->j = ft_strlen(spl->tmp) - spl->i;
 	}
 	(*s_ptr) = s;
@@ -98,19 +98,7 @@ extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
 	{
 		if (s[spl.i] == '\'' || s[spl.i] == '\"')
 		{
-			quo = s + i;
-			if (c == '|')
-				ft_memcpy(n_str + i + j, quo, ft_query_len(quo, *quo) + 1);
-			else
-				ft_memcpy(n_str + i + j, quo + 1, ft_query_len(quo, *quo) - 1);
-			s += ft_query_len(s + i, *quo) + 1;
-			j = ft_strlen(n_str) - i;
-			if (c == ' ' && *quo == '\"' && ft_strnstr(n_str, "\'$", 2048))
-			{
-				n_str = dquote_expand(n_str, p);
-				j = ft_strlen(n_str) - i;
-			}
-			if (c == ' ' && (s[i] == '<' || s[i] == '>'))
+			if (ft_handle_cut(&s, p, &spl))
 				break ;
 			continue ;
 		}
