@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 17:08:41 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/02 22:33:37 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 13:05:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ extern char	**ft_setpath(t_prompt *p)
 	char	*nl;
 	int		i;
 
-	line = ft_gnl_query(p->envpath, "PATH=");
+	line = ft_gnl_query(p->envpath, "PATH");
 	if (!line)
 		return (NULL);
 	nl = ft_strchr(line, 10);
