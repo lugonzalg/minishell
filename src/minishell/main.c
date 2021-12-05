@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 13:58:00 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 21:10:35 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ int	ft_putpath(t_child *child)
 extern void	command_pos(t_prompt *p, t_child *child)
 {
 	int	i;
-	int	j;
 
 	i = -1;
 	p->path = ft_setpath(p);
@@ -76,20 +75,16 @@ extern void	command_pos(t_prompt *p, t_child *child)
 		return ;
 	while (p->path[++i] && !child->path)
 	{
-		j = -1;
-		while (child->info[++j])
+		if (!access(child->info[0], X_OK))
 		{
-			if (!access(child->info[j], X_OK))
-			{
-				child->path = ft_strdup(child->info[j]);
-				break ;
-			}
-			child->path = ft_strjoin(p->path[i], child->info[j]);
-			if (!access(child->path, X_OK))
-				break ;
-			free(child->path);
-			child->path = NULL;
+			child->path = ft_strdup(child->info[0]);
+			break ;
 		}
+		child->path = ft_strjoin(p->path[i], child->info[0]);
+		if (!access(child->path, X_OK))
+			break ;
+		free(child->path);
+		child->path = NULL;
 	}
 	free_d2(p->path);
 }
