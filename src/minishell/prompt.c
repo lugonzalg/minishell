@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 17:37:03 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/06 21:12:04 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,11 @@ static void	process_command(t_prompt *p, t_child *child, size_t i)
 			multipipe(child);
 		else
 		{
-			if (access(child->path, X_OK))
+			if (access(child->path, X_OK) || !ft_strncmp(child->info[i], getenv("PWD"), ft_strlen(child->info[i])))
+			{
+				printf("minishell: %s: is a directory\n", child->info[i]);
 				go_exit(127);
+			}
 		}
 	}
 	restart_data(child);

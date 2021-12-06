@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 20:02:53 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/06 21:04:18 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_global
 	pid_t	killid;
 }	t_global;
 
-static t_global	g_glob;
+t_global	g_glob;
 
 typedef size_t	(*t_len)(char *, char);
 
@@ -119,5 +119,5 @@ extern size_t		ft_correct_pos(t_child *child, size_t i, size_t j);
 extern size_t		ft_query_len(char *s, char c);
 extern void			ft_expand(t_prompt *p, t_child *child);
 
-extern int ft_quote_error(char *str);
+extern int			ft_quote_error(char *str);
 #endif

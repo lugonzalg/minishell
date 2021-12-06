@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 12:28:05 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 20:54:29 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,19 @@ static char	*ft_quote_clean(char *str)
 
 extern void	ft_expand(t_prompt *p, t_child *child)
 {
-	size_t	i;
+	size_t	i;	
 
 	i = -1;
 	while (child->info[++i])
-		child->info[i] = ft_quote_case(p, child->info[i]);
+	{
+		if (child->info[i][0] == '$' && child->info[i][1] == '?' && ft_strlen(child->info[i]) == 2)
+		{
+			free(child->info[i]);
+			child->info[i] = ft_itoa(g_glob.error);
+		}
+		else
+			child->info[i] = ft_quote_case(p, child->info[i]);
+	}
 	i = -1;
 	while (child->info[++i])
 			child->info[i] = ft_quote_clean(child->info[i]);
