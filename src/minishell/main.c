@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 17:10:41 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:27:19 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <signal.h>
 
 static int ft_check_even(char *str, char **s_ptr, char c)
 {
@@ -89,8 +92,9 @@ int	main(int argc, char *argv[], char *env[])
 	t_prompt	p;
 
 	(void)argv;
-	//signal(SIGINT, sig_handler);
-	//signal(SIGQUIT, sig_handler);
+	rl_catch_signals = 0;
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	if (argc != 1)
 		return (1);
 	set_str(&p);

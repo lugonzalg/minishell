@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 17:10:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:37:03 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ extern void	prompt_io(t_prompt *p)
 		//rl_catch_signals = 0;
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
-		if (!ft_strncmp(p->prompt, "exit", sizeof("exit")))
+		if (!p->prompt || !ft_strncmp(p->prompt, "exit", sizeof("exit")))
 			break ;
 		rl_on_new_line();
 		if (check_prompt(p))
