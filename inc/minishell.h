@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/05 02:42:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 13:21:46 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,4 +118,6 @@ extern size_t		ft_correct_pos(t_child *child, size_t i, size_t j);
 
 extern size_t		ft_query_len(char *s, char c);
 extern void			ft_expand(t_prompt *p, t_child *child);
+
+extern int ft_quote_error(char *str);
 #endif

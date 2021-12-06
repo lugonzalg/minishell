@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/05 04:32:50 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:10:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,28 +125,23 @@ static void	process_io(t_prompt *p)
 
 static bool	check_prompt(t_prompt *p)
 {
-	int	len;
+	size_t	i;
 
-	len = -1;
 	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp);
-	while (0 && p->d2_prompt[++len])
+	i = -1;
+	add_history(p->prompt);
+	while (p->d2_prompt[++i])
 	{
-		if (!ft_errorcheck(p->d2_prompt[len]))
+		if (!ft_quote_error(p->d2_prompt[i]))
 		{
-			len = -1;
 			free_d2(p->d2_prompt);
 			free(p->prompt);
 			return (true);
 		}
 	}
-	add_history(p->prompt);
-	//if (len != -1)
-	//{
-		process_io(p);
-		free(p->id);
-		free(p->prompt);
-		//unlink(".here_doc");
-	//}
+	process_io(p);
+	free(p->id);
+	free(p->prompt);
 	return (false);
 }
 
@@ -166,4 +161,3 @@ extern void	prompt_io(t_prompt *p)
 	}
 	rl_clear_history();
 }
- /*&& !child->redir[2]*/ //no se utiliza en here_doc

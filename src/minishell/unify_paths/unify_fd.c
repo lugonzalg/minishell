@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/05 04:32:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 12:29:56 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static void	resize_cat(t_child *child)
 
 static int	here_doc(t_child *child, char *key)
 {
+	size_t	len;
 	char	*line;
 	int		fd;
 
@@ -54,7 +55,8 @@ static int	here_doc(t_child *child, char *key)
 		line = get_next_line(0);
 		if (!line)
 			break ;
-		if (!ft_strncmp(key, line, ft_strlen(line) - 1))
+		len = ft_strlen(line);
+		if (!ft_strncmp(key, line, len - 1 && len != 1))
 		{
 			free(line);
 			break ;
@@ -62,6 +64,8 @@ static int	here_doc(t_child *child, char *key)
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
+	close(fd);
+	fd = open(".here_doc", O_RDONLY);
 	resize_cat(child);
 	return (fd);
 }

@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/01 12:11:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:10:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	deletenv_2(t_prompt *p)
 	unlink(".envtemp");
 }
 
-extern void	deletenv(t_child	*child, t_prompt *p)
+extern void	deletenv(t_child *child, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;

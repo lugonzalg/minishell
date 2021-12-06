@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/05 04:32:52 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 12:26:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,12 @@ extern char	*ft_cut(char *s, char **s_ptr, char c)
 		if (s[i] == '\'' || s[i] == '\"')
 		{
 			quo = s + i;
-			ft_memcpy(n_str + i + j, quo, ft_query_len(quo, *quo));
-			s += ft_query_len(quo, *quo);
+			ft_memcpy(n_str + i + j, quo, ft_query_len(quo, *quo) + 1);
+			s += ft_query_len(quo, *quo) + 1;
 			j = ft_strlen(n_str) - i;
 			if (s[i] && c == ' ' && (s[i] == '<' || s[i] == '>'))
 				break ;
+			continue ;
 		}
 		n_str[i + j] = s[i];
 		i++;

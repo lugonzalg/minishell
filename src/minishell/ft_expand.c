@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/05 04:32:49 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 12:28:05 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ static char	*ft_joinfr(t_prompt *p, char *str, size_t *j)
 		ft_memcpy(n_str + (*j), query, len_q);
 	else
 	{
-		(*j)--;
 		ft_memcpy(n_str + (*j), str + (*j) + len_env + 1,
-			ft_strlen(str) - (*j));
+		ft_strlen(str) - (*j));
+		(*j)--;
 		return (n_str);
 	}
 	ft_memcpy(n_str + (*j) + len_q, str + (*j) + len_env + 1,
-		ft_strlen(str) - (*j));
+	ft_strlen(str) - (*j));
 	free(str);
 	return (n_str);
 }
@@ -85,8 +85,8 @@ static char	*ft_quote_case(t_prompt *p, char *str)
 			str = ft_joinfr(p, str, &j);
 		else if (squote && str[j] == '\'')
 			squote = 0;
-		else if (squote && str[j] == '\'')
-			squote = 0;
+		else if (dquote && str[j] == '\"')
+			dquote = 0;
 	}
 	return (str);
 }
@@ -110,9 +110,10 @@ static char	*ft_quote_clean(char *str)
 		if (dquote || squote)
 		{
 			len = ft_query_len(&str[j], str[j]);
-			ft_memcpy(&str[j], &str[j + 1], len - 1);
-			(j) += len;
+			ft_memcpy(&str[j], &str[j + 1], len + 1);
+			j += len;
 			ft_memcpy(&str[j - 1], &str[j + 1], ft_strlen(&str[j] - len));
+			j -= 2;
 			squote = 0;
 			dquote = 0;
 		}

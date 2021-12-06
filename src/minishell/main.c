@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/03 21:10:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:10:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,45 +16,40 @@
 #include "inc/libft.h"
 #include <signal.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-//+25
-int	ft_errorcheck(char *str)
+static int ft_check_even(char *str, char **s_ptr, char c)
 {
-	int	doub[2];
-	int	simp[2];
-
-	ft_memset(doub, 0, 2 * sizeof(int));
-	ft_memset(simp, 0, 2 * sizeof(int));
 	while (*str)
 	{
-		if (*str == '\'')
+		if (*str == c)
 		{
-			simp[0]++;
-			if (simp[0] % 2 == 1 && !doub[1])
-				simp[1] = 1;
-			if (simp[0] % 2 == 0 && simp[1])
-			{
-				if (doub[0] % 2 == 1)
-					return (0);
-				simp[1] = 0;
-			}
-		}
-		if (*str == '\"')
-		{
-			doub[0]++;
-			if (doub[0] % 2 == 1 && !simp[1])
-				doub[1] = 1;
-			if (doub[0] % 2 == 0 && doub[1])
-			{
-				if (simp[0] % 2 == 1)
-					return (0);
-				doub[1] = 0;
-			}
+			(*s_ptr) = str + 1;
+			return (1);
 		}
 		str++;
 	}
-	if (doub[0] % 2 == 1 || simp[0] % 2 == 1)
-		return (0);
+	return (0);
+}
+
+extern int ft_quote_error(char *str)
+{
+	char	quote;
+
+	while (*str)
+	{
+		if (*str == '\'' || *str == '\"')
+		{
+			quote = *str;
+			if (!ft_check_even(str + 1, &str, *str))
+			{
+				printf("unclosed quotes %c\n", quote);
+				return (0);
+			}
+			continue ;
+		}
+		str++;
+	}
 	return (1);
 }
 
