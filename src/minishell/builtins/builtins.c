@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/06 20:08:28 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 21:55:43 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ extern void	showenv(t_prompt *p)
 	close(fd);
 }
 
-int		check_env(t_child *child, char *line, t_prompt *p)
+int	check_env(t_child *child, char *line, t_prompt *p)
 {
 	char		*str;
 	int			a;
@@ -60,7 +60,7 @@ int		check_env(t_child *child, char *line, t_prompt *p)
 	return (a);
 }
 
-void	deletenv_2(t_prompt *p)
+extern void	deletenv_2(t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -128,30 +128,4 @@ extern void	deletenv(t_child *child, t_prompt *p)
 	close(fd[0]);
 	close(fd[1]);
 	deletenv_2(p);
-}
-
-extern void	ft_echo(t_child *child)
-{
-	size_t	i;
-	bool	nl;
-	int		fd;
-
-	fd = 1;
-	nl = true;
-	i = 0;
-	if (child->redir[1] || child->id < child->size[0] - 2)
-		fd = child->fdpipe[child->id + 1][1];
-	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
-	{
-		nl = false;
-		i++;
-	}
-	while (child->info[++i])
-	{
-		write(fd, child->info[i], ft_strlen(child->info[i]));
-		if (i < child->size[1] - 1)
-			write(fd, " ", 1);
-	}
-	if (nl)
-		write(fd, "\n", 1);
 }

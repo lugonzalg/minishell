@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 21:04:18 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 21:54:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_prompt
 	char		*builtpath;
 	char		*temppath;
 	pid_t		*id;
-	int		sizenv;
+	int			sizenv;
 }	t_prompt;
 
 typedef struct s_child
@@ -110,6 +110,7 @@ extern void			envinclude(t_child	*child, t_prompt *p);
 extern void			showenv(t_prompt *p);
 int				ft_changedir(t_child *child, t_prompt *p);
 char				*search_pwd(t_prompt *p);
+int					ft_changedir(t_child *child, t_prompt *p);
 extern char			*expand_var(t_prompt *p, t_child *child, size_t i);
 extern char			**ft_realloc_child(char **temp);
 
@@ -124,4 +125,5 @@ extern size_t		ft_query_len(char *s, char c);
 extern void			ft_expand(t_prompt *p, t_child *child);
 
 extern int			ft_quote_error(char *str);
+extern void			restart_data(t_child *child);
 #endif

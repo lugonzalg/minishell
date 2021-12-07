@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 20:50:03 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 21:47:47 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ extern void	cmd_size(t_child *child)
 
 char	*ft_puterror(t_child *child, size_t index)
 {
-	if (child->info[index][0] == '$' && child->info[index][1] == '?' && ft_strlen(child->info[index]) == 2)
+	if (ft_strnstr(child->info[index], "$?", 3))
 		return (ft_itoa(g_glob.error));
 	return (NULL);
 }

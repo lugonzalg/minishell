@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/03 21:10:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/07 21:53:29 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,6 @@ extern void	ft_putenv(char **env, t_prompt *p)
 	close(fd);
 }
 
-
 extern char	**ft_realloc_child(char **temp)
 {
 	int		size;
@@ -212,4 +211,30 @@ extern char	**ft_realloc_child(char **temp)
 	d2[size] = NULL;
 	free(temp);
 	return (d2);
+}
+
+extern void	ft_echo(t_child *child)
+{
+	size_t	i;
+	bool	nl;
+	int		fd;
+
+	fd = 1;
+	nl = true;
+	i = 0;
+	if (child->redir[1] || child->id < child->size[0] - 2)
+		fd = child->fdpipe[child->id + 1][1];
+	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
+	{
+		nl = false;
+		i++;
+	}
+	while (child->info[++i])
+	{
+		write(fd, child->info[i], ft_strlen(child->info[i]));
+		if (i < child->size[1] - 1)
+			write(fd, " ", 1);
+	}
+	if (nl)
+		write(fd, "\n", 1);
 }

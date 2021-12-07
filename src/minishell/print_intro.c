@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 17:22:10 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 21:50:35 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@
 
 void	sig_handler(int signo)
 {
-	(void) signo;
-/*	if (signo == SIGINT && !g_glob.killid)
+	if (signo == SIGINT && !g_glob.killid)
 	{
 		printf("\n");
 		rl_on_new_line();
@@ -44,7 +43,7 @@ void	sig_handler(int signo)
 		kill(g_glob.killid, SIGQUIT);
 		printf("Quit: 3\n");
 		g_glob.error = 131;
-	}*/
+	}
 }
 
 extern void	print_intro(void)
