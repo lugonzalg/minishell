@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 14:42:27 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/03 21:10:35 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,41 +85,6 @@ extern void	ft_putenv(char **env, t_prompt *p)
 	close(fd);
 }
 
-/*extern char	*expand_var(t_prompt *p, t_child *child, size_t i)
-{
-	char	*line;
-	int		fd;
-	char	*var;
-
-	child->builtin = true;
-	fd = open(p->envpath, O_RDONLY);
-	if (child->info[0][0] == '$')
-		child->echo = true;
-	var = ft_puterror(child, i);
-	if (var)
-		return (var);
-	line = ft_strtrim(child->info[i], "$\"");
-	free(child->info[i]);
-	child->info[i] = ft_strjoin(line, "=");
-	free(line);
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		if (!ft_strncmp(line, child->info[i], ft_strlen(child->info[i])))
-		{
-			line[ft_strlen(line) - 1] = 0;
-			close(fd);
-			var = ft_strtrim(line, child->info[i]);
-			free(line);
-			return (var);
-		}
-		free(line);
-	}
-	close(fd);
-	return (NULL);
-}*/
 
 extern char	**ft_realloc_child(char **temp)
 {

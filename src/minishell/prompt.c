@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 14:40:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 21:12:04 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ void	check_redir(t_prompt *p, t_child *child)
 	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
 		child->redir[1] = true;
 	child->info = ft_split_ptr(p->d2_prompt[child->id],
-			' ', ft_len_redir, p);
-	if (!child->builtin)
-		command_pos(p, child);
+			' ', ft_len_redir);
+	ft_expand(p, child);
 	while (child->info[child->size[1]])
 		child->size[1]++;
 	if (child->redir[0] || child->redir[1])
@@ -67,7 +66,7 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id][0], 0);
 		close(child->fdpipe[child->id][0]);
 	}
-	if (child->id < child->size[0] - 2 || ((child->redir[1]) /*&& !child->redir[2]*/)) //no se utiliza en here_doc
+	if (child->id < child->size[0] - 2 || child->redir[1])
 	{
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
@@ -82,7 +81,6 @@ static void	restart_data(t_child *child)
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	free_d2(child->info);
 	free(child->path);
-	child->path = NULL;
 }
 
 static void	process_command(t_prompt *p, t_child *child, size_t i)
@@ -99,8 +97,11 @@ static void	process_command(t_prompt *p, t_child *child, size_t i)
 			multipipe(child);
 		else
 		{
-			if (access(child->path, X_OK))
+			if (access(child->path, X_OK) || !ft_strncmp(child->info[i], getenv("PWD"), ft_strlen(child->info[i])))
+			{
+				printf("minishell: %s: is a directory\n", child->info[i]);
 				go_exit(127);
+			}
 		}
 	}
 	restart_data(child);
@@ -127,28 +128,23 @@ static void	process_io(t_prompt *p)
 
 static bool	check_prompt(t_prompt *p)
 {
-	int	len;
+	size_t	i;
 
-	len = -1;
-	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp, p);
-	while (p->d2_prompt[++len])
+	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp);
+	i = -1;
+	add_history(p->prompt);
+	while (p->d2_prompt[++i])
 	{
-		if (!ft_errorcheck(p->d2_prompt[len]))
+		if (!ft_quote_error(p->d2_prompt[i]))
 		{
-			len = -1;
 			free_d2(p->d2_prompt);
 			free(p->prompt);
 			return (true);
 		}
 	}
-	add_history(p->prompt);
-	if (len != -1)
-	{
-		process_io(p);
-		free(p->id);
-		free(p->prompt);
-		unlink(".here_doc");
-	}
+	process_io(p);
+	free(p->id);
+	free(p->prompt);
 	return (false);
 }
 
@@ -159,7 +155,7 @@ extern void	prompt_io(t_prompt *p)
 		//rl_catch_signals = 0;
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
-		if (!ft_strncmp(p->prompt, "exit", sizeof("exit")))
+		if (!p->prompt || !ft_strncmp(p->prompt, "exit", sizeof("exit")))
 			break ;
 		rl_on_new_line();
 		if (check_prompt(p))

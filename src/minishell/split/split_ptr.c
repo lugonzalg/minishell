@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/01 20:52:14 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 12:26:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "inc/minishell.h"
 #include "inc/libft.h"
 
-static size_t	ft_query_len(char *s, char c)
+extern size_t	ft_query_len(char *s, char c)
 {
 	size_t	i;
 	size_t	n;
@@ -32,151 +32,33 @@ static size_t	ft_query_len(char *s, char c)
 	return (0);
 }
 
-extern char	*dquote_expand(char *str, t_prompt *p, bool on)
+extern char	*ft_cut(char *s, char **s_ptr, char c)
 {
-	static char	*n_str;
-	char		*env;
-	size_t		i;
-
-	i = 0;
-	n_str = ft_strchr(str, '$');
-	while (ft_isalpha(n_str[i + 1]))
-		i++;
-	p->tmp = ft_substr(n_str + 1, 0, i);
-	env = ft_gnl_query(p->envpath, p->tmp);
-	free(p->tmp);
-	p->tmp = ft_substr(env, i + 1, ft_strlen(env) - 2 - i);
-	free(env);
-	n_str = ft_calloc(sizeof(char), ft_strlen(p->tmp) + ft_strlen(str));
-	i = ft_strchr(str, '$') - str;
-	env = ft_memcpy(n_str, str, i);
-	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
-	free(p->tmp);
-	p->tmp = ft_strchr(str + i, '\'');
-	env = ft_memcpy(env + ft_strlen(env), p->tmp, ft_strlen(p->tmp));
-	if (0 && on)
-		free(str);
-	if (ft_strchr(n_str, '$'))
-		dquote_expand(n_str, p, true);
-	return (n_str);
-}
-
-static bool	ft_handle_cut(char **s_ptr, t_prompt *p, t_split *spl)
-{
+	char	*n_str;
 	char	*quo;
-	char	*s;
+	size_t	i;
+	size_t	j;
 
-	s = (*s_ptr);	
-	quo = s + spl->i;
-	if (spl->c == '|')
-		ft_memcpy(spl->tmp + spl->i + spl->j, quo, ft_query_len(quo, *quo) + 1);
-	else
-		ft_memcpy(spl->tmp + spl->i + spl->j, quo + 1, ft_query_len(quo, *quo) - 1);
-	s += ft_query_len(s + spl->i, *quo) + 1;
-	spl->j = ft_strlen(spl->tmp) - spl->i;
-	if (spl->c == ' ')
-		spl->j += 2;
-	if (spl->c == ' ' && *quo == '\"' && ft_strnstr(spl->tmp, "\'$", 2048))
+	n_str = ft_calloc(sizeof(char), ft_strlen(s) + 1);
+	i = 0;
+	j = 0;
+	while (s[i] && s[i] != c)
 	{
-		spl->tmp = dquote_expand(spl->tmp, p, true);
-		spl->j = ft_strlen(spl->tmp) - spl->i;
-	}
-	(*s_ptr) = s;
-	if (spl->c == ' ' && (s[spl->i] == '<' || s[spl->i] == '>'))
-		return (true);
-	return (false);
-}
-
-extern char	*ft_cut(char *s, char **s_ptr, char c, t_prompt *p)
-{
-	t_split	spl;
-
-	spl.tmp = ft_calloc(sizeof(char), ft_strlen(s) + 1);
-	spl.i = 0;
-	spl.j = 0;
-	spl.c = c;
-	while (s[spl.i] && s[spl.i] != c)
-	{
-		if (s[spl.i] == '\'' || s[spl.i] == '\"')
+		if (s[i] == '\'' || s[i] == '\"')
 		{
-			if (ft_handle_cut(&s, p, &spl))
+			quo = s + i;
+			ft_memcpy(n_str + i + j, quo, ft_query_len(quo, *quo) + 1);
+			s += ft_query_len(quo, *quo) + 1;
+			j = ft_strlen(n_str) - i;
+			if (s[i] && c == ' ' && (s[i] == '<' || s[i] == '>'))
 				break ;
 			continue ;
 		}
-		if (s[spl.i] && c == ' ' && (s[spl.i] == '<' || s[spl.i] == '>')
-			&& ft_isalnum(s[spl.i]))
-			break ;
-		spl.tmp[spl.i + spl.j] = s[spl.i];
-		spl.i++;
+		n_str[i + j] = s[i];
+		i++;
 	}
-	(*s_ptr) = s + spl.i;
-	return (spl.tmp);
-}
-
-extern size_t	ft_lenp(char *s, char c)
-{
-	size_t	row;
-	char	*quote;
-
-	row = 0;
-	while (*s)
-	{
-		while (*s && *s == c)
-			s++;
-		if (*s && *s != c)
-			row++;
-		while (*s && *s != c)
-		{
-			if (*s == '\"' || *s == '\"')
-			{
-				quote = s;
-				s += ft_query_len(quote, *quote);
-			}
-			s++;
-		}
-	}
-	return (row);
-}
-
-static char	*ft_delimit(char *s, size_t *row)
-{
-	char	*quote;
-
-	if (*s == '\"' || *s == '\"')
-	{
-		quote = s;
-		s += ft_query_len(quote, *(quote));
-		(*row)++;
-	}
-	if (*s == '<' || *s == '>')
-	{
-		while (*s == '<' || *s == '>')
-			s++;
-		if (*(s + 1) != 32)
-			(*row)++;
-	}
-	return (s);
-}
-
-extern size_t	ft_len_redir(char *s, char c)
-{
-	size_t	row;
-
-	row = 0;
-	while (*s)
-	{
-		while (*s && *s == c)
-			s++;
-		if (*s && *s != c)
-			row++;
-		while (*s && *s != c)
-		{
-			s = ft_delimit(s, &row);
-			if (*s != 32)
-				s++;
-		}
-	}
-	return (row);
+	(*s_ptr) = s + i;
+	return (n_str);
 }
 
 static void	cut_redir(char *str, char **s_ptr, char **tab, size_t *j)
@@ -200,7 +82,7 @@ static void	cut_redir(char *str, char **s_ptr, char **tab, size_t *j)
 	(*s_ptr) = str + i;
 }
 
-static char	**ft_handle_tab(const char *str, char c, char **tab, t_prompt *p)
+static char	**ft_handle_tab(const char *str, char c, char **tab)
 {
 	size_t	j;
 
@@ -211,7 +93,7 @@ static char	**ft_handle_tab(const char *str, char c, char **tab, t_prompt *p)
 			str++;
 		if (*str != c)
 		{
-			tab[j] = ft_cut((char *)str, (char **)&str, c, p);
+			tab[j] = ft_cut((char *)str, (char **)&str, c);
 			if (tab[j] == NULL)
 			{
 				free_d2(tab);
@@ -227,7 +109,7 @@ static char	**ft_handle_tab(const char *str, char c, char **tab, t_prompt *p)
 	return (tab);
 }
 
-char	**ft_split_ptr(const char *s, char c, t_len ft_len, t_prompt *p)
+char	**ft_split_ptr(const char *s, char c, t_len ft_len)
 {
 	size_t	j;
 	char	**tab;
@@ -238,5 +120,5 @@ char	**ft_split_ptr(const char *s, char c, t_len ft_len, t_prompt *p)
 	tab = (char **)ft_calloc(sizeof(char *), j + 1);
 	if (!tab)
 		return (NULL);
-	return (ft_handle_tab(s, c, tab, p));
+	return (ft_handle_tab(s, c, tab));
 }

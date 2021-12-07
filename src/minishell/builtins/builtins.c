@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/01 12:11:03 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/06 20:08:28 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,27 @@ extern void	showenv(t_prompt *p)
 	close(fd);
 }
 
-extern void	envinclude(t_child	*child, t_prompt *p)
+int		check_env(t_child *child, char *line, t_prompt *p)
 {
-	int	fd;
-	int	i;
+	char		*str;
+	int			a;
+	static int	is;
 
-	fd = open(p->envpath, O_WRONLY | O_APPEND);
-	i = 0;
-	while (child->info[1][i] && child->info[1][i] != 10)
-		write(fd, &child->info[1][i++], 1);
-	write(fd, "\n", 1);
-	p->sizenv++;
-	close(fd);
+	if (!line && !is)
+	{
+		p->sizenv++;
+		return (0);
+	}
+	if (!line && is)
+	{
+		is = 0;
+		return (1);
+	}
+	str = ft_strchr(line, '=');
+	a = ft_strncmp(child->info[1], line, str - line + 1);
+	if (!a)
+		is = 1;
+	return (a);
 }
 
 static void	deletenv_2(t_prompt *p)
@@ -71,7 +80,34 @@ static void	deletenv_2(t_prompt *p)
 	unlink(".envtemp");
 }
 
-extern void	deletenv(t_child	*child, t_prompt *p)
+extern void	envinclude(t_child	*child, t_prompt *p)
+{
+	int		fd[2];
+	char	*line;
+
+	(void) child;
+	fd[0] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	fd[1] = open(p->envpath, O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd[1]);
+		if (!check_env(child, line, p))
+		{
+			write(fd[0], child->info[1], ft_strlen(child->info[1]));
+			write(fd[0], "\n", 1);
+		}
+		else
+			write(fd[0], line, ft_strlen(line));
+		if (!line)
+			break ;
+		free(line);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	deletenv_2(p);
+}
+
+extern void	deletenv(t_child *child, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
