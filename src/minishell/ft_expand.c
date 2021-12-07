@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 19:48:34 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/07 20:15:10 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*ft_joinfr(t_prompt *p, char *str, size_t *j)
 	else
 	{
 		ft_memcpy(n_str + (*j), str + (*j) + len_env + 1,
-			ft_strlen(str) - (*j));
+			ft_strlen(str + *j));
 		(*j)--;
 		return (n_str);
 	}

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 19:46:57 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/07 20:33:30 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ extern void	cmd_size(t_child *child)
 
 	pos = 1;
 	child->size[2] = child->size[1];
-	while (child->info[pos])
+	while (child->info[0] && child->info[pos])
 	{
 		if ((ft_strchr(child->info[pos - 1], INPUT)
 				|| ft_strchr(child->info[pos - 1], OUTPUT))
