@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 20:54:29 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 19:48:34 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,19 @@ static char	*ft_joinfr(t_prompt *p, char *str, size_t *j)
 	n_str = ft_calloc(sizeof(char), ft_strlen(query) + ft_strlen(str) + 1);
 	ft_memcpy(n_str, str, (*j));
 	if (query)
+	{
 		ft_memcpy(n_str + (*j), query, len_q);
+		free(query);
+	}
 	else
 	{
 		ft_memcpy(n_str + (*j), str + (*j) + len_env + 1,
-		ft_strlen(str) - (*j));
+			ft_strlen(str) - (*j));
 		(*j)--;
 		return (n_str);
 	}
 	ft_memcpy(n_str + (*j) + len_q, str + (*j) + len_env + 1,
-	ft_strlen(str) - (*j));
+		ft_strlen(str) - (*j));
 	free(str);
 	return (n_str);
 }
@@ -93,29 +96,26 @@ static char	*ft_quote_case(t_prompt *p, char *str)
 
 static char	*ft_quote_clean(char *str)
 {
-	char	squote;
-	char	dquote;
+	char	quote[2];
 	size_t	len;
 	size_t	j;
 
 	j = -1;
-	squote = 0;
-	dquote = 0;
+	ft_memset(quote, 0, sizeof(char) * 2);
 	while (str[++j])
 	{
-		if (!squote && str[j] == '\'')
-			squote = dquote + 1;
-		else if (!dquote && str[j] == '\"')
-			dquote = squote + 1;
-		if (dquote || squote)
+		if (!quote[0] && str[j] == '\'')
+			quote[0] = quote[1] + 1;
+		else if (!quote[1] && str[j] == '\"')
+			quote[1] = quote[0] + 1;
+		if (quote[1] || quote[0])
 		{
 			len = ft_query_len(&str[j], str[j]);
 			ft_memcpy(&str[j], &str[j + 1], len + 1);
 			j += len;
 			ft_memcpy(&str[j - 1], &str[j + 1], ft_strlen(&str[j] - len));
 			j -= 2;
-			squote = 0;
-			dquote = 0;
+			ft_memset(quote, 0, sizeof(char) * 2);
 		}
 	}
 	return (str);
@@ -128,7 +128,7 @@ extern void	ft_expand(t_prompt *p, t_child *child)
 	i = -1;
 	while (child->info[++i])
 	{
-		if (child->info[i][0] == '$' && child->info[i][1] == '?' && ft_strlen(child->info[i]) == 2)
+		if (ft_strnstr(child->info[i], "$?", 3))
 		{
 			free(child->info[i]);
 			child->info[i] = ft_itoa(g_glob.error);
