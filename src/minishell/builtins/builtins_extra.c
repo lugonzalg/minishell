@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 17:45:52 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 21:16:11 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	changepwd(char *str, t_prompt *p)
 {
 	char	*temp;
 
+	//str = ft_strdup("/");
+	// OJO cuadno estamos en /, no se pone en el env bien
 	temp = ft_strjoin("PWD=", str);
 	deletpwd(temp, p);
 }
@@ -32,7 +34,7 @@ extern void	deletpwd(char *str, t_prompt *p)
 	char	*line;
 
 	fd[0] = open(p->envpath, O_RDONLY);
-	fd[1] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	fd[1] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	while (1)
 	{
 		line = get_next_line(fd[0]);
@@ -85,7 +87,7 @@ char	*search_pwd(t_prompt *p)
 	char	*line;
 
 	fd[0] = open(p->envpath, O_RDONLY);
-	fd[1] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	fd[1] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	while (1)
 	{
 		line = get_next_line(fd[0]);

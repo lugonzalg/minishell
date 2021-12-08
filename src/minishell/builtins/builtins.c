@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 13:27:19 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 20:31:40 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ extern void	deletenv_2(t_prompt *p)
 	char	*line;
 
 	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
-	fd[1] = open(".envtemp", O_RDONLY);
+	fd[1] = open(p->temppath, O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd[1]);
@@ -77,7 +77,7 @@ extern void	deletenv_2(t_prompt *p)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	unlink(".envtemp");
+	unlink(p->temppath);
 }
 
 extern void	envinclude(t_child	*child, t_prompt *p)
@@ -86,7 +86,7 @@ extern void	envinclude(t_child	*child, t_prompt *p)
 	char	*line;
 
 	(void) child;
-	fd[0] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	fd[0] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	fd[1] = open(p->envpath, O_RDONLY);
 	while (1)
 	{
@@ -113,7 +113,7 @@ extern void	deletenv(t_child *child, t_prompt *p)
 	char	*line;
 
 	fd[0] = open(p->envpath, O_RDONLY);
-	fd[1] = open(".envtemp", O_WRONLY | O_CREAT, 0644);
+	fd[1] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	while (1)
 	{
 		line = get_next_line(fd[0]);
