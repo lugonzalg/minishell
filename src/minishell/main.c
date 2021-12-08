@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 17:27:19 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 19:53:55 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,39 +21,28 @@
 #include <readline/history.h>
 #include <signal.h>
 
-static int ft_check_even(char *str, char **s_ptr, char c)
+void	check_redir(t_prompt *p, t_child *child)
 {
-	while (*str)
-	{
-		if (*str == c)
-		{
-			(*s_ptr) = str + 1;
-			return (1);
-		}
-		str++;
-	}
-	return (0);
+	if (ft_strchr(p->d2_prompt[child->id], INPUT))
+		child->redir[0] = true;
+	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
+		child->redir[1] = true;
+	child->info = ft_split_ptr(p->d2_prompt[child->id],
+			' ', ft_len_redir);
+	ft_expand(p, child);
+	while (child->info[child->size[1]])
+		child->size[1]++;
+	if (child->redir[0] || child->redir[1])
+		unify_fdio(child);
+	unify_cmd(p, child);
+	if (!child->builtin || !ft_strncmp(child->info[0], "expr", 4))
+		command_pos(p, child);
 }
 
-extern int ft_quote_error(char *str)
+int	go_exit(int n)
 {
-	char	quote;
-
-	while (*str)
-	{
-		if (*str == '\'' || *str == '\"')
-		{
-			quote = *str;
-			if (!ft_check_even(str + 1, &str, *str))
-			{
-				printf("unclosed quotes %c\n", quote);
-				return (0);
-			}
-			continue ;
-		}
-		str++;
-	}
-	return (1);
+	g_glob.error = n;
+	return (n);
 }
 
 int	ft_putpath(t_child *child)
@@ -97,7 +86,8 @@ int	main(int argc, char *argv[], char *env[])
 	signal(SIGQUIT, sig_handler);
 	if (argc != 1)
 		return (1);
-	set_str(&p);
+	ft_memset(&p, 0, sizeof(t_prompt));
+	p.home = ft_strdup(getenv("HOME"));
 	ft_putenv(env, &p);
 	print_intro();
 	prompt_io(&p);

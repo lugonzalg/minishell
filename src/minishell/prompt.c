@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 21:12:04 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 19:53:59 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <term.h>
-
-void	check_redir(t_prompt *p, t_child *child)
-{
-	if (ft_strchr(p->d2_prompt[child->id], INPUT))
-		child->redir[0] = true;
-	if (ft_strchr(p->d2_prompt[child->id], OUTPUT))
-		child->redir[1] = true;
-	child->info = ft_split_ptr(p->d2_prompt[child->id],
-			' ', ft_len_redir);
-	ft_expand(p, child);
-	while (child->info[child->size[1]])
-		child->size[1]++;
-	if (child->redir[0] || child->redir[1])
-		unify_fdio(child);
-	unify_cmd(p, child);
-	if (!child->builtin || !ft_strncmp(child->info[0], "expr", 4))
-		command_pos(p, child);
-}
-
-int	go_exit(int n)
-{
-	g_glob.error = n;
-	return (n);
-}
 
 void	multipipe(t_child *child)
 {
@@ -75,14 +51,6 @@ void	multipipe(t_child *child)
 	exit(127);
 }
 
-static void	restart_data(t_child *child)
-{
-	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
-	ft_memset(child->redir, false, sizeof(bool) * 2);
-	free_d2(child->info);
-	free(child->path);
-}
-
 static void	process_command(t_prompt *p, t_child *child, size_t i)
 {
 	child->id = i;
@@ -97,7 +65,8 @@ static void	process_command(t_prompt *p, t_child *child, size_t i)
 			multipipe(child);
 		else
 		{
-			if (access(child->path, X_OK) || !ft_strncmp(child->info[i], getenv("PWD"), ft_strlen(child->info[i])))
+			//if (access(child->path, X_OK) || !ft_strncmp(child->info[i], getenv("PWD"), ft_strlen(child->info[i])))
+			if (access(child->path, X_OK))
 			{
 				printf("minishell: %s: is a directory\n", child->info[i]);
 				go_exit(127);
@@ -152,7 +121,6 @@ extern void	prompt_io(t_prompt *p)
 {
 	while (1)
 	{
-		//rl_catch_signals = 0;
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		if (!p->prompt || !ft_strncmp(p->prompt, "exit", sizeof("exit")))

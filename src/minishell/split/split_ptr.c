@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/06 12:26:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/07 20:26:07 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ extern char	*ft_cut(char *s, char **s_ptr, char c)
 	size_t	i;
 	size_t	j;
 
-	n_str = ft_calloc(sizeof(char), ft_strlen(s) + 1);
+	n_str = ft_calloc(sizeof(char), ft_strlen(s) + 10);
 	i = 0;
 	j = 0;
 	while (s[i] && s[i] != c)
