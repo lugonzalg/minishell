@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 14:32:48 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:54:35 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ typedef struct s_child
 	int			**fdpipe;
 	char		*path;
 	char		*ttypath;
-	size_t		size[4]; // [0] -> pipes // [1] -> new_info // [2] -> info // [3] -> cmd END
-	bool		redir[3]; // [0] -> inredir // [1] -> outredir // here_doc
+	size_t		size[4];
+	bool		redir[3];
 	bool		builtin;
 	size_t		id;
 	int			tty;
 	bool		echo;
 }	t_child;
+
+typedef size_t		(*t_len)(char *, char);
 
 typedef struct s_global
 {
@@ -58,9 +60,7 @@ typedef struct s_global
 	pid_t	killid;
 }	t_global;
 
-t_global	g_glob;
-
-typedef size_t	(*t_len)(char *, char);
+t_global			g_glob;
 
 extern void			check_redir(t_prompt *p, t_child *child);
 extern void			command_pos(t_prompt *p, t_child *child);
@@ -101,6 +101,9 @@ extern void			showenv(t_prompt *p);
 int					ft_changedir(t_child *child, t_prompt *p);
 extern char			*expand_var(t_prompt *p, t_child *child, size_t i);
 extern char			**ft_realloc_child(char **temp);
+void				ft_putpwd(char *str, t_prompt *p);
+char				*search_pwd(t_prompt *p);
+void				changepwd(char *str, t_prompt *p);
 
 extern char			**ft_setpath(t_prompt *p);
 extern char			*ft_gnl_query(char *path, char *query);

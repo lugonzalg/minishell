@@ -25,6 +25,7 @@ FILES = minishell/main \
 		minishell/unify_paths/command_path \
 		minishell/builtins/builtins \
 		minishell/builtins/builtins_extra \
+		minishell/builtins/builtins_utils \
 		minishell/builtins/handle_builtins \
 		minishell/split/split_ptr \
 		minishell/split/split_tools \

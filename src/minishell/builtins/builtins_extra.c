@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 13:27:18 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:45:52 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void	changepwd(char *str, t_prompt *p)
+void	changepwd(char *str, t_prompt *p)
 {
 	char	*temp;
 
@@ -51,7 +51,6 @@ extern void	deletpwd(char *str, t_prompt *p)
 	close(fd[1]);
 	deletenv_2(p);
 }
-
 
 static int	changediraux(t_child *child, t_prompt *p)
 {
@@ -93,54 +92,12 @@ char	*search_pwd(t_prompt *p)
 		if (!line)
 			break ;
 		if (!ft_strncmp("PWD=", line, 4))
-			return(line);
+			return (line);
 		free(line);
 	}
 	close(fd[0]);
 	close(fd[1]);
-	return(NULL);
-}
-
-void	ft_putpwd(char *str, t_prompt *p)
-{
-	char *temp;
-	char *pwd;
-	char *dest;
-
-	pwd = search_pwd(p);
-	temp = ft_substr(pwd, 4, ft_strlen(pwd) - 5);
-	free(pwd);
-	while (str && *str)
-	{
-		if (*str == '/')
-			str++;
-		if (*str == '.')
-		{
-			pwd = ft_substr(temp, 0, ft_strlen(temp) - ft_strlen(ft_strrchr(temp, '/')));
-			free(temp);
-			temp = pwd;
-			if (!temp[0])
-			{
-				free(temp);
-				pwd = ft_strdup("/");
-				break ;
-			}
-			str = ft_strchr(str, '/');
-		}
-		else
-		{
-			pwd = ft_substr(str, 0, ft_strlen(str) - ft_strlen(ft_strchr(str, '/')));
-			dest = ft_strjoin("/", pwd); 
-			free(pwd);
-			pwd = ft_strjoin(temp, dest);
-			free(dest);
-			free(temp);
-			temp = pwd;
-			str = ft_strchr(str, '/');
-		}
-	}
-	changepwd(pwd, p);
-	free(pwd);
+	return (NULL);
 }
 
 int	ft_changedir(t_child *child, t_prompt *p)
@@ -161,79 +118,4 @@ int	ft_changedir(t_child *child, t_prompt *p)
 	}
 	ft_putpwd(child->info[1], p);
 	return (0);
-}
-
-extern void	ft_putenv(char **env, t_prompt *p)
-{
-	size_t	i;
-	size_t	j;
-	int		fd;
-	char	pwd[PATH_MAX];
-
-	getcwd(pwd, sizeof(pwd));
-	p->builtpath = ft_strjoin(pwd, "/doc/.builtin_cmd");
-	p->envpath = ft_strjoin(pwd, "/.env");
-	p->temppath = ft_strjoin(pwd, "/.tempenv");
-	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	i = -1;
-	while (env[++i])
-	{
-		j = -1;
-		while (env[i][++j])
-			write(fd, &env[i][j], sizeof(char));
-		write(fd, "\n", sizeof(char));
-		p->sizenv++;
-	}
-	close(fd);
-}
-
-extern char	**ft_realloc_child(char **temp)
-{
-	int		size;
-	char	**d2;
-	int		index;
-
-	size = 0;
-	while (temp[size])
-		size++;
-	size += 1;
-	d2 = (char **)ft_calloc(sizeof(char *), size + 1);
-	d2[0] = ft_strdup("echo");
-	size = 1;
-	index = 0;
-	while (temp[index])
-	{
-		d2[size] = ft_strdup(temp[index]);
-		free(temp[index]);
-		index++;
-		size++;
-	}
-	d2[size] = NULL;
-	free(temp);
-	return (d2);
-}
-extern void	ft_echo(t_child *child)
-{
-	size_t	i;
-	bool	nl;
-	int		fd;
-
-	fd = 1;
-	nl = true;
-	i = 0;
-	if (child->redir[1] || child->id < child->size[0] - 2)
-		fd = child->fdpipe[child->id + 1][1];
-	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
-	{
-		nl = false;
-		i++;
-	}
-	while (child->info[++i])
-	{
-		write(fd, child->info[i], ft_strlen(child->info[i]));
-		if (i < child->size[1] - 1)
-			write(fd, " ", 1);
-	}
-	if (nl)
-		write(fd, "\n", 1);
 }

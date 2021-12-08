@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 19:53:59 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 19:12:07 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ static void	process_command(t_prompt *p, t_child *child, size_t i)
 			multipipe(child);
 		else
 		{
-			//if (access(child->path, X_OK) || !ft_strncmp(child->info[i], getenv("PWD"), ft_strlen(child->info[i])))
-			if (access(child->path, X_OK))
+			if (access(child->path, X_OK) || !ft_strncmp(child->info[0], getenv("PWD"), ft_strlen(child->info[0]))
+				|| !ft_strncmp(child->info[0], getenv("HOME"), ft_strlen(child->info[0])))
 			{
-				printf("minishell: %s: is a directory\n", child->info[i]);
+				printf("minishell: %s: is a directory\n", child->info[0]);
 				go_exit(127);
 			}
 		}
@@ -123,7 +123,8 @@ extern void	prompt_io(t_prompt *p)
 	{
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
-		if (!p->prompt || !ft_strncmp(p->prompt, "exit", sizeof("exit")))
+		if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
+				||!ft_strncmp(p->prompt, "exit ", 5))
 			break ;
 		rl_on_new_line();
 		if (check_prompt(p))

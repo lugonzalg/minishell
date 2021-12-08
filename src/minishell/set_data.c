@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 19:53:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 18:56:42 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ extern void	restart_data(t_child *child)
 	ft_memset(child->redir, false, sizeof(bool) * 2);
 	free_d2(child->info);
 	free(child->path);
+	child->path = NULL;
 }
 
 extern void	set_child(t_prompt *p, t_child *child)
