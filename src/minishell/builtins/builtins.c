@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/07 19:53:53 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 13:27:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	check_env(t_child *child, char *line, t_prompt *p)
 	return (a);
 }
 
-static void	deletenv_2(t_prompt *p)
+extern void	deletenv_2(t_prompt *p)
 {
 	int		fd[2];
 	char	*line;

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 19:53:58 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 14:32:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_prompt
 	char		*builtpath;
 	pid_t		*id;
 	int			sizenv;
+	char		*temppath;
 }	t_prompt;
 
 typedef struct s_child
@@ -51,14 +52,6 @@ typedef struct s_child
 	bool		echo;
 }	t_child;
 
-typedef struct s_split
-{
-	size_t	i;
-	size_t	j;
-	char	*tmp;
-	char	c;
-}	t_split;
-
 typedef struct s_global
 {
 	int		error;
@@ -68,7 +61,6 @@ typedef struct s_global
 t_global	g_glob;
 
 typedef size_t	(*t_len)(char *, char);
-
 
 extern void			check_redir(t_prompt *p, t_child *child);
 extern void			command_pos(t_prompt *p, t_child *child);
@@ -103,6 +95,7 @@ extern void			ft_builtins(t_child *child, t_prompt *p);
 extern void			ft_putenv(char **env, t_prompt *p);
 extern void			ft_echo(t_child *child);
 extern void			deletenv(t_child	*child, t_prompt *p);
+extern void			deletenv_2(t_prompt *p);
 extern void			envinclude(t_child	*child, t_prompt *p);
 extern void			showenv(t_prompt *p);
 int					ft_changedir(t_child *child, t_prompt *p);
@@ -121,4 +114,5 @@ extern void			ft_expand(t_prompt *p, t_child *child);
 
 extern int			ft_quote_error(char *str);
 extern void			restart_data(t_child *child);
+extern void			deletpwd(char *str, t_prompt *p);
 #endif
