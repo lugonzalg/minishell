@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 20:26:07 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/08 20:37:35 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,15 @@ static char	**ft_handle_tab(const char *str, char c, char **tab)
 			str++;
 		if (*str != c)
 		{
-			tab[j] = ft_cut((char *)str, (char **)&str, c);
-			if (tab[j] == NULL)
+			if (c == '|' || (c == ' ' && *str != '<' && *str != '>'))
 			{
-				free_d2(tab);
-				return (NULL);
+				tab[j] = ft_cut((char *)str, (char **)&str, c);
+				if (tab[j++] == NULL)
+				{
+					free_d2(tab);
+					return (NULL);
+				}
 			}
-			j++;
 			if (c == ' ' && (*str == '<' || *str == '>'))
 				cut_redir((char *)str, (char **)&str, tab, &j);
 		}

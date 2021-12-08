@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 17:50:10 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 20:37:34 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ static void	ft_fdout(t_child *child, size_t i)
 	else if (ft_strlen(child->info[i]) == 2)
 		fd = open(child->info[++i], O_RDWR | O_APPEND | O_CREAT, 0644);
 	else
-	{
-		printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 		return ;
-	}
 	close(child->fdpipe[child->id + 1][1]);
 	child->fdpipe[child->id + 1][1] = fd;
 }
@@ -96,10 +93,7 @@ static size_t	ft_fdin(t_child *child, size_t i)
 	else if (ft_strlen(child->info[i]) == 2)
 		fd = here_doc(child, child->info[i-- + 1]);
 	else
-	{
-		printf("minishell: syntax error near unexpected token `%s'\n", child->info[i]);
 		return (i);
-	}
 	close(child->fdpipe[child->id][0]);
 	child->fdpipe[child->id][0] = fd;
 	return (i);

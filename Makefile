@@ -9,7 +9,7 @@ INC = -I /usr/include/readline \
 	  -I ${PWD}/src/libft \
 	  -I ${PWD}/src/ft_printf \
 
-CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address 
+CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address 
 LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
 		 -L usr/include/readline \
 		 -L bin/ -lreadline -lft -lftprintf -ltermcap
