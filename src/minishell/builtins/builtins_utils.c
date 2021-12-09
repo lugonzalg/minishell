@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:34:46 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 18:05:38 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 20:39:17 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void	putpwdutils(char **str, char **pwd, char **temp, char **dest)
 	{
 		len = ft_strlen(ft_strrchr(*temp, '/'));
 		*pwd = ft_substr(*temp, 0, ft_strlen(*temp) - len);
-		free(*temp);
+		//free(*temp);
 		*temp = *pwd;
 		if (!*temp[0])
 		{
