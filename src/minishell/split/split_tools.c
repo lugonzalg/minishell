@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:01:38 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/07 20:11:16 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 19:05:22 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,13 @@ static char	*ft_delimit(char *s, size_t *row)
 	if (*s == '\"' || *s == '\"')
 	{
 		quote = s;
-		s += ft_query_len(quote, *(quote));
+		s += ft_query_len(quote, *(quote)) + 1;
 		if (!s)
 			(*row)++;
 	}
 	if (*s == '<' || *s == '>')
 	{
+		(*row)++;
 		while (*s == '<' || *s == '>')
 			s++;
 		if (*(s + 1) != 32)
