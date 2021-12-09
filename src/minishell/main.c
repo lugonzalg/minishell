@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 20:37:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 17:28:11 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ void	check_redir(t_prompt *p, t_child *child)
 	child->info = ft_split_ptr(p->d2_prompt[child->id],
 			' ', ft_len_redir);
 	i = -1;
-	ft_expand(p, child);
 	while (child->info[++i])
 	{
-		if (ft_strchr(child->info[i], '<') && ft_strchr(child->info[i], '\'')
-				&& ft_strchr(child->info[i], '\"'))
+		if (ft_strchr(child->info[i], '<') && !ft_strchr(child->info[i], '\'')
+				&& !ft_strchr(child->info[i], '\"'))
 			child->redir[0] = true;
-		else if (ft_strchr(child->info[i], '>') && ft_strchr(child->info[i], '\'')
-				&& ft_strchr(child->info[i], '\"'))
-			child->redir[1] = false;
+		else if (ft_strchr(child->info[i], '>') && !ft_strchr(child->info[i], '\'')
+				&& !ft_strchr(child->info[i], '\"'))
+			child->redir[1] = true;
 	}
+	ft_expand(p, child);
 	child->size[1] = i;
 	if (child->redir[0] || child->redir[1])
 		unify_fdio(child);

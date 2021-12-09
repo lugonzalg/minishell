@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 21:16:11 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 17:50:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void	changepwd(char *str, t_prompt *p)
 {
 	char	*temp;
 
-	//str = ft_strdup("/");
-	// OJO cuadno estamos en /, no se pone en el env bien
 	temp = ft_strjoin("PWD=", str);
 	deletpwd(temp, p);
 }
