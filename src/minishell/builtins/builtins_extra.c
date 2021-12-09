@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 17:50:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 19:39:39 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	changepwd(char *str, t_prompt *p)
 
 	temp = ft_strjoin("PWD=", str);
 	deletpwd(temp, p);
+	free(temp);
 }
 
 extern void	deletpwd(char *str, t_prompt *p)
