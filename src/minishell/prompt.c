@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 18:09:02 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 20:32:10 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	process_command(t_prompt *p, t_child *child, size_t i)
 	else if (child->info[0])
 	{
 		p->id[i] = fork();
-		g_glob.killid = p->id[1];
+		g_glob.killid = p->id[0];
 		if (p->id[i] == 0)
 			multipipe(child);
 		else

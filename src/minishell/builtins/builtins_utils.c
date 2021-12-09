@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:34:46 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 18:23:04 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 19:42:24 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ static void	putpwdextra(char **str, char **pwd, char **temp, char **dest)
 	int	len;
 
 	len = ft_strlen(ft_strchr(*str, '/'));
-	*pwd = ft_substr(*str, 0, ft_strlen(*str) - len);
-	*dest = ft_strjoin("/", *pwd);
-	free(*pwd);
-	*pwd = ft_strjoin(*temp, *dest);
-	free(*dest);
+	*temp = ft_substr(*str, 0, ft_strlen(*str) - len);
+	*dest = ft_strjoin("/", *temp);
 	free(*temp);
-	*temp = *pwd;
+	*temp = ft_strjoin(*pwd, *dest);
+	free(*dest);
+	free(*pwd);
+	*pwd = *temp;
 	*str = ft_strchr(*str, '/');
 }
 
@@ -94,14 +94,12 @@ static void	putpwdutils(char **str, char **pwd, char **temp, char **dest)
 		len = ft_strlen(ft_strrchr(*temp, '/'));
 		if (ft_strlen(*temp) - len == 0)
 			len--;
-		*pwd = ft_substr(*temp, 0, ft_strlen(*temp) - len);
-		if (ft_strlen(*temp) - len == 0)
-			len--;
-		free(*temp);
-		*temp = *pwd;
-		if (!*temp[0])
+		*temp = ft_substr(*pwd, 0, ft_strlen(*pwd) - len);
+		free(*pwd);
+		*pwd = *temp;
+		if (!*pwd[0])
 		{
-			free(*temp);
+			free(*pwd);
 			*pwd = ft_strdup("/");
 			return ;
 		}
@@ -120,6 +118,7 @@ void	ft_putpwd(char *str, t_prompt *p)
 	pwd = search_pwd(p);
 	temp = ft_substr(pwd, 4, ft_strlen(pwd) - 5);
 	free(pwd);
+	pwd = temp;
 	while (str && *str)
 	{
 		if (*str == '/')
