@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 19:09:59 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 20:42:29 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ extern void	ft_expand(t_prompt *p, t_child *child)
 			free(child->info[i]);
 			child->info[i] = ft_itoa(g_glob.error);
 		}
-		else if (ft_strchr(child->info[i], '$') && ft_strlen(child->info[i]) > 1)
+		else if (ft_strchr(child->info[i], '$')
+			&& ft_strlen(child->info[i]) > 1)
 			child->info[i] = ft_quote_case(p, child->info[i]);
 	}
 	i = -1;

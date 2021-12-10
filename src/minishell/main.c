@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 18:42:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/09 20:43:10 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ void	check_redir(t_prompt *p, t_child *child)
 	while (child->info[++i])
 	{
 		if (ft_strchr(child->info[i], '<') && !ft_strchr(child->info[i], '\'')
-				&& !ft_strchr(child->info[i], '\"'))
+			&& !ft_strchr(child->info[i], '\"'))
 			child->redir[0] = true;
-		else if (ft_strchr(child->info[i], '>') && !ft_strchr(child->info[i], '\'')
-				&& !ft_strchr(child->info[i], '\"'))
+		else if (ft_strchr(child->info[i], '>')
+			&& !ft_strchr(child->info[i], '\'')
+			&& !ft_strchr(child->info[i], '\"'))
 			child->redir[1] = true;
 	}
 	ft_expand(p, child);
