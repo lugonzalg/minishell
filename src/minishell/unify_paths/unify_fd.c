@@ -6,18 +6,17 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 20:37:34 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:24:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
 #include "inc/get_next_line.h"
 #include "inc/minishell.h"
 #include "inc/libft.h"
+#include <stdlib.h>
+#include <fcntl.h>
 
-static void	resize_cat(t_child *child)
+static void	ft_resize(t_child *child)
 {
 	char	**resize;
 	size_t	j;
@@ -37,18 +36,18 @@ static void	resize_cat(t_child *child)
 	}
 	while (child->info[++i])
 		resize[j++] = ft_strdup(child->info[i]);
-	child->redir[0] = true;
-	free_d2(child->info);
+	ft_free_d2(child->info);
 	child->info = resize;
+	child->redir[0] = true;
 }
 
-static int	here_doc(t_child *child, char *key)
+static int	ft_here_doc(t_child *child, char *key)
 {
 	size_t	len;
 	char	*line;
 	int		fd;
 
-	fd = open(".here_doc", O_RDWR | O_TRUNC | O_CREAT, 0644);
+	fd = open(".here_doc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	while (1)
 	{
 		write(1, "> ", 2);
@@ -66,7 +65,7 @@ static int	here_doc(t_child *child, char *key)
 	}
 	close(fd);
 	fd = open(".here_doc", O_RDONLY);
-	resize_cat(child);
+	ft_resize(child);
 	return (fd);
 }
 
@@ -91,7 +90,7 @@ static size_t	ft_fdin(t_child *child, size_t i)
 	if (ft_strlen(child->info[i]) == 1)
 		fd = open(child->info[++i], O_RDONLY);
 	else if (ft_strlen(child->info[i]) == 2)
-		fd = here_doc(child, child->info[i-- + 1]);
+		fd = ft_here_doc(child, child->info[i-- + 1]);
 	else
 		return (i);
 	close(child->fdpipe[child->id][0]);
@@ -99,7 +98,7 @@ static size_t	ft_fdin(t_child *child, size_t i)
 	return (i);
 }
 
-extern void	unify_fdio(t_child *child)
+extern void	ft_unify_fdio(t_child *child)
 {
 	size_t	i;
 

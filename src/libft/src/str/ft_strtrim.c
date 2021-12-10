@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 18:13:53 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/11/22 18:13:56 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 20:13:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_check(char *s1, char *set)
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*str;
-	int		size;
+	int		i;
 
 	if (!set || !s1)
 		return ((char *)s1);
@@ -40,16 +40,16 @@ char	*ft_strtrim(char const *s1, char const *set)
 		else
 			break ;
 	}
-	size = ft_strlen(s1) - 1;
-	while (s1[size])
+	i = ft_strlen(s1) - 1;
+	while (*s1 && s1[i])
 	{
-		if (ft_check((char *)&s1[size], (char *)set))
-			size--;
+		if (ft_check((char *)&s1[i], (char *)set))
+			i--;
 		else
 			break ;
 	}
-	if (size <= 0)
-		size = 1;
-	str = ft_substr(s1, 0, size + 1);
+	if (i <= 0)
+		i = 1;
+	str = ft_substr(s1, 0, i + 1);
 	return (str);
 }

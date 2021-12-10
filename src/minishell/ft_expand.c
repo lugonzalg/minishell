@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 20:42:29 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:23:43 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ static char	*ft_quote_case(t_prompt *p, char *str)
 			squote = dquote + 1;
 		else if (!dquote && str[j] == '\"')
 			dquote = squote + 1;
-		else if (((dquote == 1 && squote == 2) || !squote) && str[j] == '$')
+		else if (((dquote == 1 && squote == 2) || !squote) && str[j] == '$'
+			&& ft_isalpha(str[j + 1]))
 			str = ft_joinfr(p, str, &j);
 		else if (squote && str[j] == '\'')
 			squote = 0;
@@ -132,9 +133,10 @@ extern void	ft_expand(t_prompt *p, t_child *child)
 		{
 			free(child->info[i]);
 			child->info[i] = ft_itoa(g_glob.error);
+			if (ft_strnstr(child->info[0], "echo", 5))
+				ft_go_exit(0);
 		}
-		else if (ft_strchr(child->info[i], '$')
-			&& ft_strlen(child->info[i]) > 1)
+		else
 			child->info[i] = ft_quote_case(p, child->info[i]);
 	}
 	i = -1;

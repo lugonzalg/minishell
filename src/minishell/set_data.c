@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 18:11:57 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:24:14 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 #include "inc/libft.h"
 #include <fcntl.h>
 
-extern void	restart_data(t_child *child)
+extern void	ft_restart_data(t_child *child)
 {
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
 	ft_memset(child->redir, false, sizeof(bool) * 2);
-	free_d2(child->info);
+	ft_free_d2(child->info);
 	free(child->path);
 	child->path = NULL;
 }
 
-extern void	set_child(t_prompt *p, t_child *child)
+extern void	ft_set_child(t_prompt *p, t_child *child)
 {
 	size_t	i;
 	char	*tmp;
@@ -51,7 +51,7 @@ extern void	set_child(t_prompt *p, t_child *child)
 	}
 }
 
-extern void	free_child(t_child *child)
+extern void	ft_free_child(t_child *child)
 {
 	size_t	i;
 
@@ -69,7 +69,7 @@ extern void	free_child(t_child *child)
 	free(child->ttypath);
 }
 
-extern void	free_p(t_prompt *p)
+extern void	ft_free_p(t_prompt *p)
 {
 	free(p->user);
 	unlink(p->envpath);
@@ -80,7 +80,7 @@ extern void	free_p(t_prompt *p)
 	free(p->prompt);
 }
 
-extern void	free_d2(char **dat)
+extern void	ft_free_d2(char **dat)
 {
 	int	i;
 

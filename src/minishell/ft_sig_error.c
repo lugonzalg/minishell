@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_intro.c                                      :+:      :+:    :+:   */
+/*   ft_sig_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 20:34:10 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:26:04 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/libft.h"
-#include "inc/get_next_line.h"
-#include "inc/ft_printf.h"
 #include "inc/minishell.h"
-#include <signal.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <signal.h>
+#include <readline/readline.h>
 
-void	sig_handler(int signo)
+void	ft_sig_handler(int signo)
 {
 	if (signo == SIGINT && !g_glob.killid)
 	{
@@ -31,11 +23,13 @@ void	sig_handler(int signo)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		ft_go_exit(1);
 	}
 	if (signo == SIGINT && g_glob.killid)
 	{
 		printf("\r");
 		write(1, "\n", 1);
+		ft_go_exit(130);
 	}
 	if (signo == SIGQUIT && g_glob.killid)
 	{
@@ -45,20 +39,8 @@ void	sig_handler(int signo)
 	}
 }
 
-extern void	print_intro(void)
+extern int	ft_go_exit(int n)
 {
-	int		fd;
-	char	*str;
-
-	fd = open("./doc/intro.txt", O_RDONLY);
-	printf("\n");
-	while (1)
-	{
-		str = get_next_line(fd);
-		if (!str)
-			break ;
-		printf("%s", str);
-		free(str);
-	}
-	close(fd);
+	g_glob.error = n;
+	return (n);
 }

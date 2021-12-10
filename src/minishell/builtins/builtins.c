@@ -6,21 +6,18 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 19:42:25 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:24:16 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
+#include "inc/get_next_line.h"
 #include "inc/minishell.h"
 #include "inc/libft.h"
-#include "inc/ft_printf.h"
-#include "inc/get_next_line.h"
-#include <dirent.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <stdio.h>
 
-extern void	showenv(t_prompt *p)
+extern void	ft_showenv(t_prompt *p)
 {
 	char	*line;
 	int		fd;
@@ -37,50 +34,7 @@ extern void	showenv(t_prompt *p)
 	close(fd);
 }
 
-int	check_env(t_child *child, char *line, t_prompt *p)
-{
-	char		*str;
-	int			a;
-	static int	is;
-
-	if (!line && !is)
-	{
-		p->sizenv++;
-		return (0);
-	}
-	if (!line && is)
-	{
-		is = 0;
-		return (1);
-	}
-	str = ft_strchr(line, '=');
-	a = ft_strncmp(child->info[1], line, str - line + 1);
-	if (!a)
-		is = 1;
-	return (a);
-}
-
-extern void	deletenv_2(t_prompt *p)
-{
-	int		fd[2];
-	char	*line;
-
-	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
-	fd[1] = open(p->temppath, O_RDONLY);
-	while (1)
-	{
-		line = get_next_line(fd[1]);
-		if (!line)
-			break ;
-		write(fd[0], line, ft_strlen(line));
-		free(line);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	unlink(p->temppath);
-}
-
-extern void	envinclude(t_child	*child, t_prompt *p)
+extern void	ft_envinclude(t_child	*child, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -91,7 +45,7 @@ extern void	envinclude(t_child	*child, t_prompt *p)
 	while (1)
 	{
 		line = get_next_line(fd[1]);
-		if (!check_env(child, line, p))
+		if (!ft_check_env(child, line, p))
 		{
 			write(fd[0], child->info[1], ft_strlen(child->info[1]));
 			write(fd[0], "\n", 1);
@@ -104,10 +58,10 @@ extern void	envinclude(t_child	*child, t_prompt *p)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	deletenv_2(p);
+	ft_deletenv_2(p);
 }
 
-extern void	deletenv(t_child *child, t_prompt *p)
+extern void	ft_deletenv(t_child *child, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -127,5 +81,51 @@ extern void	deletenv(t_child *child, t_prompt *p)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	deletenv_2(p);
+	ft_deletenv_2(p);
+}
+
+extern void	ft_echo(t_child *child)
+{
+	size_t	i;
+	bool	nl;
+	int		fd;
+
+	fd = 1;
+	nl = true;
+	i = 0;
+	if (child->redir[1] || child->id < child->size[0] - 2)
+		fd = child->fdpipe[child->id + 1][1];
+	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
+	{
+		nl = false;
+		i++;
+	}
+	while (child->info[++i])
+	{
+		write(fd, child->info[i], ft_strlen(child->info[i]));
+		if (i < child->size[1] - 1)
+			write(fd, " ", 1);
+	}
+	if (nl)
+		write(fd, "\n", 1);
+}
+
+extern int	ft_changedir(t_child *child, t_prompt *p)
+{
+	if (child->size[1] == 1)
+	{
+		chdir(p->home);
+		ft_changepwd(p->home, p);
+		return (0);
+	}
+	if (ft_changediraux(child, p) != -1)
+		return (0);
+	if (chdir(child->info[1]))
+	{
+		printf("minishell: cd: %s: No such file or directory\n", child->info[1]);
+		ft_go_exit(128);
+		return (1);
+	}
+	ft_putpwd(child->info[1], p);
+	return (0);
 }

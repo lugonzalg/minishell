@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_builtins.c                                  :+:      :+:    :+:   */
+/*   ft_handle_builtins.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:46:07 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 19:42:24 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 21:49:29 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,38 +29,14 @@ extern void	ft_builtins(t_child *child, t_prompt *p)
 	else if (!ft_strncmp(child->info[0], "cd", sizeof("cd")))
 		ft_changedir(child, p);
 	else if (!ft_strncmp(child->info[0], "env", sizeof("env")))
-		showenv(p);
+		ft_showenv(p);
 	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
 		&& ft_strchr(child->info[1], '='))
-		envinclude(child, p);
+		ft_envinclude(child, p);
 	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
-		deletenv(child, p);
+		ft_deletenv(child, p);
 	else if (!ft_strncmp(child->info[0], "echo", sizeof("echo")))
 		ft_echo(child);
-}
-
-extern void	ft_putenv(char **env, t_prompt *p)
-{
-	size_t	i;
-	size_t	j;
-	int		fd;
-	char	pwd[PATH_MAX];
-
-	getcwd(pwd, sizeof(pwd));
-	p->builtpath = ft_strjoin(pwd, "/doc/.builtin_cmd");
-	p->envpath = ft_strjoin(pwd, "/.env");
-	p->temppath = ft_strjoin(pwd, "/.tempenv");
-	fd = open(p->envpath, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	i = -1;
-	while (env[++i])
-	{
-		j = -1;
-		while (env[i][++j])
-			write(fd, &env[i][j], sizeof(char));
-		write(fd, "\n", sizeof(char));
-		p->sizenv++;
-	}
-	close(fd);
 }
 
 extern int	ft_checkbuiltins(char *str, t_prompt *p)

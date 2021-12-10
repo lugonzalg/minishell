@@ -6,24 +6,19 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 20:47:30 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:24:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
+#include "inc/get_next_line.h"
 #include "inc/minishell.h"
 #include "inc/libft.h"
-#include "inc/ft_printf.h"
-#include "inc/get_next_line.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <term.h>
 
-void	multipipe(t_child *child)
+void	ft_multipipe(t_child *child)
 {
 	size_t	i;
 	ssize_t	signal;
@@ -47,14 +42,15 @@ void	multipipe(t_child *child)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
-	signal = execve(child->path, child->info, NULL);
-	exit(127);
+	if (child->path)
+		signal = execve(child->path, child->info, NULL);
+	exit(126);
 }
 
-static void	process_command(t_prompt *p, t_child *child, size_t i)
+static void	ft_process_command(t_prompt *p, t_child *child, size_t i)
 {
 	child->id = i;
-	check_redir(p, child);
+	ft_check_redir(p, child);
 	if (ft_checkbuiltins(child->info[0], p))
 		ft_builtins(child, p);
 	else if (child->info[0])
@@ -62,43 +58,48 @@ static void	process_command(t_prompt *p, t_child *child, size_t i)
 		p->id[i] = fork();
 		g_glob.killid = p->id[0];
 		if (p->id[i] == 0)
-			multipipe(child);
+			ft_multipipe(child);
 		else
 		{
-			if (access(child->path, X_OK)
-				|| !ft_strncmp(child->info[0], getenv("PWD")
+			if (!ft_strncmp(child->info[0], getenv("PWD")
 					, ft_strlen(child->info[0]))
 				|| !ft_strncmp(child->info[0], getenv("HOME")
 					, ft_strlen(child->info[0])))
 			{
 				printf("minishell: %s: is a directory\n", child->info[0]);
-				go_exit(127);
+				ft_go_exit(126);
 			}
+			if (child->path && access(child->path, X_OK))
+				printf("minishell: %s: command not found\n", child->info[0]);
 		}
 	}
-	restart_data(child);
+	ft_restart_data(child);
 }
 
-static void	process_io(t_prompt *p)
+static void	ft_process_io(t_prompt *p)
 {
 	size_t	i;
 	t_child	child;
 	int		status;
 
 	status = 0;
-	set_child(p, &child);
+	ft_set_child(p, &child);
 	i = -1;
 	while (p->d2_prompt[++i])
-		process_command(p, &child, i);
-	free_child(&child);
+		ft_process_command(p, &child, i);
+	ft_free_child(&child);
 	while (1)
 	{
 		if (wait(&status) <= 0)
 			break ;
+		if (status == 256)
+			ft_go_exit(1);
+		else if (status == 32512)
+			ft_go_exit(127);
 	}
 }
 
-static bool	check_prompt(t_prompt *p)
+static bool	ft_check_prompt(t_prompt *p)
 {
 	size_t	i;
 
@@ -109,18 +110,18 @@ static bool	check_prompt(t_prompt *p)
 	{
 		if (!ft_quote_error(p->d2_prompt[i]))
 		{
-			free_d2(p->d2_prompt);
+			ft_free_d2(p->d2_prompt);
 			free(p->prompt);
 			return (true);
 		}
 	}
-	process_io(p);
+	ft_process_io(p);
 	free(p->id);
 	free(p->prompt);
 	return (false);
 }
 
-extern void	prompt_io(t_prompt *p)
+extern void	ft_prompt_io(t_prompt *p)
 {
 	while (1)
 	{
@@ -130,9 +131,9 @@ extern void	prompt_io(t_prompt *p)
 			|| !ft_strncmp(p->prompt, "exit ", 5))
 			break ;
 		rl_on_new_line();
-		if (check_prompt(p))
+		if (ft_check_prompt(p))
 			continue ;
-		free_d2(p->d2_prompt);
+		ft_free_d2(p->d2_prompt);
 	}
 	rl_clear_history();
 }

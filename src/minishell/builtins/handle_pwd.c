@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_extra.c                                   :+:      :+:    :+:   */
+/*   ft_handle_pwd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 19:39:39 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:24:17 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,9 @@
 #include "inc/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
 
-void	changepwd(char *str, t_prompt *p)
-{
-	char	*temp;
-
-	temp = ft_strjoin("PWD=", str);
-	deletpwd(temp, p);
-	free(temp);
-}
-
-extern void	deletpwd(char *str, t_prompt *p)
+extern void	ft_deletpwd(char *str, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -50,37 +40,10 @@ extern void	deletpwd(char *str, t_prompt *p)
 	}
 	close(fd[0]);
 	close(fd[1]);
-	deletenv_2(p);
+	ft_deletenv_2(p);
 }
 
-static int	changediraux(t_child *child, t_prompt *p)
-{
-	char	*path;
-	char	*temp;
-
-	if ((child->info[1][0] == '~' && child->info[1][1] == '/') ||
-			(child->info[1][0] == '~' && ft_strlen(child->info[1]) == 1))
-	{
-		temp = ft_strdup(child->info[1] + 1);
-		path = ft_strjoin(p->home, temp);
-		free(temp);
-		if (!chdir(path))
-		{
-			changepwd(path, p);
-			free(path);
-			return (0);
-		}
-		else
-		{
-			printf("minishell: cd: %s: No such file or directory\n", path);
-			free(path);
-			return (go_exit(1));
-		}
-	}
-	return (-1);
-}
-
-char	*search_pwd(t_prompt *p)
+extern char	*ft_search_pwd(t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -101,22 +64,61 @@ char	*search_pwd(t_prompt *p)
 	return (NULL);
 }
 
-int	ft_changedir(t_child *child, t_prompt *p)
+static void	ft_putpwdextra(char **str, char **pwd, char **temp, char **dest)
 {
-	if (child->size[1] == 1)
+	int	len;
+
+	len = ft_strlen(ft_strchr(*str, '/'));
+	*temp = ft_substr(*str, 0, ft_strlen(*str) - len);
+	*dest = ft_strjoin("/", *temp);
+	free(*temp);
+	*temp = ft_strjoin(*pwd, *dest);
+	free(*dest);
+	free(*pwd);
+	*pwd = *temp;
+	*str = ft_strchr(*str, '/');
+}
+
+static void	ft_putpwdutils(char **str, char **pwd, char **temp, char **dest)
+{
+	int	len;
+
+	if (**str == '.')
 	{
-		chdir(p->home);
-		changepwd(p->home, p);
-		return (0);
+		len = ft_strlen(ft_strrchr(*temp, '/'));
+		if (ft_strlen(*temp) - len == 0)
+			len--;
+		*temp = ft_substr(*pwd, 0, ft_strlen(*pwd) - len);
+		free(*pwd);
+		*pwd = *temp;
+		if (!*pwd[0])
+		{
+			free(*pwd);
+			*pwd = ft_strdup("/");
+			return ;
+		}
+		*str = ft_strchr(*str, '/');
 	}
-	if (changediraux(child, p) != -1)
-		return (0);
-	if (chdir(child->info[1]))
+	else
+		ft_putpwdextra(str, pwd, temp, dest);
+}
+
+void	ft_putpwd(char *str, t_prompt *p)
+{
+	char	*temp;
+	char	*pwd;
+	char	*dest;
+
+	pwd = ft_search_pwd(p);
+	temp = ft_substr(pwd, 4, ft_strlen(pwd) - 5);
+	free(pwd);
+	pwd = temp;
+	while (str && *str)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", child->info[1]);
-		go_exit(128);
-		return (1);
+		if (*str == '/')
+			str++;
+		ft_putpwdutils(&str, &pwd, &temp, &dest);
 	}
-	ft_putpwd(child->info[1], p);
-	return (0);
+	ft_changepwd(pwd, p);
+	free(pwd);
 }

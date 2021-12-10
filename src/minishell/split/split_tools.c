@@ -6,13 +6,12 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:01:38 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 19:05:22 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 21:37:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include "inc/libft.h"
 #include "inc/minishell.h"
+#include "inc/libft.h"
 
 extern size_t	ft_lenp(char *s, char c)
 {
@@ -46,7 +45,7 @@ static char	*ft_delimit(char *s, size_t *row)
 	if (*s == '\"' || *s == '\"')
 	{
 		quote = s;
-		s += ft_query_len(quote, *(quote)) + 1;
+		s += ft_query_len(quote, *(quote));
 		if (!s)
 			(*row)++;
 	}

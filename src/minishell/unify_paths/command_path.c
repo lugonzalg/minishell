@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 17:08:41 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/08 19:59:39 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:06:24 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+
+extern int	ft_putpath(t_child *child)
+{
+	if (child->info[0] && !access(child->info[0], X_OK))
+		child->path = ft_strdup(child->info[0]);
+	return (1);
+}
 
 static int	ft_check_even(char *str, char **s_ptr, char c)
 {

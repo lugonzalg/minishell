@@ -6,11 +6,10 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/09 19:02:44 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:23:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "inc/minishell.h"
 #include "inc/libft.h"
 
@@ -98,7 +97,7 @@ static char	**ft_handle_tab(const char *str, char c, char **tab)
 				tab[j] = ft_cut((char *)str, (char **)&str, c);
 				if (tab[j++] == NULL)
 				{
-					free_d2(tab);
+					ft_free_d2(tab);
 					return (NULL);
 				}
 			}

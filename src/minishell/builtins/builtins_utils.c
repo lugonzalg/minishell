@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:34:46 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 19:42:24 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 22:24:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,117 +14,84 @@
 #include "inc/minishell.h"
 #include "inc/libft.h"
 #include <stdlib.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
 
-extern char	**ft_realloc_child(char **temp)
-{
-	int		size;
-	char	**d2;
-	int		index;
-
-	size = 0;
-	while (temp[size])
-		size++;
-	size += 1;
-	d2 = (char **)ft_calloc(sizeof(char *), size + 1);
-	d2[0] = ft_strdup("echo");
-	size = 1;
-	index = 0;
-	while (temp[index])
-	{
-		d2[size] = ft_strdup(temp[index]);
-		free(temp[index]);
-		index++;
-		size++;
-	}
-	d2[size] = NULL;
-	free(temp);
-	return (d2);
-}
-
-extern void	ft_echo(t_child *child)
-{
-	size_t	i;
-	bool	nl;
-	int		fd;
-
-	fd = 1;
-	nl = true;
-	i = 0;
-	if (child->redir[1] || child->id < child->size[0] - 2)
-		fd = child->fdpipe[child->id + 1][1];
-	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
-	{
-		nl = false;
-		i++;
-	}
-	while (child->info[++i])
-	{
-		write(fd, child->info[i], ft_strlen(child->info[i]));
-		if (i < child->size[1] - 1)
-			write(fd, " ", 1);
-	}
-	if (nl)
-		write(fd, "\n", 1);
-}
-
-static void	putpwdextra(char **str, char **pwd, char **temp, char **dest)
-{
-	int	len;
-
-	len = ft_strlen(ft_strchr(*str, '/'));
-	*temp = ft_substr(*str, 0, ft_strlen(*str) - len);
-	*dest = ft_strjoin("/", *temp);
-	free(*temp);
-	*temp = ft_strjoin(*pwd, *dest);
-	free(*dest);
-	free(*pwd);
-	*pwd = *temp;
-	*str = ft_strchr(*str, '/');
-}
-
-static void	putpwdutils(char **str, char **pwd, char **temp, char **dest)
-{
-	int	len;
-
-	if (**str == '.')
-	{
-		len = ft_strlen(ft_strrchr(*temp, '/'));
-		if (ft_strlen(*temp) - len == 0)
-			len--;
-		*temp = ft_substr(*pwd, 0, ft_strlen(*pwd) - len);
-		free(*pwd);
-		*pwd = *temp;
-		if (!*pwd[0])
-		{
-			free(*pwd);
-			*pwd = ft_strdup("/");
-			return ;
-		}
-		*str = ft_strchr(*str, '/');
-	}
-	else
-		putpwdextra(str, pwd, temp, dest);
-}
-
-void	ft_putpwd(char *str, t_prompt *p)
+void	ft_changepwd(char *str, t_prompt *p)
 {
 	char	*temp;
-	char	*pwd;
-	char	*dest;
 
-	pwd = search_pwd(p);
-	temp = ft_substr(pwd, 4, ft_strlen(pwd) - 5);
-	free(pwd);
-	pwd = temp;
-	while (str && *str)
+	temp = ft_strjoin("PWD=", str);
+	ft_deletpwd(temp, p);
+	free(temp);
+}
+
+extern int	ft_changediraux(t_child *child, t_prompt *p)
+{
+	char	*path;
+	char	*temp;
+
+	if ((child->info[1][0] == '~' && child->info[1][1] == '/') ||
+			(child->info[1][0] == '~' && ft_strlen(child->info[1]) == 1))
 	{
-		if (*str == '/')
-			str++;
-		putpwdutils(&str, &pwd, &temp, &dest);
+		temp = ft_strdup(child->info[1] + 1);
+		path = ft_strjoin(p->home, temp);
+		free(temp);
+		if (!chdir(path))
+		{
+			ft_changepwd(path, p);
+			free(path);
+			return (0);
+		}
+		else
+		{
+			printf("minishell: cd: %s: No such file or directory\n", path);
+			free(path);
+			return (ft_go_exit(1));
+		}
 	}
-	changepwd(pwd, p);
-	free(pwd);
+	return (-1);
+}
+
+extern void	ft_deletenv_2(t_prompt *p)
+{
+	int		fd[2];
+	char	*line;
+
+	fd[0] = open(p->envpath, O_WRONLY | O_TRUNC);
+	fd[1] = open(p->temppath, O_RDONLY);
+	while (1)
+	{
+		line = get_next_line(fd[1]);
+		if (!line)
+			break ;
+		write(fd[0], line, ft_strlen(line));
+		free(line);
+	}
+	close(fd[0]);
+	close(fd[1]);
+	unlink(p->temppath);
+}
+
+extern int	ft_check_env(t_child *child, char *line, t_prompt *p)
+{
+	char		*str;
+	int			a;
+	static int	is;
+
+	if (!line && !is)
+	{
+		p->sizenv++;
+		return (0);
+	}
+	if (!line && is)
+	{
+		is = 0;
+		return (1);
+	}
+	str = ft_strchr(line, '=');
+	a = ft_strncmp(child->info[1], line, str - line + 1);
+	if (!a)
+		is = 1;
+	return (a);
 }
