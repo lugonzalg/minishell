@@ -17,7 +17,7 @@ LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
 BIN = libft.a libftprintf.a minishell
 
 FILES = minishell/main \
-		minishell/print_intro \
+		minishell/ft_sig_error \
 		minishell/prompt \
 		minishell/set_data \
 		minishell/unify_paths/unify	\
