@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 22:24:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/11 16:27:09 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	ft_process_command(t_prompt *p, t_child *child, size_t i)
 				printf("minishell: %s: is a directory\n", child->info[0]);
 				ft_go_exit(126);
 			}
-			if (child->path && access(child->path, X_OK))
+			if (!child->path || access(child->path, X_OK))
 				printf("minishell: %s: command not found\n", child->info[0]);
 		}
 	}
@@ -94,7 +94,7 @@ static void	ft_process_io(t_prompt *p)
 			break ;
 		if (status == 256)
 			ft_go_exit(1);
-		else if (status == 32512)
+		else if (status == 32256)
 			ft_go_exit(127);
 	}
 }
