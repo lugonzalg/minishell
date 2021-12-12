@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_sig_error.c                                     :+:      :+:    :+:   */
+/*   ft_error_check.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/11 20:23:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/12 20:54:08 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,23 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	ft_sig_handler(int signo)
+extern char	*ft_trim_error(char *info, char redir, int on)
 {
-	if (signo == SIGINT && !g_glob.killid)
+	char	*msg;
+	size_t	len;
+
+	len = 2;
+	if (on)
+		len = ft_strchr(info, redir) - info;
+	if (!on && *info != redir)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		ft_go_exit(1);
+		len = 0;
+		while (ft_isalnum(info[len]))
+			len++;
 	}
-	if (signo == SIGINT && g_glob.killid)
-	{
-		printf("\r");
-		write(1, "\n", 1);
-		ft_go_exit(130);
-	}
-	if (signo == SIGQUIT && g_glob.killid)
-	{
-		kill(g_glob.killid, SIGQUIT);
-		printf("Quit: 3\n");
-		g_glob.error = 131;
-	}
+	msg = ft_calloc(sizeof(char), ft_strlen(info));
+	ft_memcpy(msg, info, len);
+	return (msg);
 }
 
 extern int	ft_go_exit(int n)
@@ -48,19 +43,18 @@ extern int	ft_go_exit(int n)
 	return (n);
 }
 
-static int	ft_fd_name(t_child *child, size_t *i, char redir, char **fd_err)
+static int	ft_fd_name(t_child *child, size_t i, char redir)
 {
-	if (ft_strchr(child->info[*i], redir)
-		&& ft_strchr(child->info[*i + 1], redir)
-		&& (ft_strncmp(child->info[*i], "<", 2)
-		|| ft_strncmp(child->info[*i], "<<", 3)
-		|| ft_strncmp(child->info[*i], ">", 2)
-		|| ft_strncmp(child->info[*i], ">>", 3)))
+	if (ft_strchr(child->info[i], redir)
+		&& ft_strchr(child->info[i + 1], redir)
+		&& (ft_strncmp(child->info[i], "<", 2)
+			|| ft_strncmp(child->info[i], "<<", 3)
+			|| ft_strncmp(child->info[i], ">", 2)
+			|| ft_strncmp(child->info[i], ">>", 3)))
 	{
-		(*fd_err) = child->info[*i + 1];
 		return (-1);
 	}
-	else if (!child->info[*i + 1] && ft_strlen(child->info[*i]) < 3)
+	else if (!child->info[i + 1] && ft_strlen(child->info[i]) < 3)
 		return (-1);
 	return (1);
 }
@@ -77,11 +71,13 @@ extern int	ft_fdcheck(t_child *child, char redir)
 		fd_err = "newline";
 		if (!ft_strchr(child->info[i], redir))
 			continue ;
-		fd = ft_fd_name(child, &i, redir, &fd_err);
+		fd = ft_fd_name(child, i, redir);
 		if (fd == -1)
 		{
-			printf("minishell: syntax error near unexpected token `%s'\n",
+			fd_err = ft_trim_error(child->info[i + 1], redir, 0);
+			printf("minishell: our syntax error near unexpected token `%s'\n",
 				fd_err);
+			free(fd_err);
 			return (ft_go_exit(258));
 		}
 	}

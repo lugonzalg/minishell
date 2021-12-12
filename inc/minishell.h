@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/11 19:47:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/12 18:16:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ extern int			ft_go_exit(int num);
 extern void			ft_sig_handler(int signo);
 extern int			ft_fdcheck(t_child *child, char redir);
 extern bool			ft_check_prompt(t_prompt *p);
+extern char			*ft_trim_error(char *info, char redir, int on);
 
 /*UNIFY*/
 extern void			ft_unify_fdio(t_child *child);

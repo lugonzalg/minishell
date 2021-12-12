@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/11 20:45:05 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/12 19:08:08 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,9 @@ static void	ft_fdout(t_child *child, size_t i)
 	else
 	{
 		child->redir[2] = true;
+		err_fd = ft_trim_error(child->info[i], OUTPUT, 1);
 		printf("minishell: %s: Bad file descriptor\n", err_fd);
+		free(err_fd);
 		return ;
 	}
 	close(child->fdpipe[child->id + 1][1]);

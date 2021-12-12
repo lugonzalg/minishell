@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 22:28:39 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 22:23:44 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/12 21:32:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,30 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <readline/readline.h>
+
+extern void	ft_sig_handler(int signo)
+{
+	if (signo == SIGINT && !g_glob.killid)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+		ft_go_exit(1);
+	}
+	if (signo == SIGINT && g_glob.killid)
+	{
+		printf("\r");
+		write(1, "\n", 1);
+		ft_go_exit(130);
+	}
+	if (signo == SIGQUIT && g_glob.killid)
+	{
+		kill(g_glob.killid, SIGQUIT);
+		printf("Quit: 3\n");
+		g_glob.error = 131;
+	}
+}
 
 static void	ft_print_intro(void)
 {

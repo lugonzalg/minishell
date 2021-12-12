@@ -10,14 +10,14 @@ INC = -I /usr/include/readline \
 	  -I ${PWD}/src/ft_printf \
 
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address 
-LFLAGS = -L //Users/$(USER)/.brew/opt/readline/lib \
+LIB = -L //Users/$(USER)/.brew/opt/readline/lib \
 		 -L usr/include/readline \
 		 -L bin/ -lreadline -lft -lftprintf -ltermcap
 
 BIN = libft.a libftprintf.a minishell
 
 FILES = minishell/main \
-		minishell/ft_sig_error \
+		minishell/ft_error_check \
 		minishell/prompt \
 		minishell/set_data \
 		minishell/unify_paths/unify	\
@@ -42,7 +42,7 @@ OBJ = $(addprefix $(SRC_DIR), $(addsuffix .o, $(FILES)))
 
 $(NAME): ${OBJ}
 	@${SHELL} ./src/script/file_manager.sh
-	${CC} ${CFLAGS} -o ${NAME} ${OBJ} ${LFLAGS}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJ} ${LIB}
 
 all: $(NAME)
 

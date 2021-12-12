@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 22:23:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/12 20:54:08 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	cut_redir(char *str, char **s_ptr, char **tab, size_t *j)
 	{
 		str += i;
 		tab[(*j)] = ft_calloc(sizeof(char), ft_strlen(str) + 1);
-		i += ft_query_len(str, 32);
+		i += ft_strlen(str);
 		ft_memcpy(tab[(*j)++], str, i);
 	}
 	(*s_ptr) = str + i;
