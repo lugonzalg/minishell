@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/11 16:27:09 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/11 19:47:09 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,21 @@
 #include "inc/libft.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	ft_multipipe(t_child *child)
+static void	ft_handle_pipe(t_child *child)
 {
 	size_t	i;
-	ssize_t	signal;
 
-	i = 0;
-	while (i < child->size[0])
+	i = -1;
+	while (++i < child->size[0])
 	{
 		if (i != child->id)
 			close(child->fdpipe[i][0]);
 		if (i != child->id + 1)
 			close(child->fdpipe[i][1]);
-		i++;
 	}
 	if (child->id || child->redir[0])
 	{
@@ -42,8 +41,17 @@ void	ft_multipipe(t_child *child)
 		dup2(child->fdpipe[child->id + 1][1], 1);
 		close(child->fdpipe[child->id + 1][1]);
 	}
+}
+
+void	ft_multipipe(t_child *child)
+{
+	if (child->redir[2])
+		exit(129);
+	ft_handle_pipe(child);
 	if (child->path)
-		signal = execve(child->path, child->info, NULL);
+		execve(child->path, child->info, NULL);
+	if (!child->path || access(child->path, X_OK))
+		exit(127);
 	exit(126);
 }
 
@@ -76,7 +84,7 @@ static void	ft_process_command(t_prompt *p, t_child *child, size_t i)
 	ft_restart_data(child);
 }
 
-static void	ft_process_io(t_prompt *p)
+extern void	ft_process_io(t_prompt *p)
 {
 	size_t	i;
 	t_child	child;
@@ -95,30 +103,10 @@ static void	ft_process_io(t_prompt *p)
 		if (status == 256)
 			ft_go_exit(1);
 		else if (status == 32256)
+			ft_go_exit(126);
+		else if (status == 32512)
 			ft_go_exit(127);
 	}
-}
-
-static bool	ft_check_prompt(t_prompt *p)
-{
-	size_t	i;
-
-	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp);
-	i = -1;
-	add_history(p->prompt);
-	while (p->d2_prompt[++i])
-	{
-		if (!ft_quote_error(p->d2_prompt[i]))
-		{
-			ft_free_d2(p->d2_prompt);
-			free(p->prompt);
-			return (true);
-		}
-	}
-	ft_process_io(p);
-	free(p->id);
-	free(p->prompt);
-	return (false);
 }
 
 extern void	ft_prompt_io(t_prompt *p)

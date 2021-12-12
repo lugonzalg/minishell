@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 22:24:15 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/11 20:45:05 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "inc/libft.h"
 #include <stdlib.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 static void	ft_resize(t_child *child)
 {
@@ -72,13 +73,18 @@ static int	ft_here_doc(t_child *child, char *key)
 static void	ft_fdout(t_child *child, size_t i)
 {
 	int		fd;
+	char	*err_fd;
 
 	if (ft_strlen(child->info[i]) == 1)
 		fd = open(child->info[++i], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	else if (ft_strlen(child->info[i]) == 2)
 		fd = open(child->info[++i], O_RDWR | O_APPEND | O_CREAT, 0644);
 	else
+	{
+		child->redir[2] = true;
+		printf("minishell: %s: Bad file descriptor\n", err_fd);
 		return ;
+	}
 	close(child->fdpipe[child->id + 1][1]);
 	child->fdpipe[child->id + 1][1] = fd;
 }
@@ -87,12 +93,24 @@ static size_t	ft_fdin(t_child *child, size_t i)
 {
 	int		fd;
 
+	fd = -1;
 	if (ft_strlen(child->info[i]) == 1)
 		fd = open(child->info[++i], O_RDONLY);
 	else if (ft_strlen(child->info[i]) == 2)
 		fd = ft_here_doc(child, child->info[i-- + 1]);
 	else
+	{
+		printf("minishell: %s: Bad file descriptor\n", child->info[i]);
+		child->redir[2] = true;
 		return (i);
+	}
+	if (fd == -1)
+	{
+		child->redir[2] = true;
+		printf("minishell: %s: No such file or directory\n", child->info[i]);
+		ft_go_exit(1);
+		return (i);
+	}
 	close(child->fdpipe[child->id][0]);
 	child->fdpipe[child->id][0] = fd;
 	return (i);
@@ -103,6 +121,11 @@ extern void	ft_unify_fdio(t_child *child)
 	size_t	i;
 
 	i = -1;
+	if (ft_fdcheck(child, OUTPUT) || ft_fdcheck(child, INPUT))
+	{
+		child->redir[2] = true;
+		return ;
+	}
 	while (child->info[++i])
 	{
 		if (ft_strchr(child->info[i], OUTPUT))

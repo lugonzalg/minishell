@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/11 16:18:51 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/11 19:47:26 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # define OUTPUT 	'>'
 # define INPUT		'<'
-# define NL			"\n"
-# define S_QUOTE	"\'"
-# define D_QUOTE	"\""
+# define NL			'\n'
+# define S_QUOTE	'\''
+# define D_QUOTE	'\"'
 # define PATH_MAX	4096
 
 # include <stdbool.h>
@@ -69,6 +69,8 @@ extern void			ft_check_redir(t_prompt *p, t_child *child);
 /*SIGNAL & ERROR*/
 extern int			ft_go_exit(int num);
 extern void			ft_sig_handler(int signo);
+extern int			ft_fdcheck(t_child *child, char redir);
+extern bool			ft_check_prompt(t_prompt *p);
 
 /*UNIFY*/
 extern void			ft_unify_fdio(t_child *child);
@@ -88,6 +90,7 @@ extern char			**ft_split_ptr(const char *s, char c, t_len len);
 extern size_t		ft_lenp(char *s, char c);
 extern size_t		ft_len_redir(char *s, char c);
 extern char			*ft_cut(char *s, char **s_ptr, char c);
+extern void			ft_process_io(t_prompt *p);
 
 /*BUILTINS*/
 extern int			ft_checkbuiltins(char *str, t_prompt *p);

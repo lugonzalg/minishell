@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 22:24:14 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/11 19:30:55 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 extern void	ft_restart_data(t_child *child)
 {
 	ft_memset(&child->size[1], 0, sizeof(size_t) * 3);
-	ft_memset(child->redir, false, sizeof(bool) * 2);
+	ft_memset(child->redir, false, sizeof(bool) * 3);
 	ft_free_d2(child->info);
 	free(child->path);
 	child->path = NULL;
