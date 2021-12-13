@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/12 18:16:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:21:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ extern void			ft_putpwd(char *str, t_prompt *p);
 extern char			*ft_search_pwd(t_prompt *p);
 extern void			ft_changepwd(char *str, t_prompt *p);
 extern void			ft_deletpwd(char *str, t_prompt *p);
+extern void			ft_env_fail(t_child *child);
 
 /*EXPAND & QUOTE*/
 extern void			ft_expand(t_prompt *p, t_child *child);

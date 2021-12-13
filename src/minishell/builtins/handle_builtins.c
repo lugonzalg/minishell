@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:46:07 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 21:49:29 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:20:42 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ extern void	ft_builtins(t_child *child, t_prompt *p)
 	else if (!ft_strncmp(child->info[0], "export", sizeof("export"))
 		&& ft_strchr(child->info[1], '='))
 		ft_envinclude(child, p);
-	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset")))
+	else if (!ft_strncmp(child->info[0], "unset", sizeof("unset"))
+		&& child->info[1])
 		ft_deletenv(child, p);
 	else if (!ft_strncmp(child->info[0], "echo", sizeof("echo")))
 		ft_echo(child);
@@ -65,4 +66,11 @@ extern int	ft_checkbuiltins(char *str, t_prompt *p)
 	}
 	close(fd);
 	return (0);
+}
+
+extern void	ft_env_fail(t_child *child)
+{
+	printf("minishell: export: `%s': not a valid identifier\n", child->info[1]);
+	ft_go_exit(1);
+	return ;
 }

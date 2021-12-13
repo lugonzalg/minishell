@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/10 22:24:16 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:21:22 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ extern void	ft_envinclude(t_child	*child, t_prompt *p)
 	int		fd[2];
 	char	*line;
 
-	(void) child;
+	if (ft_isdigit(child->info[1][0]))
+		return (ft_env_fail(child));
 	fd[0] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	fd[1] = open(p->envpath, O_RDONLY);
 	while (1)
@@ -123,7 +124,7 @@ extern int	ft_changedir(t_child *child, t_prompt *p)
 	if (chdir(child->info[1]))
 	{
 		printf("minishell: cd: %s: No such file or directory\n", child->info[1]);
-		ft_go_exit(128);
+		ft_go_exit(1);
 		return (1);
 	}
 	ft_putpwd(child->info[1], p);

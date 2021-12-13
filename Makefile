@@ -58,6 +58,7 @@ fclean: clean
 	@${MAKE} -C src/ft_printf fclean
 	${RM} bin
 	${RM} ${BIN}
+	${RM} minishell.dSYM
 
 re: fclean all
 
