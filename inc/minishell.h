@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/13 17:21:13 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/13 20:55:37 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # define NL			'\n'
 # define S_QUOTE	'\''
 # define D_QUOTE	'\"'
+# define PIPE		'|'
+# define AND		'&'
+# define DOLLAR		'$'
+# define SPACE		' '
 # define PATH_MAX	4096
 
 # include <stdbool.h>

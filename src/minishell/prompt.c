@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/12 22:41:15 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/13 20:55:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,37 @@ extern void	ft_process_io(t_prompt *p)
 			ft_go_exit(126);
 		else if (status == 32512)
 			ft_go_exit(127);
+		else
+			ft_go_exit(0);
 	}
+}
+
+extern int	ft_prompt_error(char *prompt)
+{
+	size_t	n;
+
+	n = 0;
+	while (*prompt)
+	{
+		if (*prompt == PIPE && !n)
+		{
+			ft_go_exit(258);
+			return (printf("minishell: syntax error near unexpected token `|'\n"));
+		}
+		else if (*prompt == PIPE && n)
+			n = 0;
+		else if (*prompt == AND && !n)
+		{
+			ft_go_exit(258);
+			return (printf("minishell: syntax error near unexpected token `&'\n"));
+		}
+		else if (*prompt == AND && n)
+			n = 0;
+		if (*prompt != SPACE && *prompt != PIPE && *prompt != AND)
+			n++;
+		prompt++;
+	}
+	return (0);
 }
 
 extern void	ft_prompt_io(t_prompt *p)
@@ -117,8 +147,17 @@ extern void	ft_prompt_io(t_prompt *p)
 		p->prompt = readline("minishell > ");
 		if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
 			|| !ft_strncmp(p->prompt, "exit ", 5))
+		{
+			write(1, "exit\n", 5);
 			break ;
+		}
 		rl_on_new_line();
+		if (ft_prompt_error(p->prompt))
+		{
+			add_history(p->prompt);
+			free(p->prompt);
+			continue ;
+		}
 		if (ft_check_prompt(p))
 			continue ;
 		ft_free_d2(p->d2_prompt);

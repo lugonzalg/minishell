@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/13 17:21:22 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/13 20:55:33 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,10 @@ extern void	ft_echo(t_child *child)
 	fd = 1;
 	nl = true;
 	i = 0;
+	while (1)
+	{
+
+	}
 	if (child->redir[1] || child->id < child->size[0] - 2)
 		fd = child->fdpipe[child->id + 1][1];
 	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
