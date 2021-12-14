@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/13 20:55:37 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/14 17:54:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef size_t		(*t_len)(char *, char);
 typedef struct s_global
 {
 	int		error;
+	int		here_doc;
 	pid_t	killid;
 }	t_global;
 

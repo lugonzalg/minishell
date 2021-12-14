@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/13 19:54:16 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/14 18:28:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ static int	ft_here_doc(t_child *child, char *key)
 	int		fd;
 
 	fd = open(".here_doc", O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	while (1)
+	while (g_glob.here_doc)
 	{
 		write(1, "> ", 2);
 		line = get_next_line(0);
 		if (!line)
 			break ;
 		len = ft_strlen(line);
-		if (!ft_strncmp(key, line, len - 1 && len != 1))
+		if (!ft_strncmp(key, line, len - 1) && len != 1)
 		{
 			free(line);
 			break ;

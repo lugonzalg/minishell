@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/13 20:55:36 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/14 18:40:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ extern char	*ft_trim_error(char *info, char redir, int on)
 	size_t	len;
 
 	len = 2;
+	if (!info || !redir)
+		return (ft_strdup("|"));
 	if (on)
 		len = ft_strchr(info, redir) - info;
 	if (!on && *info != redir)

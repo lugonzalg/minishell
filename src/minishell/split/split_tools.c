@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:01:38 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/10 21:37:00 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/14 18:33:24 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ static char	*ft_delimit(char *s, size_t *row)
 	if (*s == '<' || *s == '>')
 	{
 		(*row)++;
-		while (*s == '<' || *s == '>')
+		while (*s && (*s == '<' || *s == '>'))
 			s++;
-		if (*(s + 1) != 32)
+		if (*s && *(s + 1) != 32)
 			(*row)++;
 	}
 	return (s);
@@ -74,7 +74,7 @@ extern size_t	ft_len_redir(char *s, char c)
 		while (*s && *s != c)
 		{
 			s = ft_delimit(s, &row);
-			if (*s != 32)
+			if (*s && *s != 32)
 				s++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/13 20:55:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/14 18:26:17 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ extern void	ft_prompt_io(t_prompt *p)
 {
 	while (1)
 	{
+		g_glob.here_doc = 1;	
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
