@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/13 20:55:33 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/15 21:10:30 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,24 @@ extern void	ft_deletenv(t_child *child, t_prompt *p)
 	ft_deletenv_2(p);
 }
 
+extern int	ft_nl_checker(char *str, bool *nl)
+{
+	size_t	i;
+
+	i = 1;
+	if (!str)
+		return (0);
+	if (!ft_strncmp(str, "-n", 2))
+	{
+		*nl = false;
+		while (str[i] && str[i] == 'n')
+			i++;
+		if (!str[i])
+			return (1);
+	}
+	return (0);
+}
+
 extern void	ft_echo(t_child *child)
 {
 	size_t	i;
@@ -93,23 +111,18 @@ extern void	ft_echo(t_child *child)
 
 	fd = 1;
 	nl = true;
-	i = 0;
-	while (1)
-	{
+	i = 1;
 
-	}
 	if (child->redir[1] || child->id < child->size[0] - 2)
 		fd = child->fdpipe[child->id + 1][1];
-	if (child->info[1] && !ft_strncmp(child->info[1], "-n", 3))
-	{
-		nl = false;
+	while (ft_nl_checker(child->info[i], &nl))
 		i++;
-	}
-	while (child->info[++i])
+	while (child->info[i])
 	{
 		write(fd, child->info[i], ft_strlen(child->info[i]));
 		if (i < child->size[1] - 1)
 			write(fd, " ", 1);
+		i++;
 	}
 	if (nl)
 		write(fd, "\n", 1);

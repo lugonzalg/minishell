@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/14 18:40:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/17 18:31:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,25 @@ extern int	ft_fdcheck(t_child *child, char redir)
 	return (0);
 }
 
+static ft_cmd_behavior(char *str)
+{
+	char	*cmd;
+	size_t	i;
+	char	quote;
+
+	cmd = calloc(sizeof(char), 100);
+	while (*str)
+	{
+		if (
+		str++;
+	}
+}
+
 extern bool	ft_check_prompt(t_prompt *p)
 {
 	size_t	i;
 
+	p->cmd = ft_cmd_behavior(p->prompt);
 	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp);
 	i = -1;
 	if (p->prompt && p->prompt[0])

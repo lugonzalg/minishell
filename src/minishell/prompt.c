@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/14 18:26:17 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/15 21:10:32 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ extern void	ft_prompt_io(t_prompt *p)
 			break ;
 		}
 		rl_on_new_line();
-		if (ft_prompt_error(p->prompt))
+		if (0 && ft_prompt_error(p->prompt))
 		{
 			add_history(p->prompt);
 			free(p->prompt);
