@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/18 00:51:44 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/20 19:29:13 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ extern int	ft_fdcheck(t_child *child, char redir)
 	i = -1;
 	while (child->info[++i])
 	{
+		fd_err = "newline";
 		if (!ft_strchr(child->info[i], redir))
 			continue ;
 		fd = ft_fd_name(child, i, redir);

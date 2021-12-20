@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/17 18:33:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/20 19:31:02 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,17 @@ typedef struct s_child
 	int			tty;
 	bool		echo;
 }	t_child;
+
+typedef struct s_wildcard
+{
+	char	**info;
+	char	*pwd;
+	char	*temp;
+	char	**compwc;
+	int		*inout;
+	size_t	i;
+	bool	last;
+}	t_wc;
 
 typedef size_t		(*t_len)(char *, char);
 
@@ -119,6 +130,27 @@ extern char			*ft_search_pwd(t_prompt *p);
 extern void			ft_changepwd(char *str, t_prompt *p);
 extern void			ft_deletpwd(char *str, t_prompt *p);
 extern void			ft_env_fail(t_child *child);
+
+/*WILDCARD*/
+void				ft_handlewc(t_child *child);
+void				ft_takedirinfo(size_t *i, t_wc *z);
+char				**ft_add_info(char **dest, char **z, size_t *i);
+int					ft_verify_info(char *pwd, char *comp);
+char				**ft_putoffd2(char **z, size_t i);
+size_t				ft_strlen_d2(char **str);
+void				ft_verifyd2(t_wc *z);
+void				ft_initinout(t_wc *z, char *str);
+size_t				ft_lastcompare(t_wc *z, char *str, size_t i);
+int					ft_lastwc(t_wc *z);
+int					ft_lastdir(t_wc *z);
+char				**ft_searchdata(char *pwd);
+void				ft_join_info(size_t *i, t_wc *z, char	**data);
+void				ft_add_file(t_wc *z);
+void				ft_take_2in(t_wc *z);
+char				*ft_comparedata_util(t_wc *z, char *str, size_t *i);
+int					ft_increasepath(t_wc *z, char *dir, bool ver);
+int					ft_splitwc(t_wc *z, char *dir, bool ver);
+size_t				ft_comparedata(t_wc *z, char *str);
 
 /*EXPAND & QUOTE*/
 extern void			ft_expand(t_prompt *p, t_child *child);

@@ -1,7 +1,8 @@
 #!/bin/sh
 
 #setup brew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+curl brew.42.fr | bash 
 #install readline library
 brew install readline
 

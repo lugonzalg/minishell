@@ -9,7 +9,11 @@ INC = -I /usr/include/readline \
 	  -I ${PWD}/src/libft \
 	  -I ${PWD}/src/ft_printf \
 
+<<<<<<< HEAD
 CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address 
+=======
+CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address 
+>>>>>>> 0c2d3a475ec6aab7880431498babdbbd002ed165
 LIB = -L //Users/$(USER)/.brew/opt/readline/lib \
 		 -L usr/include/readline \
 		 -L bin/ -lreadline -lft -lftprintf -ltermcap
@@ -29,7 +33,16 @@ FILES = minishell/main \
 		minishell/builtins/handle_builtins \
 		minishell/split/split_ptr \
 		minishell/split/split_tools \
+<<<<<<< HEAD
 		minishell/ft_expand
+=======
+		minishell/ft_expand \
+		minishell/wildcard/handlewc \
+		minishell/wildcard/expandwc \
+		minishell/wildcard/dirinfowc \
+		minishell/wildcard/extrawc \
+		minishell/wildcard/utilswc \
+>>>>>>> 0c2d3a475ec6aab7880431498babdbbd002ed165
 
 SRC_DIR = src/
 OBJ_DIR = obj/

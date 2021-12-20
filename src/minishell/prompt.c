@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/18 00:51:43 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/20 19:26:19 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <dirent.h>
 
 static void	ft_handle_pipe(t_child *child)
 {
@@ -65,6 +66,7 @@ static void	ft_process_command(t_prompt *p, t_child *child, size_t i)
 	{
 		p->id[i] = fork();
 		g_glob.killid = p->id[0];
+		ft_handlewc(child);
 		if (p->id[i] == 0)
 			ft_multipipe(child);
 		else
@@ -153,6 +155,7 @@ extern int	ft_prompt_error(t_prompt *p)
 			ft_resize_prompt(p, &n);
 	}
 	return (0);
+	}
 }
 
 extern void	ft_prompt_io(t_prompt *p)
