@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/15 21:10:32 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/18 00:51:43 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,30 +111,46 @@ extern void	ft_process_io(t_prompt *p)
 	}
 }
 
-extern int	ft_prompt_error(char *prompt)
+extern void	ft_resize_prompt(t_prompt *p, ssize_t *n)
 {
-	size_t	n;
+	char	*line;
 
+	*n = -1;
+	line = readline("> ");
+	if (!line)
+		return ;
+	p->tmp = ft_strjoin(p->prompt, " ");
+	free(p->prompt);
+	p->prompt = p->tmp;
+	p->tmp = ft_strjoin(p->prompt, line);
+	free(line);
+	free(p->prompt);
+	p->prompt = p->tmp;
+}
+
+extern int	ft_prompt_error(t_prompt *p)
+{
+	ssize_t	n;
+	size_t	i;
+
+	i = -1;
 	n = 0;
-	while (*prompt)
+	while (p->prompt[++i])
 	{
-		if (*prompt == PIPE && !n)
+		if ((n == -1 && ft_strchr("|&;", p->prompt[i]))
+			|| (i != 0 && ft_strchr("|&;", p->prompt[i])
+			&& ft_strchr("|&;", p->prompt[i - 1])
+			&& p->prompt[i] != p->prompt[i - 1]))
 		{
-			ft_go_exit(258);
-			return (printf("minishell: syntax error near unexpected token `|'\n"));
+				printf("minishell: syntax error near unexpected token `%c\n", p->prompt[i]);
+				return (1);
 		}
-		else if (*prompt == PIPE && n)
-			n = 0;
-		else if (*prompt == AND && !n)
-		{
-			ft_go_exit(258);
-			return (printf("minishell: syntax error near unexpected token `&'\n"));
-		}
-		else if (*prompt == AND && n)
-			n = 0;
-		if (*prompt != SPACE && *prompt != PIPE && *prompt != AND)
+		if (p->prompt[i] == S_QUOTE || p->prompt[i] == S_QUOTE)
+			i = ft_query_len(p->prompt + i, p->prompt[i]);
+		if (!ft_strchr("|&;", p->prompt[i]) && p->prompt[i] != 32) 
 			n++;
-		prompt++;
+		if (n != -1 && ft_strchr("|&", p->prompt[i]) && !p->prompt[i + 1])
+			ft_resize_prompt(p, &n);
 	}
 	return (0);
 }
@@ -146,6 +162,9 @@ extern void	ft_prompt_io(t_prompt *p)
 		g_glob.here_doc = 1;	
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
+		p->tmp = ft_strtrim(p->prompt, " ");
+		free(p->prompt);
+		p->prompt = p->tmp;
 		if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
 			|| !ft_strncmp(p->prompt, "exit ", 5))
 		{
@@ -153,7 +172,7 @@ extern void	ft_prompt_io(t_prompt *p)
 			break ;
 		}
 		rl_on_new_line();
-		if (0 && ft_prompt_error(p->prompt))
+		if (ft_prompt_error(p))
 		{
 			add_history(p->prompt);
 			free(p->prompt);

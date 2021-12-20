@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 15:13:15 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/14 18:31:31 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/17 19:34:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static char	**ft_handle_tab(const char *str, char c, char **tab)
 	{
 		while (*str && *str == c)
 			str++;
-		if (*str != c)
+		if (*str && *str != c)
 		{
 			if (c == '|' || (c == ' ' && *str != '<' && *str != '>'))
 			{

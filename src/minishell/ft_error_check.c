@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/17 18:31:41 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/18 00:51:44 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ extern char	*ft_trim_error(char *info, char redir, int on)
 
 	len = 2;
 	if (!info || !redir)
-		return (ft_strdup("|"));
+		return (ft_strdup("newline"));
 	if (on)
 		len = ft_strchr(info, redir) - info;
 	if (!on && *info != redir)
@@ -70,14 +70,13 @@ extern int	ft_fdcheck(t_child *child, char redir)
 	i = -1;
 	while (child->info[++i])
 	{
-		fd_err = "newline";
 		if (!ft_strchr(child->info[i], redir))
 			continue ;
 		fd = ft_fd_name(child, i, redir);
 		if (fd == -1)
 		{
 			fd_err = ft_trim_error(child->info[i + 1], redir, 0);
-			printf("minishell: our syntax error near unexpected token `%s'\n",
+			printf("minishell: syntax error near unexpected token `%s'\n",
 				fd_err);
 			free(fd_err);
 			return (ft_go_exit(258));
@@ -86,29 +85,14 @@ extern int	ft_fdcheck(t_child *child, char redir)
 	return (0);
 }
 
-static ft_cmd_behavior(char *str)
-{
-	char	*cmd;
-	size_t	i;
-	char	quote;
-
-	cmd = calloc(sizeof(char), 100);
-	while (*str)
-	{
-		if (
-		str++;
-	}
-}
-
 extern bool	ft_check_prompt(t_prompt *p)
 {
 	size_t	i;
 
-	p->cmd = ft_cmd_behavior(p->prompt);
 	p->d2_prompt = ft_split_ptr(p->prompt, '|', ft_lenp);
-	i = -1;
 	if (p->prompt && p->prompt[0])
 		add_history(p->prompt);
+	i = -1;
 	while (p->d2_prompt[++i])
 	{
 		if (!ft_quote_error(p->d2_prompt[i]))
