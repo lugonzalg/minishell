@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 21:18:51 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 19:23:01 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:32:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ extern void	ft_check_redir(t_prompt *p, t_child *child)
 	ft_expand(p, child);
 	child->size[1] = i;
 	if (child->redir[0] || child->redir[1])
-		ft_unify_fdio(child);
+		i = ft_unify_fdio(child);
+	if (i)
+		return ;
 	ft_unify_cmd(p, child);
 	if (!child->builtin || !ft_strncmp(child->info[0], "expr", 4))
 		ft_command_pos(p, child);

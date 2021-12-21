@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 21:37:16 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:30:24 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ extern bool			ft_check_prompt(t_prompt *p);
 extern char			*ft_trim_error(char *info, char redir, int on);
 
 /*UNIFY*/
-extern void			ft_unify_fdio(t_child *child);
+extern int			ft_unify_fdio(t_child *child);
 extern void			ft_unify_cmd(t_prompt *p, t_child *child);
 extern int			ft_putpath(t_child *child);
 extern char			**ft_setpath(t_prompt *p);

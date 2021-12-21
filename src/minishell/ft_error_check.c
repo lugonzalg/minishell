@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 12:54:04 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/21 19:04:12 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:55:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ extern char	*ft_trim_error(char *info, char redir, int on)
 		while (ft_isalnum(info[len]))
 			len++;
 		if (!len)
-			len = ft_strlen(info);
+			len = 2;
 	}
 	msg = ft_calloc(sizeof(char), ft_strlen(info) + 1);
 	ft_memcpy(msg, info, len);
@@ -69,6 +69,8 @@ static int	ft_fd_name(t_child *child, size_t *i, char redir)
 		ft_memset(n_str, redir, 3);
 		if (!ft_strncmp(child->info[*i], n_str, 3))
 		{
+			if (!child->info[*i + 1])
+				*i += 1;
 			free(n_str);
 			return (-1);
 		}
@@ -102,6 +104,8 @@ extern int	ft_fdcheck(t_child *child, char redir)
 			printf("minishell: syntax error near unexpected token `%s'\n",
 				fd_err);
 			free(fd_err);
+			ft_free_d2(child->info);
+			child->info = NULL;
 			return (ft_go_exit(258));
 		}
 	}

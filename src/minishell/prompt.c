@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 21:37:21 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:35:00 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ static void	ft_process_command(t_prompt *p, t_child *child, size_t i)
 {
 	child->id = i;
 	ft_check_redir(p, child);
-	if (ft_checkbuiltins(child->info[0], p))
+	if (child->info && ft_checkbuiltins(child->info[0], p))
 		ft_builtins(child, p);
-	else if (child->info[0])
+	else if (child->info && child->info[0])
 	{
 		p->id[i] = fork();
 		g_glob.killid = p->id[0];

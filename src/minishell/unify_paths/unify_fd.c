@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 03:25:37 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 21:37:19 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:30:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ static size_t	ft_fdin(t_child *child, size_t i)
 	return (i);
 }
 
-extern void	ft_unify_fdio(t_child *child)
+extern int	ft_unify_fdio(t_child *child)
 {
 	size_t	i;
 
@@ -126,7 +126,7 @@ extern void	ft_unify_fdio(t_child *child)
 	if (ft_fdcheck(child, OUTPUT) || ft_fdcheck(child, INPUT))
 	{
 		child->redir[2] = true;
-		return ;
+		return (1);
 	}
 	while (child->info[++i])
 	{
@@ -135,4 +135,5 @@ extern void	ft_unify_fdio(t_child *child)
 		if (ft_strchr(child->info[i], INPUT))
 			i = ft_fdin(child, i);
 	}
+	return (0);
 }
