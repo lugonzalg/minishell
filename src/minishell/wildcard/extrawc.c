@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 16:21:15 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/20 18:20:14 by mikgarci         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:38:16 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ int	ft_lastdir(t_wc *z)
 	}
 	ft_increasepath(z, NULL, false);
 	free(z->temp);
+	free(z->pwd);
 	return (0);
 }
