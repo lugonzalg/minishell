@@ -1,0 +1,7 @@
+*.swp
+.env
+.DS_Store
+*.a
+*.o
+*dSYM
+file*
