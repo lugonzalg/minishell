@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 19:26:19 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/20 21:37:21 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ extern void	ft_process_io(t_prompt *p)
 			ft_go_exit(126);
 		else if (status == 32512)
 			ft_go_exit(127);
-		else
-			ft_go_exit(0);
 	}
 }
 
@@ -117,7 +115,7 @@ extern void	ft_resize_prompt(t_prompt *p, ssize_t *n)
 {
 	char	*line;
 
-	*n = -1;
+	*n = 0;
 	line = readline("> ");
 	if (!line)
 		return ;
@@ -139,7 +137,7 @@ extern int	ft_prompt_error(t_prompt *p)
 	n = 0;
 	while (p->prompt[++i])
 	{
-		if ((n == -1 && ft_strchr("|&;", p->prompt[i]))
+		if ((n == 0 && ft_strchr("|&;", p->prompt[i]))
 			|| (i != 0 && ft_strchr("|&;", p->prompt[i])
 			&& ft_strchr("|&;", p->prompt[i - 1])
 			&& p->prompt[i] != p->prompt[i - 1]))
@@ -148,14 +146,15 @@ extern int	ft_prompt_error(t_prompt *p)
 				return (1);
 		}
 		if (p->prompt[i] == S_QUOTE || p->prompt[i] == S_QUOTE)
-			i = ft_query_len(p->prompt + i, p->prompt[i]);
+			i += ft_query_len(p->prompt + i, p->prompt[i]);
 		if (!ft_strchr("|&;", p->prompt[i]) && p->prompt[i] != 32) 
 			n++;
-		if (n != -1 && ft_strchr("|&", p->prompt[i]) && !p->prompt[i + 1])
+		if (n != 0 && ft_strchr("|&", p->prompt[i]) && !p->prompt[i + 1])
 			ft_resize_prompt(p, &n);
+		if (n && ft_strchr("|&", p->prompt[i]))
+			n = 0;
 	}
 	return (0);
-	}
 }
 
 extern void	ft_prompt_io(t_prompt *p)

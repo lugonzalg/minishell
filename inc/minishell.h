@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 19:31:02 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/20 21:37:16 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_prompt
 	pid_t		*id;
 	int			sizenv;
 	char		*temppath;
+	char		*expand;
 }	t_prompt;
 
 typedef struct s_child
@@ -54,6 +55,7 @@ typedef struct s_child
 	size_t		id;
 	int			tty;
 	bool		echo;
+	char		*expand;
 }	t_child;
 
 typedef struct s_wildcard

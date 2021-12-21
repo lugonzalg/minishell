@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 19:27:06 by lugonzal         ###   ########.fr       */
+/*   Updated: 2021/12/20 21:37:15 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static char	*ft_env_query(t_prompt *p, char *query, size_t *lq, size_t *lenv)
 	(*lenv) = j;
 	env = ft_substr(query, 0, j);
 	raw_env = ft_gnl_query(p->envpath, env);
+	if (!raw_env)
+		p->expand = ft_strjoin("$", env);
 	free(env);
 	if (!raw_env)
 		return (NULL);
@@ -137,7 +139,17 @@ extern void	ft_expand(t_prompt *p, t_child *child)
 				ft_go_exit(0);
 		}
 		else
+		{
 			child->info[i] = ft_quote_case(p, child->info[i]);
+			if (!child->expand && i && ft_strlen(child->info[i]) == 0
+				&& (ft_strchr(child->info[i - 1], '<') || ft_strchr(child->info[i - 1], '>')))
+				child->expand = ft_strdup(p->expand);
+			else
+			{
+				free(p->expand);
+				p->expand = NULL;
+			}
+		}
 	}
 	i = -1;
 	while (child->info[++i])
