@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/21 19:30:24 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:46:54 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_prompt
 	char		**path;
 	char		*home;
 	char		**d2_prompt;
-	char		*user;
 	char		*prompt;
 	char		*tmp;
 	char		*envpath;
@@ -110,6 +109,8 @@ extern size_t		ft_lenp(char *s, char c);
 extern size_t		ft_len_redir(char *s, char c);
 extern char			*ft_cut(char *s, char **s_ptr, char c);
 extern void			ft_process_io(t_prompt *p);
+extern int			ft_prompt_error(t_prompt *p);
+extern void			ft_multipipe(t_child *child);
 
 /*BUILTINS*/
 extern int			ft_checkbuiltins(char *str, t_prompt *p);
@@ -123,6 +124,7 @@ extern void			ft_deletenv(t_child	*child, t_prompt *p);
 extern void			ft_deletenv_2(t_prompt *p);
 /*********************ECHO*************************************/
 extern void			ft_echo(t_child *child);
+extern int			ft_nl_checker(char *str, bool *nl);
 /*********************CHANGE_DIR*******************************/
 extern int			ft_changedir(t_child *child, t_prompt *p);
 extern int			ft_changediraux(t_child *child, t_prompt *p);
@@ -157,6 +159,9 @@ size_t				ft_comparedata(t_wc *z, char *str);
 /*EXPAND & QUOTE*/
 extern void			ft_expand(t_prompt *p, t_child *child);
 extern int			ft_quote_error(char *str);
+extern char			*ft_quote_clean(char *str);
+extern char			*ft_joinfr(t_prompt *p, char *str, size_t *j);
+extern char			*ft_quote_case(t_prompt *p, char *str);
 
 /*TOOLS*/
 extern char			*ft_gnl_query(char *path, char *query);

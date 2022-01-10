@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/20 21:37:15 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:10:04 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*ft_env_query(t_prompt *p, char *query, size_t *lq, size_t *lenv)
 	return (env);
 }
 
-static char	*ft_joinfr(t_prompt *p, char *str, size_t *j)
+extern char	*ft_joinfr(t_prompt *p, char *str, size_t *j)
 {
 	char	*n_str;
 	char	*query;
@@ -71,87 +71,38 @@ static char	*ft_joinfr(t_prompt *p, char *str, size_t *j)
 	return (n_str);
 }
 
-static char	*ft_quote_case(t_prompt *p, char *str)
+static void	ft_no_dollar_case(t_child *c, t_prompt *p, size_t i)
 {
-	char	squote;
-	char	dquote;
-	size_t	j;
-
-	j = -1;
-	squote = 0;
-	dquote = 0;
-	while (str[++j])
+	c->info[i] = ft_quote_case(p, c->info[i]);
+	if (!c->expand && i && ft_strlen(c->info[i]) == 0
+		&& (ft_strchr(c->info[i - 1], '<')
+			|| ft_strchr(c->info[i - 1], '>')))
+		c->expand = ft_strdup(p->expand);
+	else
 	{
-		if (!squote && str[j] == '\'')
-			squote = dquote + 1;
-		else if (!dquote && str[j] == '\"')
-			dquote = squote + 1;
-		else if (((dquote == 1 && squote == 2) || !squote) && str[j] == '$'
-			&& ft_isalpha(str[j + 1]))
-			str = ft_joinfr(p, str, &j);
-		else if (squote && str[j] == '\'')
-			squote = 0;
-		else if (dquote && str[j] == '\"')
-			dquote = 0;
+		free(p->expand);
+		p->expand = NULL;
 	}
-	return (str);
 }
 
-static char	*ft_quote_clean(char *str)
-{
-	char	quote[2];
-	size_t	len;
-	size_t	j;
-
-	j = -1;
-	ft_memset(quote, 0, sizeof(char) * 2);
-	while (str[++j])
-	{
-		if (!quote[0] && str[j] == '\'')
-			quote[0] = quote[1] + 1;
-		else if (!quote[1] && str[j] == '\"')
-			quote[1] = quote[0] + 1;
-		if (quote[1] || quote[0])
-		{
-			len = ft_query_len(&str[j], str[j]);
-			ft_memcpy(&str[j], &str[j + 1], len + 1);
-			j += len;
-			ft_memcpy(&str[j - 1], &str[j + 1], ft_strlen(str + j) + 1);
-			j -= 2;
-			ft_memset(quote, 0, sizeof(char) * 2);
-		}
-	}
-	return (str);
-}
-
-extern void	ft_expand(t_prompt *p, t_child *child)
+extern void	ft_expand(t_prompt *p, t_child *c)
 {
 	size_t	i;	
 
 	i = -1;
-	while (child->info[++i])
+	while (c->info[++i])
 	{
-		if (ft_strnstr(child->info[i], "$?", 3))
+		if (ft_strnstr(c->info[i], "$?", 3))
 		{
-			free(child->info[i]);
-			child->info[i] = ft_itoa(g_glob.error);
-			if (ft_strnstr(child->info[0], "echo", 5))
+			free(c->info[i]);
+			c->info[i] = ft_itoa(g_glob.error);
+			if (ft_strnstr(c->info[0], "echo", 5))
 				ft_go_exit(0);
 		}
 		else
-		{
-			child->info[i] = ft_quote_case(p, child->info[i]);
-			if (!child->expand && i && ft_strlen(child->info[i]) == 0
-				&& (ft_strchr(child->info[i - 1], '<') || ft_strchr(child->info[i - 1], '>')))
-				child->expand = ft_strdup(p->expand);
-			else
-			{
-				free(p->expand);
-				p->expand = NULL;
-			}
-		}
+			ft_no_dollar_case(c, p, i);
 	}
 	i = -1;
-	while (child->info[++i])
-			child->info[i] = ft_quote_clean(child->info[i]);
+	while (c->info[++i])
+			c->info[i] = ft_quote_clean(c->info[i]);
 }

@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/20 19:30:08 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:23:47 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,21 @@ extern void	ft_showenv(t_prompt *p)
 	close(fd);
 }
 
-extern void	ft_envinclude(t_child	*child, t_prompt *p)
+extern void	ft_envinclude(t_child	*c, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
 
-	if (ft_isdigit(child->info[1][0]))
-		return (ft_env_fail(child));
+	if (ft_isdigit(c->info[1][0]))
+		return (ft_env_fail(c));
 	fd[0] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	fd[1] = open(p->envpath, O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd[1]);
-		if (!ft_check_env(child, line, p))
+		if (!ft_check_env(c, line, p))
 		{
-			write(fd[0], child->info[1], ft_strlen(child->info[1]));
+			write(fd[0], c->info[1], ft_strlen(c->info[1]));
 			write(fd[0], "\n", 1);
 		}
 		else
@@ -62,7 +62,7 @@ extern void	ft_envinclude(t_child	*child, t_prompt *p)
 	ft_deletenv_2(p);
 }
 
-extern void	ft_deletenv(t_child *child, t_prompt *p)
+extern void	ft_deletenv(t_child *c, t_prompt *p)
 {
 	int		fd[2];
 	char	*line;
@@ -74,7 +74,7 @@ extern void	ft_deletenv(t_child *child, t_prompt *p)
 		line = get_next_line(fd[0]);
 		if (!line)
 			break ;
-		if (ft_strncmp(child->info[1], line, ft_strlen(child->info[1])))
+		if (ft_strncmp(c->info[1], line, ft_strlen(c->info[1])))
 			write(fd[1], line, ft_strlen(line));
 		else
 			p->sizenv--;
@@ -85,25 +85,7 @@ extern void	ft_deletenv(t_child *child, t_prompt *p)
 	ft_deletenv_2(p);
 }
 
-extern int	ft_nl_checker(char *str, bool *nl)
-{
-	size_t	i;
-
-	i = 1;
-	if (!str)
-		return (0);
-	if (!ft_strncmp(str, "-n", 2))
-	{
-		*nl = false;
-		while (str[i] && str[i] == 'n')
-			i++;
-		if (!str[i])
-			return (1);
-	}
-	return (0);
-}
-
-extern void	ft_echo(t_child *child)
+extern void	ft_echo(t_child *c)
 {
 	size_t	i;
 	bool	nl;
@@ -112,15 +94,14 @@ extern void	ft_echo(t_child *child)
 	fd = 1;
 	nl = true;
 	i = 1;
-
-	if (child->redir[1] || child->id < child->size[0] - 2)
-		fd = child->fdpipe[child->id + 1][1];
-	while (ft_nl_checker(child->info[i], &nl))
+	if (c->redir[1] || c->id < c->size[0] - 2)
+		fd = c->fdpipe[c->id + 1][1];
+	while (ft_nl_checker(c->info[i], &nl))
 		i++;
-	while (child->info[i])
+	while (c->info[i])
 	{
-		write(fd, child->info[i], ft_strlen(child->info[i]));
-		if (i < child->size[1] - 1)
+		write(fd, c->info[i], ft_strlen(c->info[i]));
+		if (i < c->size[1] - 1)
 			write(fd, " ", 1);
 		i++;
 	}
@@ -128,22 +109,22 @@ extern void	ft_echo(t_child *child)
 		write(fd, "\n", 1);
 }
 
-extern int	ft_changedir(t_child *child, t_prompt *p)
+extern int	ft_changedir(t_child *c, t_prompt *p)
 {
-	if (child->size[1] == 1)
+	if (c->size[1] == 1)
 	{
 		chdir(p->home);
 		ft_changepwd(p->home, p);
 		return (0);
 	}
-	if (ft_changediraux(child, p) != -1)
+	if (ft_changediraux(c, p) != -1)
 		return (0);
-	if (chdir(child->info[1]))
+	if (chdir(c->info[1]))
 	{
-		printf("minishell: cd: %s: No such file or directory\n", child->info[1]);
+		printf("minishell: cd: %s: No such file or directory\n", c->info[1]);
 		ft_go_exit(1);
 		return (1);
 	}
-	ft_putpwd(child->info[1], p);
+	ft_putpwd(c->info[1], p);
 	return (0);
 }

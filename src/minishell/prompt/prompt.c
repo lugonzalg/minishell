@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/21 19:35:00 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:33:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,54 +20,17 @@
 #include <readline/history.h>
 #include <dirent.h>
 
-static void	ft_handle_pipe(t_child *child)
+static void	ft_process_command(t_prompt *p, t_child *child)
 {
-	size_t	i;
-
-	i = -1;
-	while (++i < child->size[0])
-	{
-		if (i != child->id)
-			close(child->fdpipe[i][0]);
-		if (i != child->id + 1)
-			close(child->fdpipe[i][1]);
-	}
-	if (child->id || child->redir[0])
-	{
-		dup2(child->fdpipe[child->id][0], 0);
-		close(child->fdpipe[child->id][0]);
-	}
-	if (child->id < child->size[0] - 2 || child->redir[1])
-	{
-		dup2(child->fdpipe[child->id + 1][1], 1);
-		close(child->fdpipe[child->id + 1][1]);
-	}
-}
-
-void	ft_multipipe(t_child *child)
-{
-	if (child->redir[2])
-		exit(129);
-	ft_handle_pipe(child);
-	if (child->path)
-		execve(child->path, child->info, NULL);
-	if (!child->path || access(child->path, X_OK))
-		exit(127);
-	exit(126);
-}
-
-static void	ft_process_command(t_prompt *p, t_child *child, size_t i)
-{
-	child->id = i;
 	ft_check_redir(p, child);
 	if (child->info && ft_checkbuiltins(child->info[0], p))
 		ft_builtins(child, p);
 	else if (child->info && child->info[0])
 	{
-		p->id[i] = fork();
+		p->id[child->id] = fork();
 		g_glob.killid = p->id[0];
 		ft_handlewc(child);
-		if (p->id[i] == 0)
+		if (p->id[child->id] == 0)
 			ft_multipipe(child);
 		else
 		{
@@ -96,7 +59,10 @@ extern void	ft_process_io(t_prompt *p)
 	ft_set_child(p, &child);
 	i = -1;
 	while (p->d2_prompt[++i])
-		ft_process_command(p, &child, i);
+	{
+		child.id = i;
+		ft_process_command(p, &child);
+	}
 	ft_free_child(&child);
 	while (1)
 	{
@@ -111,48 +77,30 @@ extern void	ft_process_io(t_prompt *p)
 	}
 }
 
-extern void	ft_resize_prompt(t_prompt *p, ssize_t *n)
+static int	ft_exit(t_prompt *p)
 {
-	char	*line;
-
-	*n = 0;
-	line = readline("> ");
-	if (!line)
-		return ;
-	p->tmp = ft_strjoin(p->prompt, " ");
-	free(p->prompt);
-	p->prompt = p->tmp;
-	p->tmp = ft_strjoin(p->prompt, line);
-	free(line);
-	free(p->prompt);
-	p->prompt = p->tmp;
-}
-
-extern int	ft_prompt_error(t_prompt *p)
-{
-	ssize_t	n;
+	char	**tab;
 	size_t	i;
 
 	i = -1;
-	n = 0;
-	while (p->prompt[++i])
+	if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
+		|| !ft_strncmp(p->prompt, "exit ", 5))
 	{
-		if ((n == 0 && ft_strchr("|&;", p->prompt[i]))
-			|| (i != 0 && ft_strchr("|&;", p->prompt[i])
-			&& ft_strchr("|&;", p->prompt[i - 1])
-			&& p->prompt[i] != p->prompt[i - 1]))
+		tab = ft_split(p->prompt, 32);
+		while (tab[1] && tab[1][++i])
 		{
-				printf("minishell: syntax error near unexpected token `%c\n", p->prompt[i]);
-				return (1);
+			if (!ft_isdigit(tab[1][i]))
+			{
+				printf("bash: exit: %s: numeric argument required\n", tab[1]);
+				ft_free_d2(tab);
+				return (0);
+			}
 		}
-		if (p->prompt[i] == S_QUOTE || p->prompt[i] == S_QUOTE)
-			i += ft_query_len(p->prompt + i, p->prompt[i]);
-		if (!ft_strchr("|&;", p->prompt[i]) && p->prompt[i] != 32) 
-			n++;
-		if (n != 0 && ft_strchr("|&", p->prompt[i]) && !p->prompt[i + 1])
-			ft_resize_prompt(p, &n);
-		if (n && ft_strchr("|&", p->prompt[i]))
-			n = 0;
+		write(1, "exit\n", 5);
+		if (tab[1])
+			exit(ft_atoi(tab[1]));
+		ft_free_d2(tab);
+		return (1);
 	}
 	return (0);
 }
@@ -161,18 +109,14 @@ extern void	ft_prompt_io(t_prompt *p)
 {
 	while (1)
 	{
-		g_glob.here_doc = 1;	
+		g_glob.here_doc = 1;
 		g_glob.killid = 0;
 		p->prompt = readline("minishell > ");
 		p->tmp = ft_strtrim(p->prompt, " ");
 		free(p->prompt);
 		p->prompt = p->tmp;
-		if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
-			|| !ft_strncmp(p->prompt, "exit ", 5))
-		{
-			write(1, "exit\n", 5);
+		if (ft_exit(p))
 			break ;
-		}
 		rl_on_new_line();
 		if (ft_prompt_error(p))
 		{

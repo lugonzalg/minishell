@@ -6,11 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 16:12:27 by mikgarci          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/12/21 19:15:16 by mikgarci         ###   ########.fr       */
-=======
-/*   Updated: 2021/12/20 18:20:16 by mikgarci         ###   ########.fr       */
->>>>>>> 0c2d3a475ec6aab7880431498babdbbd002ed165
+/*   Updated: 2021/12/21 20:05:05 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +75,8 @@ static void	ft_initinfowc(t_child *child, size_t index, t_wc *z)
 			ft_take_2in(z);
 		child->info = ft_add_info(z->info, child->info, &index);
 	}
-<<<<<<< HEAD
 	else
 		free(z->info);
-=======
->>>>>>> 0c2d3a475ec6aab7880431498babdbbd002ed165
 }
 
 void	ft_handlewc(t_child *child)
@@ -95,13 +88,9 @@ void	ft_handlewc(t_child *child)
 	while (child->info[++index])
 	{
 		if (ft_strchr(child->info[index], '*'))
-<<<<<<< HEAD
 		{
 			ft_initinfowc(child, index, &z);
 		}
-=======
-			ft_initinfowc(child, index, &z);
->>>>>>> 0c2d3a475ec6aab7880431498babdbbd002ed165
 	}
 	return ;
 }

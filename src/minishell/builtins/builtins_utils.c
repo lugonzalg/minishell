@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:34:46 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/13 17:13:35 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:23:45 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+
+extern int	ft_nl_checker(char *str, bool *nl)
+{
+	size_t	i;
+
+	i = 1;
+	if (!str)
+		return (0);
+	if (!ft_strncmp(str, "-n", 2))
+	{
+		while (str[i] && str[i] == 'n')
+			i++;
+		if (!str[i])
+			*nl = false;
+		if (!str[i])
+			return (1);
+	}
+	return (0);
+}
 
 void	ft_changepwd(char *str, t_prompt *p)
 {

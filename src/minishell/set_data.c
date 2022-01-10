@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/21 19:38:04 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/03 20:33:39 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ extern void	ft_free_child(t_child *child)
 
 extern void	ft_free_p(t_prompt *p)
 {
-	free(p->user);
 	unlink(p->envpath);
 	free(p->envpath);
 	free(p->builtpath);
