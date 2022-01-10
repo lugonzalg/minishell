@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 19:58:59 by mikgarci          #+#    #+#             */
-/*   Updated: 2022/01/03 20:23:47 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/10 19:37:08 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ extern void	ft_envinclude(t_child	*c, t_prompt *p)
 	int		fd[2];
 	char	*line;
 
-	if (ft_isdigit(c->info[1][0]))
+	if (ft_isdigit(c->info[1][0]) || ft_bad_indent(c))
 		return (ft_env_fail(c));
 	fd[0] = open(p->temppath, O_WRONLY | O_CREAT, 0644);
 	fd[1] = open(p->envpath, O_RDONLY);

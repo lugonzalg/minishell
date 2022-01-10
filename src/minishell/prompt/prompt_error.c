@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 17:38:48 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:27 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/10 19:08:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ extern void	ft_resize_prompt(t_prompt *p, ssize_t *n)
 	p->prompt = p->tmp;
 }
 
+static void	ft_print_error(char str_prompt)
+{
+	printf("minishell: syntax error near unexpected token `%c\n", str_prompt);
+}
+
 extern int	ft_prompt_error(t_prompt *p)
 {
 	ssize_t	n;
@@ -49,7 +54,7 @@ extern int	ft_prompt_error(t_prompt *p)
 				&& ft_strchr("|&;", p->prompt[i - 1])
 				&& p->prompt[i] != p->prompt[i - 1]))
 		{
-			printf("minishell: syntax error near unexpected token `%c\n", p->prompt[i]);
+			ft_print_error(p->prompt[i]);
 			return (1);
 		}
 		if (p->prompt[i] == S_QUOTE || p->prompt[i] == S_QUOTE)

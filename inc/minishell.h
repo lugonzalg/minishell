@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/03 20:46:54 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/10 19:36:50 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ extern void			ft_envinclude(t_child	*child, t_prompt *p);
 extern int			ft_check_env(t_child *child, char *line, t_prompt *p);
 extern void			ft_deletenv(t_child	*child, t_prompt *p);
 extern void			ft_deletenv_2(t_prompt *p);
+extern int			ft_bad_indent(t_child *c);
 /*********************ECHO*************************************/
 extern void			ft_echo(t_child *child);
 extern int			ft_nl_checker(char *str, bool *nl);

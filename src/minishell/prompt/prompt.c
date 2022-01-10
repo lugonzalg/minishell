@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/03 20:33:41 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/10 19:50:41 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ extern void	ft_process_io(t_prompt *p)
 	}
 }
 
-static int	ft_exit(t_prompt *p)
+static void	ft_exit(t_prompt *p)
 {
 	char	**tab;
 	size_t	i;
@@ -87,22 +87,21 @@ static int	ft_exit(t_prompt *p)
 		|| !ft_strncmp(p->prompt, "exit ", 5))
 	{
 		tab = ft_split(p->prompt, 32);
+		free(p->prompt);
+		write(1, "exit\n", 5);
 		while (tab[1] && tab[1][++i])
 		{
 			if (!ft_isdigit(tab[1][i]))
 			{
 				printf("bash: exit: %s: numeric argument required\n", tab[1]);
 				ft_free_d2(tab);
-				return (0);
+				exit(255);
 			}
 		}
-		write(1, "exit\n", 5);
-		if (tab[1])
-			exit(ft_atoi(tab[1]));
+		i = ft_atoi(tab[1]);
 		ft_free_d2(tab);
-		return (1);
+		exit(i);
 	}
-	return (0);
 }
 
 extern void	ft_prompt_io(t_prompt *p)
@@ -115,8 +114,7 @@ extern void	ft_prompt_io(t_prompt *p)
 		p->tmp = ft_strtrim(p->prompt, " ");
 		free(p->prompt);
 		p->prompt = p->tmp;
-		if (ft_exit(p))
-			break ;
+		ft_exit(p);
 		rl_on_new_line();
 		if (ft_prompt_error(p))
 		{

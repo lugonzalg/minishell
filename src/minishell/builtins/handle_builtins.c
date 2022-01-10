@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:46:07 by lugonzal          #+#    #+#             */
-/*   Updated: 2021/12/13 17:20:42 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/10 19:37:40 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,17 @@ extern void	ft_env_fail(t_child *child)
 	printf("minishell: export: `%s': not a valid identifier\n", child->info[1]);
 	ft_go_exit(1);
 	return ;
+}
+
+extern int	ft_bad_indent(t_child *c)
+{
+	size_t	i;
+
+	i = -1;
+	while (c->info[1][++i])
+	{
+		if (c->info[1][i] == SPACE)
+			return (1);
+	}
+	return (0);
 }

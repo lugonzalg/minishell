@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 16:51:36 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/10 18:22:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/10 18:59:04 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	ft_putpwd(char *str, t_prompt *p)
 	pwd = ft_search_pwd(p);
 	if (!pwd)
 		pwd = getcwd(pwd, 2048);
-	//temp = ft_substr(pwd, 4, ft_strlen(pwd) - 5);
 	temp = ft_substr(pwd, 4, ft_strlen(pwd));
 	free(pwd);
 	pwd = temp;
