@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 16:21:15 by mikgarci          #+#    #+#             */
-/*   Updated: 2021/12/21 19:38:16 by mikgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:52:46 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ size_t	ft_lastcompare(t_wc *z, char *str, size_t i)
 		if (ft_strncmp(str, z->compwc[i], ft_strlen(z->compwc[i])))
 			return (0);
 	}
+	if (!str)
+		return (0);
 	return (1);
 }
 

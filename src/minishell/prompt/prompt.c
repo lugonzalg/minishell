@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/11 16:07:28 by mikgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:31:24 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static void	ft_exit(t_prompt *p)
 			}
 		}
 		i = 0;
-		if (tab)
+		if (tab && tab[1])
 			i = ft_atoi(tab[1]);
 		ft_free_d2(tab);
 		exit(i);
