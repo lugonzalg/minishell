@@ -6,7 +6,7 @@
 /*   By: mikgarci <mikgarci@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 16:12:27 by mikgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 16:57:21 by mikgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 17:53:09 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,15 @@ static void	ft_searchpwd(t_wc *z)
 			dir++;
 		wc = ft_strchr(z->temp, '*');
 		if (!ft_shortpwd(dir, wc, z))
+		{
 			return ;
+		}
 		i += ft_strlen(&z->pwd[i]) - ft_strlen(z->temp) - 1;
+	}
+	if (z->pwd[ft_strlen(z->pwd) - 1] == '/')
+	{
+		free(z->pwd);
+		free(z->temp);
 	}
 	return ;
 }
