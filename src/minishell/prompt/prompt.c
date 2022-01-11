@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/10 19:50:41 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:07:28 by mikgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	ft_exit(t_prompt *p)
 		tab = ft_split(p->prompt, 32);
 		free(p->prompt);
 		write(1, "exit\n", 5);
-		while (tab[1] && tab[1][++i])
+		while (tab && tab[1] && tab[1][++i])
 		{
 			if (!ft_isdigit(tab[1][i]))
 			{
@@ -98,7 +98,9 @@ static void	ft_exit(t_prompt *p)
 				exit(255);
 			}
 		}
-		i = ft_atoi(tab[1]);
+		i = 0;
+		if (tab)
+			i = ft_atoi(tab[1]);
 		ft_free_d2(tab);
 		exit(i);
 	}
