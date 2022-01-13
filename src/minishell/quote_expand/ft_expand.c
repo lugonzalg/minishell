@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:24:33 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/03 20:10:04 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/13 19:00:38 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static char	*ft_env_query(t_prompt *p, char *query, size_t *lq, size_t *lenv)
 	(*lenv) = j;
 	env = ft_substr(query, 0, j);
 	raw_env = ft_gnl_query(p->envpath, env);
-	if (!raw_env)
-		p->expand = ft_strjoin("$", env);
 	free(env);
 	if (!raw_env)
 		return (NULL);

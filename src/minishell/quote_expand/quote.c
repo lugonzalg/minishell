@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 18:48:29 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/03 20:34:26 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/13 19:03:36 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ extern char	*ft_quote_case(t_prompt *p, char *str)
 		else if (((dquote == 1 && squote == 2) || !squote) && str[j] == '$'
 			&& ft_isalpha(str[j + 1]))
 			str = ft_joinfr(p, str, &j);
-		else if (squote && str[j] == '\'')
-			squote = 0;
-		else if (dquote && str[j] == '\"')
+		if ((squote && str[j] == '\'') || (dquote && str[j] == '\"'))
+		{
 			dquote = 0;
+			squote = 0;
+		}
 	}
 	return (str);
 }
