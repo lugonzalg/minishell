@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/11 18:26:36 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/19 17:54:25 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,12 @@ static void	ft_exit(t_prompt *p)
 	char	**tab;
 	size_t	i;
 
-	i = -1;
-	if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5)
-		|| !ft_strncmp(p->prompt, "exit ", 5))
+	if (!p->prompt || !ft_strncmp(p->prompt, "exit", 5))
 	{
 		tab = ft_split(p->prompt, 32);
 		free(p->prompt);
 		write(1, "exit\n", 5);
+		i = -1;
 		while (tab && tab[1] && tab[1][++i])
 		{
 			if (!ft_isdigit(tab[1][i]))

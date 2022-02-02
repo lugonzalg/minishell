@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/03 20:33:39 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/01/25 20:39:17 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ extern void	ft_free_child(t_child *child)
 
 	i = -1;
 	i = -1;
-	while (++i < child->size[0])
+	while (++i <= child->size[0])
 	{
 		if (child->fdpipe[i][0] != 0)
 			close(child->fdpipe[i][0]);
