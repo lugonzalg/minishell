@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 13:28:19 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/10 19:36:50 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/02/05 18:39:48 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_prompt
 typedef struct s_child
 {
 	char		**info;
-	int			**fdpipe;
+	int			fdpipe[2][2];
 	char		*path;
 	char		*ttypath;
 	size_t		size[4];

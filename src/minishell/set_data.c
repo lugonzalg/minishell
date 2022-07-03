@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:38:35 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/25 20:39:17 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/02/05 18:41:10 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,11 @@ extern void	ft_set_child(t_prompt *p, t_child *child)
 		i++;
 	}
 	ft_memset(child, 0, sizeof(t_child));
-	child->fdpipe = (int **)malloc(sizeof(int *) * i);
 	child->size[0] = i;
 	p->id = (pid_t *)malloc(sizeof(pid_t) * child->size[0]);
 	i = -1;
-	while (++i < child->size[0])
-	{
-		child->fdpipe[i] = (int *)malloc(sizeof(int) * 2);
+	while (++i < 2)
 		pipe(child->fdpipe[i]);
-	}
 }
 
 extern void	ft_free_child(t_child *child)
@@ -57,7 +53,7 @@ extern void	ft_free_child(t_child *child)
 
 	i = -1;
 	i = -1;
-	while (++i <= child->size[0])
+	while (0 && ++i <= child->size[0])
 	{
 		if (child->fdpipe[i][0] != 0)
 			close(child->fdpipe[i][0]);
@@ -65,7 +61,7 @@ extern void	ft_free_child(t_child *child)
 			close(child->fdpipe[i][1]);
 		free(child->fdpipe[i]);
 	}
-	free(child->fdpipe);
+	//free(child->fdpipe);
 	free(child->ttypath);
 }
 

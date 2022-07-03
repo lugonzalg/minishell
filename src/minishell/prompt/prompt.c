@@ -6,7 +6,7 @@
 /*   By: lugonzal <lugonzal@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 13:37:46 by lugonzal          #+#    #+#             */
-/*   Updated: 2022/01/19 17:54:25 by lugonzal         ###   ########.fr       */
+/*   Updated: 2022/02/05 19:00:29 by lugonzal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,13 @@
 
 static void	ft_process_command(t_prompt *p, t_child *child)
 {
+	int test;
 	ft_check_redir(p, child);
 	if (child->info && ft_checkbuiltins(child->info[0], p))
 		ft_builtins(child, p);
 	else if (child->info && child->info[0])
 	{
+		close(child->fdpipe[0][1]);
 		p->id[child->id] = fork();
 		g_glob.killid = p->id[0];
 		ft_handlewc(child);
@@ -44,6 +46,11 @@ static void	ft_process_command(t_prompt *p, t_child *child)
 			}
 			if (!child->path || access(child->path, X_OK))
 				printf("minishell: %s: command not found\n", child->info[0]);
+			waitpid(p->id[child->id], &test, 0);
+			close(child->fdpipe[0][0]);
+			child->fdpipe[0][1] = child->fdpipe[1][1];
+			child->fdpipe[0][0] = child->fdpipe[1][0];
+			pipe(child->fdpipe[1]);
 		}
 	}
 	ft_restart_data(child);
